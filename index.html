@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>David Jiang</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #070F2B;
+      display: flex;
+      align-items: center; 
+      justify-content: center;
+      font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
+                   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+
+/* Control speed */
+    :root {
+      --timeScale: 2;
+    }
+    .container {
+      position: relative;
+      width: 480px;   /* 24 columns * 20px */
+      height: 100px;  /* 5 rows * 20px */
+      border: 2px solid #444;
+      background: #1B1A55;        
+      overflow: hidden;        
+      border-radius: 10px;
+      transition: all 0.8s ease;
+    }
+
+    .container.expanded {
+      width: 80vw;   
+      height: 80vh;  
+    }
+
+    .block {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #4287f5; 
+      box-shadow: 0 0 3px rgba(0,0,0,0.3);
+      border-radius: 10px;
+
+      /* 
+         --x, --y, and --delay are numbers (no 's' unit).
+         Example: style="--delay:0.05; --x:3; --y:2;"
+      */
+      left: calc(var(--x) * 20px);
+      top: -200px;  /* start above the container */
+
+      /*
+        Multiply base 0.3s by 1 / var(--timeScale).
+        If --timeScale is 2, then duration = 0.15s => 2x faster.
+      */
+      animation-duration: calc(0.3s * (1 / var(--timeScale)));
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+      animation-name: dropIn;
+      
+      /*
+        Also scale the delay by 1 / var(--timeScale).
+        If we said style="--delay:0.05" => 0.05s base,
+        then final delay = 0.05s * 0.5 = 0.025s (faster).
+      */
+      animation-delay: calc(var(--delay) * 1s * (1 / var(--timeScale)));
+    }
+
+    @keyframes dropIn {
+      to {
+        top: calc(var(--y) * 20px);
+      }
+    }
+
+    #homepage {
+      display: none; 
+      width: 100%;  
+      height: 100%;
+      box-sizing: border-box;
+      border-spacing: 20px;
+      padding: 20px;         
+      border-radius: 10px;
+      overflow-y: auto;  
+    }
+
+    .homepage-left,
+    .homepage-right {
+      display: table-cell;
+      vertical-align: top;
+      padding: 10px;
+    }
+
+    .homepage-left {
+      width: 50%;
+    }
+    .homepage-right {
+      width: 50%;
+      animation: fadeIn 3s;
+      padding-left:100px;
+    }
+
+    .right-links {
+      /* display: flex; */
+      flex-direction: column;
+      gap: 10px;
+    }
+    .right-links a {
+      color: #bbb;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 4px;
+      text-align: center;
+      transition: background 0.3s, color 0.3s;
+    }
+    .right-links a:hover {
+      color: #fff;
+    }
+
+    #homepage h1 {
+      margin-top: 0;
+      color: #828dc5;
+      animation: fadeIn 3s;
+    }
+    #homepage p {
+      color: #9290C3;
+      animation: fadeIn 3s;
+    }
+    @keyframes fadeIn {
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .social-row {
+      display: flex; 
+      gap: 20px; 
+      margin-top: 20px; 
+      animation: fadeIn 3s;
+    }
+    a {
+      color: #505b93; 
+      text-decoration: none; 
+      transition: transform 0.2s, color 0.2s; 
+    }
+    a:hover {
+      color: #ffffff; 
+      transform: scale(1.2); 
+    }
+    .social-row svg {
+      width: 40px; 
+      height: 40px;
+    }
+
+    .ask-me-about {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #828dc5;
+      animation: fadeIn 3s;
+    }
+
+    .typewrite > .wrap { 
+      border-right: 0.08em solid #fff; 
+    }
+
+    .wrap {
+        color:#fafafa;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+  
+<!-- D (columns 0..3) -->
+<div class="block" style="--delay:0.00; --x:0;  --y:0;"></div>
+<div class="block" style="--delay:0.05; --x:1;  --y:0;"></div>
+<div class="block" style="--delay:0.10; --x:2;  --y:0;"></div>
+<div class="block" style="--delay:0.20; --x:0;  --y:1;"></div>
+<div class="block" style="--delay:0.25; --x:3;  --y:1;"></div>
+<div class="block" style="--delay:0.30; --x:0;  --y:2;"></div>
+<div class="block" style="--delay:0.35; --x:3;  --y:2;"></div>
+<div class="block" style="--delay:0.40; --x:0;  --y:3;"></div>
+<div class="block" style="--delay:0.45; --x:3;  --y:3;"></div>
+<div class="block" style="--delay:0.50; --x:0;  --y:4;"></div>
+<div class="block" style="--delay:0.55; --x:1;  --y:4;"></div>
+<div class="block" style="--delay:0.60; --x:2;  --y:4;"></div>
+
+<!-- A (columns 5..8) -->
+<div class="block" style="--delay:0.75; --x:6;  --y:0;"></div>
+<div class="block" style="--delay:0.80; --x:7;  --y:0;"></div>
+<div class="block" style="--delay:0.90; --x:5;  --y:1;"></div>
+<div class="block" style="--delay:0.95; --x:8;  --y:1;"></div>
+<div class="block" style="--delay:1.00; --x:5;  --y:2;"></div>
+<div class="block" style="--delay:1.05; --x:6;  --y:2;"></div>
+<div class="block" style="--delay:1.10; --x:7;  --y:2;"></div>
+<div class="block" style="--delay:1.15; --x:8;  --y:2;"></div>
+<div class="block" style="--delay:1.20; --x:5;  --y:3;"></div>
+<div class="block" style="--delay:1.25; --x:8;  --y:3;"></div>
+<div class="block" style="--delay:1.30; --x:5;  --y:4;"></div>
+<div class="block" style="--delay:1.35; --x:8;  --y:4;"></div>
+
+<!-- V / U shape (columns 10..13) -->
+<div class="block" style="--delay:1.40; --x:10; --y:0;"></div>
+<div class="block" style="--delay:1.45; --x:13; --y:0;"></div>
+<div class="block" style="--delay:1.50; --x:10; --y:1;"></div>
+<div class="block" style="--delay:1.55; --x:13; --y:1;"></div>
+<div class="block" style="--delay:1.60; --x:10; --y:2;"></div>
+<div class="block" style="--delay:1.65; --x:13; --y:2;"></div>
+<div class="block" style="--delay:1.70; --x:10; --y:3;"></div>
+<div class="block" style="--delay:1.75; --x:13; --y:3;"></div>
+<div class="block" style="--delay:1.85; --x:11; --y:4;"></div>
+<div class="block" style="--delay:1.90; --x:12; --y:4;"></div>
+
+<!-- I (columns 15..18) -->
+<div class="block" style="--delay:2.05; --x:16; --y:0;"></div>
+<div class="block" style="--delay:2.10; --x:17; --y:0;"></div>
+<div class="block" style="--delay:2.20; --x:16; --y:1;"></div>
+<div class="block" style="--delay:2.25; --x:17; --y:1;"></div>
+<div class="block" style="--delay:2.30; --x:16; --y:2;"></div>
+<div class="block" style="--delay:2.35; --x:17; --y:2;"></div>
+<div class="block" style="--delay:2.40; --x:16; --y:3;"></div>
+<div class="block" style="--delay:2.45; --x:17; --y:3;"></div>
+<div class="block" style="--delay:2.55; --x:16; --y:4;"></div>
+<div class="block" style="--delay:2.60; --x:17; --y:4;"></div>
+
+<!-- Last D (columns 20..23) -->
+<div class="block" style="--delay:2.70; --x:20; --y:0;"></div>
+<div class="block" style="--delay:2.75; --x:21; --y:0;"></div>
+<div class="block" style="--delay:2.80; --x:22; --y:0;"></div>
+<div class="block" style="--delay:2.90; --x:20; --y:1;"></div>
+<div class="block" style="--delay:2.95; --x:23; --y:1;"></div>
+<div class="block" style="--delay:3.00; --x:20; --y:2;"></div>
+<div class="block" style="--delay:3.05; --x:23; --y:2;"></div>
+<div class="block" style="--delay:3.10; --x:20; --y:3;"></div>
+<div class="block" style="--delay:3.15; --x:23; --y:3;"></div>
+<div class="block" style="--delay:3.20; --x:20; --y:4;"></div>
+<div class="block" style="--delay:3.25; --x:21; --y:4;"></div>
+<div class="block" style="--delay:3.30; --x:22; --y:4;"></div>
+
+  <div id="homepage">
+    <div class="homepage-left">
+      <h1>Hi, I'm David Jiang</h1>
+      <div class="social-row">
+        <a href="https://www.linkedin.com/in/xpoes/" target="_blank">
+            <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="linkedin-in" class="svg-inline--fa fa-linkedin-in " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path fill="currentColor" d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z">
+                </path>
+            </svg>
+        </a>
+        <a href="https://x.com/djiang03" target="_blank">
+            <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitter" class="svg-inline--fa fa-twitter " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path fill="currentColor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
+                </path>
+            </svg>
+        </a>
+        <a href="https://github.com/xpoes123" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+        </a>
+        <a href="https://www.instagram.com/david.jiang1729/" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+    </div>
+      <p>
+        I am a software developer at <a href="https://www.uncountable.com/" target="_blank">Uncountable</a> based in New York. 
+        </p>
+        <p>
+        I studied computer science and math at the University of Wisconsin-Madison.
+      </p>
+      <div class="ask-me-about">
+        Ask me about 
+        <span class="typewrite"
+              data-period="2000"
+              data-type='[ "live music.", "Spotify data.", "LLMs.", "chess.", "Rubik&#8217;s cubes.", "integer partitions.", "poker.", "science bowl.", "GeoGuessr.", "Valorant.", "Madison.", "math competions.", "indie rock.", "cooking without recipes.", "graph problems."]'>
+          <span class="wrap"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="homepage-right">
+      <img src="dav.jpg"
+           alt="Picture" width="300"/>
+      <div class="right-links">
+        <a href="#">Blog</a>
+        <a href="research.html">Research</a>
+        <a href="projects.html">Projects</a>
+        <a href="#">Other</a>
+      </div>
+    </div>
+  </div> <!-- /#homepage -->
+</div> <!-- /.container -->
+
+<script>
+    var TxtType = function(el, toRotate, period) {
+      this.toRotate = toRotate;
+      this.el = el;
+      this.loopNum = 0;
+      this.period = parseInt(period, 10) || 2000;
+      this.txt = '';
+      this.tick();
+      this.isDeleting = false;
+    };
+    
+    TxtType.prototype.tick = function() {
+      var i = this.loopNum % this.toRotate.length;
+      var fullTxt = this.toRotate[i];
+    
+      if (this.isDeleting) {
+        this.txt = fullTxt.substring(0, this.txt.length - 1);
+      } else {
+        this.txt = fullTxt.substring(0, this.txt.length + 1);
+      }
+    
+      this.el.innerHTML = '<span class="wrap">'+ this.txt +'</span>';
+    
+      var that = this;
+      var delta = 100 - Math.random() * 100;
+    
+      if (this.isDeleting) {
+        delta /= 2;
+      }
+    
+      if (!this.isDeleting && this.txt === fullTxt) {
+        delta = this.period;
+        this.isDeleting = true;
+      } 
+      else if (this.isDeleting && this.txt === '') {
+        this.isDeleting = false;
+        this.loopNum++;
+        delta = 150;
+      }
+    
+      setTimeout(function() {
+        that.tick();
+      }, delta);
+    };
+    
+    function randomShuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+    
+    // ========== Single onload handler for BOTH Typewriter & Falling Dots ==========
+    window.addEventListener('load', function() {
+      // 1) Initialize Typewriter
+      var elements = document.getElementsByClassName('typewrite');
+      for (var i = 0; i < elements.length; i++) {
+        var toRotateStr = elements[i].getAttribute('data-type');
+        var period = elements[i].getAttribute('data-period');
+        if (toRotateStr) {
+          // parse JSON array
+          var toRotate = JSON.parse(toRotateStr);
+          toRotate = randomShuffle(toRotate);
+          new TxtType(elements[i], toRotate, period);
+        }
+      }
+    
+      // 2) Animate Falling Dots
+      const container = document.getElementById('mainContainer');
+      let timeScale = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--timeScale')
+      ) || 1;
+    
+      // find max block delay
+      let maxDelay = 0;
+      document.querySelectorAll('.block').forEach(block => {
+        const delayStr = block.style.getPropertyValue('--delay');
+        const delayVal = parseFloat(delayStr) || 0;
+        if (delayVal > maxDelay) {
+          maxDelay = delayVal;
+        }
+      });
+    
+      // total time before container expansion
+      // 0.3s base fall + 0.75 buffer => scaled by timeScale
+      const finalLandingAt1x = maxDelay + 0.75;
+      const finalTimeout = (finalLandingAt1x * 1000) / timeScale;
+    
+      setTimeout(function() {
+        // Hide blocks once they’ve “landed”
+        document.querySelectorAll('.block').forEach(block => {
+          block.style.display = 'none';
+        });
+    
+        // Expand container
+        container.classList.add('expanded');
+    
+        // After transition => show homepage as table
+        container.addEventListener('transitionend', function onTransitionEnd() {
+          const homepage = document.getElementById('homepage');
+          homepage.style.display = 'table';
+          container.removeEventListener('transitionend', onTransitionEnd);
+        });
+      }, finalTimeout);
+    
+      // optional blinking cursor style
+      var css = document.createElement("style");
+      css.type = "text/css";
+      css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
+      document.body.appendChild(css);
+    });
+    </script>
+    
+    </body>
+    </html>
