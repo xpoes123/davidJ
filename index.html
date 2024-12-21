@@ -5,172 +5,240 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>David Jiang</title>
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #070F2B;
-      display: flex;
-      align-items: center; 
-      justify-content: center;
-      font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
-                   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    }
+    <style>
+        /* --- GLOBAL RESETS & FONTS --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #070F2B;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
+               "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
 
-/* Control speed */
-    :root {
-      --timeScale: 2;
-    }
-    .container {
-      position: relative;
-      width: 480px;   /* 24 columns * 20px */
-      height: 100px;  /* 5 rows * 20px */
-      border: 2px solid #444;
-      background: #1B1A55;        
-      overflow: hidden;        
-      border-radius: 10px;
-      transition: all 0.8s ease;
-    }
+/* --- SPEED CONTROL (FASTER FALL) --- */
+:root {
+  --timeScale: 2;
+}
 
-    .container.expanded {
-      width: 80vw;   
-      height: 80vh;  
-    }
+/* --- CONTAINER & DOTS --- */
+.container {
+  position: relative;
+  width: 480px;   /* 24 columns * 20px */
+  height: 100px;  /* 5 rows * 20px */
+  border: 2px solid #444;
+  background: #1B1A55;        
+  overflow: hidden;        
+  border-radius: 10px;
+  transition: all 0.8s ease; /* for the expansion effect */
+}
+.container.expanded {
+  width: 80vw;   
+  height: 80vh;  
+}
 
-    .block {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: #4287f5; 
-      box-shadow: 0 0 3px rgba(0,0,0,0.3);
-      border-radius: 10px;
+.block {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #4287f5; 
+  box-shadow: 0 0 3px rgba(0,0,0,0.3);
+  border-radius: 10px;
 
-      /* 
-         --x, --y, and --delay are numbers (no 's' unit).
-         Example: style="--delay:0.05; --x:3; --y:2;"
-      */
-      left: calc(var(--x) * 20px);
-      top: -200px;  /* start above the container */
+  /* 
+     --x, --y, --delay are numeric (no 's' unit).
+     Example: style="--delay:0.05; --x:3; --y:2;"
+  */
+  left: calc(var(--x) * 20px);
+  top: -200px;  /* start well above container */
+  animation-duration: calc(0.3s * (1 / var(--timeScale)));
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  animation-name: dropIn;
+  animation-delay: calc(var(--delay) * 1s * (1 / var(--timeScale)));
+}
 
-      /*
-        Multiply base 0.3s by 1 / var(--timeScale).
-        If --timeScale is 2, then duration = 0.15s => 2x faster.
-      */
-      animation-duration: calc(0.3s * (1 / var(--timeScale)));
-      animation-timing-function: ease-out;
-      animation-fill-mode: forwards;
-      animation-name: dropIn;
-      
-      /*
-        Also scale the delay by 1 / var(--timeScale).
-        If we said style="--delay:0.05" => 0.05s base,
-        then final delay = 0.05s * 0.5 = 0.025s (faster).
-      */
-      animation-delay: calc(var(--delay) * 1s * (1 / var(--timeScale)));
-    }
+@keyframes dropIn {
+  to {
+    top: calc(var(--y) * 20px);
+  }
+}
 
-    @keyframes dropIn {
-      to {
-        top: calc(var(--y) * 20px);
+/* --- HOMEPAGE (DESKTOP DEFAULT) --- */
+/* HIDDEN + OPACITY=0 so text doesn't appear prematurely */
+#homepage {
+  display: none;    /* hidden until animation is done */
+  opacity: 0;       /* also invisible */
+  transition: opacity 0.8s ease; /* fade in when shown */
+
+  width: 100%;  
+  height: 100%;
+  box-sizing: border-box;
+  border-spacing: 20px;
+  padding: 20px;         
+  border-radius: 10px;
+  overflow-y: auto;  
+
+  /* "table layout" for desktop screens */
+  display: table;
+}
+#homepage.visible {
+  opacity: 1; /* once the JS adds .visible, homepage fades in */
+}
+
+/* Table “cells” on desktop */
+.homepage-left,
+.homepage-right {
+  display: table-cell;
+  vertical-align: top;
+  padding: 10px;
+}
+
+/* 1) Left side is truly left-aligned (desktop and up) */
+.homepage-left {
+  width: 50%;
+  text-align: left;   /* left-align text on the left side */
+}
+.homepage-right {
+  width: 50%;
+  animation: fadeIn 3s;
+  padding-left: 100px;
+}
+
+/* LINKS on desktop */
+.right-links {
+  /* If desktop uses table layout, no need for row or column here */
+  gap: 10px;
+}
+.right-links a {
+  color: #bbb;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-align: center;
+  transition: background 0.3s, color 0.3s;
+}
+.right-links a:hover {
+  color: #fff;
+}
+
+/* HEADINGS & PARAGRAPHS */
+#homepage h1 {
+  margin-top: 0;
+  color: #828dc5;
+  animation: fadeIn 3s;
+}
+#homepage p {
+  color: #9290C3;
+  animation: fadeIn 3s;
+}
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* SOCIAL ICONS (DESKTOP) */
+.social-row {
+  display: flex; 
+  gap: 20px; 
+  margin-top: 20px; 
+  animation: fadeIn 3s;
+}
+a {
+  color: #505b93; 
+  text-decoration: none; 
+  transition: transform 0.2s, color 0.2s; 
+}
+a:hover {
+  color: #ffffff; 
+  transform: scale(1.2); 
+}
+.social-row svg {
+  width: 40px; 
+  height: 40px;
+}
+
+/* TYPEWRITER TEXT */
+.ask-me-about {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #828dc5;
+  animation: fadeIn 3s;
+}
+.typewrite > .wrap { 
+  border-right: 0.08em solid #fff; 
+}
+.wrap {
+  color: #fafafa;
+}
+
+/* SPACER (OPTIONAL) */
+.space {
+  height: 150px;
+}
+
+/* --- MOBILE STYLES --- */
+@media (max-width: 768px) {
+
+  /* #homepage as flex on mobile */
+  #homepage {
+    display: flex;             /* override the desktop "table" */
+    flex-direction: column;
+    align-items: flex-start;   /* left-align main content */
+    justify-content: flex-start;
+    width: 100%;
+    height: auto;
+    padding-bottom: 20px;     
+  }
+
+  
+
+  /* Make social icons smaller, centered horizontally */
+  .social-row {
+    justify-content: center;   /* center the row of icons */
+  }
+  .social-row svg {
+    width: 24px; 
+    height: 24px;
+  }
+
+  /* Let left and right each go full width on mobile */
+  .homepage-left, 
+  .homepage-right {
+    display: block;
+    width: 100%;
+    padding: 10px;
+  }
+  /* Hide the image on mobile, if you want */
+  .homepage-right {
+    display: none;
+  }
+
+  /* .space often just takes up vertical real estate, hide if you want */
+  .space {
+    height:50px;
+  }
+
+  /* 2) Make the links a 2×2 grid in mobile for 4 links total */
+  .right-links {
+        margin-top: auto;                      /* push them to the bottom */
+        display: grid;                        
+        grid-template-columns: repeat(2, 1fr); /* 2 columns => 2×2 */
+        gap: 10px;                            
+        width: 100%;
+        text-align: center;
       }
-    }
 
-    #homepage {
-      display: none; 
-      width: 100%;  
-      height: 100%;
-      box-sizing: border-box;
-      border-spacing: 20px;
-      padding: 20px;         
-      border-radius: 10px;
-      overflow-y: auto;  
-    }
+  .right-links a {
+    margin: 0;       /* no need for extra margin, grid handles spacing */
+  }
+}
 
-    .homepage-left,
-    .homepage-right {
-      display: table-cell;
-      vertical-align: top;
-      padding: 10px;
-    }
-
-    .homepage-left {
-      width: 50%;
-    }
-    .homepage-right {
-      width: 50%;
-      animation: fadeIn 3s;
-      padding-left:100px;
-    }
-
-    .right-links {
-      /* display: flex; */
-      flex-direction: column;
-      gap: 10px;
-    }
-    .right-links a {
-      color: #bbb;
-      text-decoration: none;
-      font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 4px;
-      text-align: center;
-      transition: background 0.3s, color 0.3s;
-    }
-    .right-links a:hover {
-      color: #fff;
-    }
-
-    #homepage h1 {
-      margin-top: 0;
-      color: #828dc5;
-      animation: fadeIn 3s;
-    }
-    #homepage p {
-      color: #9290C3;
-      animation: fadeIn 3s;
-    }
-    @keyframes fadeIn {
-      0%   { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    .social-row {
-      display: flex; 
-      gap: 20px; 
-      margin-top: 20px; 
-      animation: fadeIn 3s;
-    }
-    a {
-      color: #505b93; 
-      text-decoration: none; 
-      transition: transform 0.2s, color 0.2s; 
-    }
-    a:hover {
-      color: #ffffff; 
-      transform: scale(1.2); 
-    }
-    .social-row svg {
-      width: 40px; 
-      height: 40px;
-    }
-
-    .ask-me-about {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      color: #828dc5;
-      animation: fadeIn 3s;
-    }
-
-    .typewrite > .wrap { 
-      border-right: 0.08em solid #fff; 
-    }
-
-    .wrap {
-        color:#fafafa;
-    }
-
-  </style>
+    </style>
 </head>
 <body>
 
@@ -282,11 +350,8 @@
           <span class="wrap"></span>
         </span>
       </div>
-    </div>
-
-    <div class="homepage-right">
-      <img src="dav.jpg"
-           alt="Picture" width="300"/>
+      <div class="space">
+      </div>
       <div class="right-links">
         <a href="#">Blog</a>
         <a href="research.html">Research</a>
@@ -294,10 +359,16 @@
         <a href="#">Other</a>
       </div>
     </div>
+
+    <div class="homepage-right">
+      <img src="dav.jpg"
+           alt="Picture" width="300"/>
+    </div>
   </div> <!-- /#homepage -->
 </div> <!-- /.container -->
 
 <script>
+    // ========== TYPEWRITER CLASS ==========
     var TxtType = function(el, toRotate, period) {
       this.toRotate = toRotate;
       this.el = el;
@@ -307,26 +378,26 @@
       this.tick();
       this.isDeleting = false;
     };
-    
+  
     TxtType.prototype.tick = function() {
       var i = this.loopNum % this.toRotate.length;
       var fullTxt = this.toRotate[i];
-    
+  
       if (this.isDeleting) {
         this.txt = fullTxt.substring(0, this.txt.length - 1);
       } else {
         this.txt = fullTxt.substring(0, this.txt.length + 1);
       }
-    
+  
       this.el.innerHTML = '<span class="wrap">'+ this.txt +'</span>';
-    
+  
       var that = this;
       var delta = 100 - Math.random() * 100;
-    
+  
       if (this.isDeleting) {
         delta /= 2;
       }
-    
+  
       if (!this.isDeleting && this.txt === fullTxt) {
         delta = this.period;
         this.isDeleting = true;
@@ -336,38 +407,36 @@
         this.loopNum++;
         delta = 150;
       }
-    
+  
       setTimeout(function() {
         that.tick();
       }, delta);
     };
-    
+  
+    // Simple random shuffle
     function randomShuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
-    
-    // ========== Single onload handler for BOTH Typewriter & Falling Dots ==========
+  
+    // ========== MAIN ONLOAD HANDLER ==========
     window.addEventListener('load', function() {
-      // 1) Initialize Typewriter
+      // 1) Initialize the typewriter effect
       var elements = document.getElementsByClassName('typewrite');
       for (var i = 0; i < elements.length; i++) {
         var toRotateStr = elements[i].getAttribute('data-type');
         var period = elements[i].getAttribute('data-period');
         if (toRotateStr) {
-          // parse JSON array
           var toRotate = JSON.parse(toRotateStr);
-          toRotate = randomShuffle(toRotate);
+          toRotate = randomShuffle(toRotate); // randomize array
           new TxtType(elements[i], toRotate, period);
         }
       }
-    
+  
       // 2) Animate Falling Dots
       const container = document.getElementById('mainContainer');
-      let timeScale = parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue('--timeScale')
-      ) || 1;
-    
-      // find max block delay
+      const homepage = document.getElementById('homepage');
+  
+      // measure the largest block delay
       let maxDelay = 0;
       document.querySelectorAll('.block').forEach(block => {
         const delayStr = block.style.getPropertyValue('--delay');
@@ -376,36 +445,41 @@
           maxDelay = delayVal;
         }
       });
-    
-      // total time before container expansion
-      // 0.3s base fall + 0.75 buffer => scaled by timeScale
-      const finalLandingAt1x = maxDelay + 0.75;
-      const finalTimeout = (finalLandingAt1x * 1000) / timeScale;
-    
-      setTimeout(function() {
-        // Hide blocks once they’ve “landed”
+  
+      // total time for the blocks to fall
+      //  (maxDelay + 0.75) seconds => scaled by timeScale
+      const timeScale = parseFloat(getComputedStyle(document.documentElement)
+                                   .getPropertyValue('--timeScale')) || 1;
+      const finalLandingAt1x = maxDelay + 1.5;   // base
+      const finalTimeout = (finalLandingAt1x * 1000) / timeScale; // ms
+  
+      // We also have container's transition: 0.8s
+      const containerTransitionMs = 800; 
+  
+      // === First Timeout ===
+      // Wait for the blocks to finish falling, then expand container.
+      setTimeout(() => {
+        // Hide blocks
         document.querySelectorAll('.block').forEach(block => {
           block.style.display = 'none';
         });
-    
+  
         // Expand container
         container.classList.add('expanded');
-    
-        // After transition => show homepage as table
-        container.addEventListener('transitionend', function onTransitionEnd() {
-          const homepage = document.getElementById('homepage');
-          homepage.style.display = 'table';
-          container.removeEventListener('transitionend', onTransitionEnd);
-        });
+  
+        // === Second Timeout ===
+        // Wait 0.8s (matching "transition: all 0.8s") for container to finish,
+        // then reveal homepage.
+        setTimeout(() => {
+          // Show homepage (let CSS decide table/flex) instead of "display:none"
+          homepage.style.display = '';
+          // Force reflow, then fade in
+          homepage.offsetHeight;
+          homepage.classList.add('visible');
+        }, containerTransitionMs);
+  
       }, finalTimeout);
-    
-      // optional blinking cursor style
-      var css = document.createElement("style");
-      css.type = "text/css";
-      css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
-      document.body.appendChild(css);
     });
-    </script>
-    
+  </script>
     </body>
     </html>
