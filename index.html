@@ -6,25 +6,22 @@
   <title>David Jiang</title>
 
     <style>
-        /* --- GLOBAL RESETS & FONTS --- */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background: #070F2B;
-  display: flex;
-  align-items: center; 
-  justify-content: center;
-  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
-               "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
+        html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #070F2B;
+        display: flex;
+        align-items: center; 
+        justify-content: center;
+        font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
+                    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
 
-/* --- SPEED CONTROL (FASTER FALL) --- */
 :root {
   --timeScale: 2;
 }
 
-/* --- CONTAINER & DOTS --- */
 .container {
   position: relative;
   width: 480px;   /* 24 columns * 20px */
@@ -33,7 +30,7 @@ html, body {
   background: #1B1A55;        
   overflow: hidden;        
   border-radius: 10px;
-  transition: all 0.8s ease; /* for the expansion effect */
+  transition: all 0.8s ease; 
 }
 .container.expanded {
   width: 80vw;   
@@ -53,7 +50,7 @@ html, body {
      Example: style="--delay:0.05; --x:3; --y:2;"
   */
   left: calc(var(--x) * 20px);
-  top: -200px;  /* start well above container */
+  top: -200px;
   animation-duration: calc(0.3s * (1 / var(--timeScale)));
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
@@ -67,12 +64,10 @@ html, body {
   }
 }
 
-/* --- HOMEPAGE (DESKTOP DEFAULT) --- */
-/* HIDDEN + OPACITY=0 so text doesn't appear prematurely */
 #homepage {
-  display: none;    /* hidden until animation is done */
-  opacity: 0;       /* also invisible */
-  transition: opacity 0.8s ease; /* fade in when shown */
+  display: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
 
   width: 100%;  
   height: 100%;
@@ -82,14 +77,12 @@ html, body {
   border-radius: 10px;
   overflow-y: auto;  
 
-  /* "table layout" for desktop screens */
   display: table;
 }
 #homepage.visible {
-  opacity: 1; /* once the JS adds .visible, homepage fades in */
+  opacity: 1; 
 }
 
-/* Table “cells” on desktop */
 .homepage-left,
 .homepage-right {
   display: table-cell;
@@ -97,10 +90,9 @@ html, body {
   padding: 10px;
 }
 
-/* 1) Left side is truly left-aligned (desktop and up) */
 .homepage-left {
   width: 50%;
-  text-align: left;   /* left-align text on the left side */
+  text-align: left; 
 }
 .homepage-right {
   width: 50%;
@@ -110,7 +102,6 @@ html, body {
 
 /* LINKS on desktop */
 .right-links {
-  /* If desktop uses table layout, no need for row or column here */
   gap: 10px;
 }
 .right-links a {
@@ -126,7 +117,6 @@ html, body {
   color: #fff;
 }
 
-/* HEADINGS & PARAGRAPHS */
 #homepage h1 {
   margin-top: 0;
   color: #828dc5;
@@ -141,7 +131,6 @@ html, body {
   100% { opacity: 1; }
 }
 
-/* SOCIAL ICONS (DESKTOP) */
 .social-row {
   display: flex; 
   gap: 20px; 
@@ -162,7 +151,6 @@ a:hover {
   height: 40px;
 }
 
-/* TYPEWRITER TEXT */
 .ask-me-about {
   margin-top: 20px;
   font-size: 1.1rem;
@@ -176,19 +164,15 @@ a:hover {
   color: #fafafa;
 }
 
-/* SPACER (OPTIONAL) */
 .space {
   height: 150px;
 }
 
-/* --- MOBILE STYLES --- */
 @media (max-width: 768px) {
-
-  /* #homepage as flex on mobile */
   #homepage {
-    display: flex;             /* override the desktop "table" */
+    display: flex;            
     flex-direction: column;
-    align-items: flex-start;   /* left-align main content */
+    align-items: flex-start;  
     justify-content: flex-start;
     width: 100%;
     height: auto;
@@ -197,37 +181,32 @@ a:hover {
 
   
 
-  /* Make social icons smaller, centered horizontally */
   .social-row {
-    justify-content: center;   /* center the row of icons */
+    justify-content: center;   
   }
   .social-row svg {
     width: 24px; 
     height: 24px;
   }
 
-  /* Let left and right each go full width on mobile */
   .homepage-left, 
   .homepage-right {
     display: block;
     width: 100%;
     padding: 10px;
   }
-  /* Hide the image on mobile, if you want */
   .homepage-right {
     display: none;
   }
 
-  /* .space often just takes up vertical real estate, hide if you want */
   .space {
     height:50px;
   }
 
-  /* 2) Make the links a 2×2 grid in mobile for 4 links total */
   .right-links {
-        margin-top: auto;                      /* push them to the bottom */
+        margin-top: auto;                    
         display: grid;                        
-        grid-template-columns: repeat(2, 1fr); /* 2 columns => 2×2 */
+        grid-template-columns: repeat(2, 1fr); 
         gap: 10px;                            
         width: 100%;
         text-align: center;
@@ -346,7 +325,7 @@ a:hover {
         Ask me about 
         <span class="typewrite"
               data-period="2000"
-              data-type='[ "live music.", "Spotify data.", "LLMs.", "chess.", "Rubik&#8217;s cubes.", "integer partitions.", "poker.", "science bowl.", "GeoGuessr.", "Valorant.", "Madison.", "math competions.", "indie rock.", "cooking without recipes.", "graph problems."]'>
+              data-type='[ "live music.", "Spotify data.", "LLMs.", "chess.", "Rubik&#8217;s cubes.", "integer partitions.", "poker.", "science bowl.", "GeoGuessr.", "Valorant.", "Madison.", "math competitions.", "indie rock.", "cooking without recipes.", "graph problems."]'>
           <span class="wrap"></span>
         </span>
       </div>

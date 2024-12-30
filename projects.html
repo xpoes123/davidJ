@@ -26,6 +26,7 @@
       background: #1B1A55;        
       border-radius: 10px;
       transition: all 0.8s ease;
+      overflow: hidden; /* keep container from growing beyond intended dimensions */
     }
 
     #homepage {
@@ -41,6 +42,7 @@
       width: 100%; 
     }
 
+    /* Flex container for the project cards */
     .cards-container {
       display: flex;
       flex-wrap: wrap;
@@ -49,35 +51,50 @@
       justify-content: center; /* Center-align all cards */
     }
 
+    /* Each project card */
     .card {
       background: #1B1A55;
       border: 1px solid #444;
       border-radius: 8px;
       padding: 20px;
-      width: calc(33% - 40px); /* ~3 cards per row */
+      width: calc(33% - 40px); /* 3 cards per row on larger screens */
       box-sizing: border-box;
       color: #fafafa;
-      text-align: center; /* Center text and images */
+      text-align: center; /* center text and images */
+      
+      /* Ensures text wraps for long words */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
+    /* Make the heading smaller */
     .card h2 {
       margin: 0 0 10px 0;
-      color: #505b93; 
+      color: #505b93;   
     }
 
+    /* Slightly smaller text for authors field */
     .authors {
       margin: 0 0 10px 0;
       font-style: italic;
+      font-size: 0.85rem;
+    }
+
+    /* General paragraphs in cards */
+    .card p {
+      font-size: 0.9rem;
+      line-height: 1.4;
     }
 
     .card img {
-        width: 100px;
-        height: 100px;
-        margin: 10px 0; /* Add spacing around the image */
-        border-radius: 4px;
-        object-fit: cover; /* Ensures the image fits the defined dimensions without distortion */
+      width: 100px;
+      height: 100px;
+      margin: 10px 0; /* spacing around the image */
+      border-radius: 4px;
+      object-fit: cover;
     }
 
+    /* Buttons smaller font */
     .card button {
       background: #23226e;
       color: #a8a8a8;
@@ -87,12 +104,14 @@
       cursor: pointer;
       font-family: inherit;
       transition: background 0.2s, transform 0.2s;
+      font-size: 0.9rem; /* smaller font */
     }
     .card button:hover {
       background: #35349c;
       transform: scale(1.05);
     }
 
+    /* Headings at top (outside of cards) */
     #homepage h1 {
       margin-top: 0;
       color: #828dc5;
@@ -100,6 +119,21 @@
 
     #homepage p {
       color: #9290C3;
+    }
+
+    /* --- MEDIA QUERY for Mobile (<=768px) --- */
+    @media (max-width: 768px) {
+      /* 2-cards-per-row on mobile */
+      .card {
+        width: calc(50% - 40px);
+      }
+
+      .card h2 {
+      margin: 0 0 10px 0;
+      color: #505b93;
+      font-size: 1rem; 
+    }
+
     }
   </style>
 </head>
@@ -112,78 +146,76 @@
       <h1>Projects</h1>
     </div>
         
-          <div class="cards-container">
+    <div class="cards-container">
       
-            <!-- Card #1 -->
-            <div class="card">
-              <h2>Sonder</h2>
-              <p class="authors">Django, Llama, JavaScript, postgreSQL</p>
-              <img src="img/sonder.png" alt="Paper 1 thumbnail">
-              <br>
-              <a href="papers/poker.Project" target="_blank">
-                <button>View Project</button>
-              </a>
-            </div>
-      
-            <!-- Card #2 -->
-            <div class="card">
-              <h2>DayTour</h2>
-              <p class="authors">Django, JavaScript, postgreSQL</p>
-              <img src="img/daytour.png" alt="Paper 2 thumbnail">
-              <br>
-              <a href="papers/plane_partition.Project" target="_blank">
-                <button>View Project</button>
-              </a>
-            </div>
-      
-            <!-- Card #3 -->
-            <div class="card">
-              <h2>Science Bowl Elo</h2>
-              <p class="authors">Django, JavaScript, postgreSQL</p>
-              <img src="img/scibowl.png" alt="Paper 3 thumbnail">
-              <br>
-              <a href="https://arxiv.org/abs/2312.06698" target="_blank">
-                <button>View Project</button>
-              </a>
-            </div>
-      
-            <!-- Card #4 -->
-            <div class="card">
-              <h2>Facial and Gender Recognition</h2>
-              <p class="authors">PyTorch</p>
-              <img src="img/male.png" alt="Paper 4 thumbnail">
-              <br>
-              <a href="papers/latent.Project" target="_blank">
-                <button>View Project</button>
-              </a>
-            </div>
-      
-            <!-- Card #5 -->
-            <div class="card">
-              <h2>Enhanced Spotify Stats (WIP)</h2>
-              <p class="authors">Django, JavaScript, postgreSQL</p>
-              <img src="img/spot.webp" alt="Paper 5 thumbnail">
-              <br>
-              <a href="papers/chaos.Project" target="_blank">
-                <button>View Project</button>
-              </a>
-            </div>
-      
-            <!-- Card #6 -->
-            <div class="card">
-              <h2>Polymarket Trading Bot (WIP)</h2>
-              <p class="authors">Python</p>
-              <img src="img/pm.png" alt="Paper 6 thumbnail">
-              <br>
-              <a href="papers/orgi.Project" target="_blank">
-                <button>View Project</button>
-              </a>
-            </div>
-      
-          </div> <!-- /.cards-container -->
-        </div> <!-- /#homepage -->
-      
-      </div> <!-- /.container -->
+      <!-- Card #1 -->
+      <div class="card">
+        <h2>Sonder</h2>
+        <p class="authors">Django, Llama, JavaScript, postgreSQL</p>
+        <img src="img/sonder.png" alt="Paper 1 thumbnail">
+        <br>
+        <a href="papers/poker.Project" target="_blank">
+          <button>View Project</button>
+        </a>
+      </div>
+
+      <!-- Card #2 -->
+      <div class="card">
+        <h2>DayTour</h2>
+        <p class="authors">Django, JavaScript, postgreSQL</p>
+        <img src="img/daytour.png" alt="Paper 2 thumbnail">
+        <br>
+        <a href="papers/plane_partition.Project" target="_blank">
+          <button>View Project</button>
+        </a>
+      </div>
+
+      <!-- Card #3 -->
+      <div class="card">
+        <h2>Science Bowl Elo</h2>
+        <p class="authors">Django, JavaScript, postgreSQL</p>
+        <img src="img/scibowl.png" alt="Paper 3 thumbnail">
+        <br>
+        <a href="https://arxiv.org/abs/2312.06698" target="_blank">
+          <button>View Project</button>
+        </a>
+      </div>
+
+      <!-- Card #4 -->
+      <div class="card">
+        <h2>Facial and Gender Recognition</h2>
+        <p class="authors">PyTorch</p>
+        <img src="img/male.png" alt="Paper 4 thumbnail">
+        <br>
+        <a href="papers/latent.Project" target="_blank">
+          <button>View Project</button>
+        </a>
+      </div>
+
+      <!-- Card #5 -->
+      <div class="card">
+        <h2>Enhanced Spotify Stats (WIP)</h2>
+        <p class="authors">Django, JavaScript, postgreSQL</p>
+        <img src="img/spot.webp" alt="Paper 5 thumbnail">
+        <br>
+        <a href="papers/chaos.Project" target="_blank">
+          <button>View Project</button>
+        </a>
+      </div>
+
+      <!-- Card #6 -->
+      <div class="card">
+        <h2>Polymarket Trading Bot (WIP)</h2>
+        <p class="authors">Python</p>
+        <img src="img/pm.png" alt="Paper 6 thumbnail">
+        <br>
+        <a href="papers/orgi.Project" target="_blank">
+          <button>View Project</button>
+        </a>
+      </div>
+    </div> <!-- /.cards-container -->
+  </div> <!-- /#homepage -->
+</div> <!-- /.container -->
       
 
 <script>
