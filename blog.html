@@ -224,7 +224,10 @@
           .then(r => r.text())
           .then(md => {
             // 1. remove all markdown headings
-            const noHeaders = md.replace(/^#{1,6} .*$/gm, '').trim();
+            const noHeaders = md
+              .replace(/^(?:#{1,6}\s.*|\*\*Date:\*\*.*)$/gm, '')
+              .trim();
+
 
             // 2. split on whitespace, take first 20 words
             const words        = noHeaders.split(/\s+/);
