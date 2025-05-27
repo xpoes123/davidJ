@@ -14,7 +14,7 @@
       display: flex;
       align-items: center; 
       justify-content: center;
-      font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
+      font-family: system-ui, Calibri, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
                    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     }
 
@@ -156,6 +156,28 @@
       overflow-y: auto;      /* scroll if content is too tall */
       padding: 20px;
       }
+      /* just below your #backBtn rules */
+      #homepage {
+  position: relative;  /* ensure absolute children are positioned relative here */
+}
+
+.home-link {
+  position: absolute;
+  top: 20px;           /* match your h1’s padding */
+  right: 20px;
+  background: #23226e;
+  color: #a8a8a8;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: inherit;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.home-link:hover {
+  background: #35349c;
+  transform: scale(1.05);
+}
 
 
   </style>
@@ -168,6 +190,7 @@
     <!-- 1) Preview grid -->
     <div id="homepage">
       <h1 style="padding:20px; margin:0; color:#828dc5;">My Blog</h1>
+      <a href="index.html" class="home-link">🏠 Home</a>
       <div class="cards-container"></div>
     </div>
 
@@ -189,12 +212,12 @@
         image: "graduation.webp",
         date:  "May 26, 2025"
       },
-      {
-        title: "Creating DayTour",
-        slug: "daytour",
-        image: "daytour.png",
-        date:  "May 26, 2025"
-      },
+      // {
+      //   title: "Creating DayTour",
+      //   slug: "daytour",
+      //   image: "daytour.png",
+      //   date:  "May 26, 2025"
+      // },
     ];
   
     const cardsContainer = document.querySelector(".cards-container");

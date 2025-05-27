@@ -14,7 +14,7 @@
       display: flex;
       align-items: center; 
       justify-content: center;
-      font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
+      font-family: system-ui, Calibri, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, 
                    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     }
 
@@ -113,6 +113,23 @@
       font-size: 1rem; 
     }
 }
+.home-link {
+  position: absolute;
+  top: 20px;           /* match your h1’s padding */
+  right: 20px;
+  background: #23226e;
+  color: #a8a8a8;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: inherit;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.home-link:hover {
+  background: #35349c;
+  transform: scale(1.05);
+}
   </style>
 </head>
 
@@ -122,6 +139,7 @@
   <div id="homepage">
     <div class="homepage-left">
       <h1>Research</h1>
+      <a href="index.html" class="home-link">🏠 Home</a>
     </div>
         
           <div class="cards-container">

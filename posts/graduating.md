@@ -28,7 +28,7 @@ I caught **COVID** in week 4—just as we were covering _tensor products_. Missi
 2. Reviewing notes
 3. Watching online lectures
 
-…and still fell behind. Not only did none of it stick, the class, and my other classes continued to progress leaving me in the dust. The first midterm comes around and I scored below the third quartile. This was the worst I've done on an exam relative to the class. I had known that I did poorly on the exam, just because in math it's so easy to self report your understanding of the content. However, when the grades were released, even though I was enjoying myself at a Halloween party, I still felt heartbroken.
+…and still fell behind. Not only did none of it stick, the class, and my other classes continued to progress leaving me in the dust. The first midterm comes around and I scored below the first quartile. This was the worst I've done on an exam relative to the class. I had known that I did poorly on the exam, just because in math it's so easy to self report your understanding of the content. However, when the grades were released, even though I was enjoying myself at a Halloween party, I still felt heartbroken.
 
 Such a common trope in undergraduate is that one class doesn't matter and everyone struggles. I quite honestly strongly disagree with this sentiment. How can I tell myself I can be a mathematician if I was struggling so much in an undergraduate class in a mid tier university. Sure the class was difficult and I had set backs, but it was eye opening in the sense that I could no longer coast my way through good grades. I did end up locking in and scored above average on the final, I still realized that this was a bad sign for my math aptitude.
 
