@@ -6,7 +6,7 @@
 
 College isn’t mandatory—it’s an **investment**. Unlike high school, where attendance is compulsory, college asks you to stake both your time and your money on an uncertain future. People spend **hundreds of thousands** of dollars chasing a degree, and yet at 18 we’re expected to pick our path.
 
-In reality, most of us experiment first. I declared chemistry, then switched into software engineering, flirted with quant, then shifted to oure math. That trial‑and‑error comes at a cost, but it also reveals what truly fits. For me, math’s elegance was irresistible… until I hit the roadblocks that showed me loving a subject doesn’t guarantee it’ll love you back.
+In reality, most of us experiment first. I declared chemistry, then switched into software engineering, flirted with quant, then shifted to pure math. That trial‑and‑error comes at a cost, but it also reveals what truly fits. For me, math’s elegance was irresistible… until I hit the roadblocks that showed me loving a subject doesn’t guarantee it’ll love you back.
 
 ---
 
