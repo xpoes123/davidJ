@@ -460,5 +460,68 @@ a:hover {
       }, finalTimeout);
     });
   </script>
+  <script>
+let animationSkipped = false;
+let animationTimeout1 = null;
+let animationTimeout2 = null;
+
+// Attach skip handler to the home button
+document.addEventListener("DOMContentLoaded", () => {
+  const homeButton = document.querySelector(".home-link");
+  const container = document.getElementById("mainContainer");
+  const homepage = document.getElementById("homepage");
+
+  if (homeButton) {
+    homeButton.addEventListener("click", (e) => {
+      e.preventDefault(); // stop navigating immediately
+      skipAnimation();
+      window.location.href = "index.html"; // navigate after skipping
+    });
+  }
+
+  function skipAnimation() {
+    if (animationSkipped) return;
+    animationSkipped = true;
+
+    // Cancel pending animation timeouts
+    clearTimeout(animationTimeout1);
+    clearTimeout(animationTimeout2);
+
+    // Hide blocks immediately
+    document.querySelectorAll(".block").forEach(b => {
+      b.style.display = "none";
+    });
+
+    // Expand container instantly
+    container.classList.add("expanded");
+
+    // Show homepage immediately
+    homepage.style.display = "";
+    homepage.classList.add("visible");
+  }
+
+  // --- Modify your animation scheduling to capture timeout IDs ---
+  const originalLoad = window.onload;
+  window.onload = function() {
+    if (originalLoad) originalLoad();
+
+    // Replace your setTimeout calls with saved timeout IDs
+    animationTimeout1 = setTimeout(() => {
+      if (animationSkipped) return;
+      document.querySelectorAll('.block').forEach(b => b.style.display = "none");
+      container.classList.add('expanded');
+
+      animationTimeout2 = setTimeout(() => {
+        if (animationSkipped) return;
+        homepage.style.display = "";
+        homepage.offsetHeight;
+        homepage.classList.add('visible');
+      }, 800);
+
+    }, finalTimeout);
+  };
+});
+</script>
+
     </body>
     </html>

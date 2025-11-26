@@ -135,6 +135,23 @@
     }
 
     }
+    .home-link {
+      position: absolute;
+      top: 20px;           /* match your h1’s padding */
+      right: 20px;
+      background: #23226e;
+      color: #a8a8a8;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .home-link:hover {
+      background: #35349c;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 
@@ -144,17 +161,29 @@
   <div id="homepage">
     <div class="homepage-left">
       <h1>Projects</h1>
+      <a href="index.html" class="home-link">🏠</a>
     </div>
         
     <div class="cards-container">
       
       <!-- Card #1 -->
+       <div class="card">
+        <h2>Scibowl Org</h2>
+        <p class="authors">React, Django, Typescript, postgreSQL</p>
+        <img src="img/science_bowl_cartoon.png" alt="Paper 4 thumbnail">
+        <br>
+        <a href="https://github.com/xpoes123/scibowl-org" target="_blank">
+          <button>View Project</button>
+        </a>
+      </div>
+
+
       <div class="card">
         <h2>Sonder</h2>
         <p class="authors">Django, Llama, JavaScript, postgreSQL</p>
         <img src="img/sonder.png" alt="Paper 1 thumbnail">
         <br>
-        <a href="papers/poker.Project" target="_blank">
+        <a href="https://github.com/xpoes123/Sonder" target="_blank">
           <button>View Project</button>
         </a>
       </div>
@@ -165,7 +194,7 @@
         <p class="authors">Django, JavaScript, postgreSQL</p>
         <img src="img/daytour.png" alt="Paper 2 thumbnail">
         <br>
-        <a href="papers/plane_partition.Project" target="_blank">
+        <a href="https://github.com/xpoes123/DayTour" target="_blank">
           <button>View Project</button>
         </a>
       </div>
@@ -176,18 +205,7 @@
         <p class="authors">Django, JavaScript, postgreSQL</p>
         <img src="img/scibowl.png" alt="Paper 3 thumbnail">
         <br>
-        <a href="https://arxiv.org/abs/2312.06698" target="_blank">
-          <button>View Project</button>
-        </a>
-      </div>
-
-      <!-- Card #4 -->
-      <div class="card">
-        <h2>Facial and Gender Recognition</h2>
-        <p class="authors">PyTorch</p>
-        <img src="img/male.png" alt="Paper 4 thumbnail">
-        <br>
-        <a href="papers/latent.Project" target="_blank">
+        <a href="https://github.com/xpoes123/SciBowlElo" target="_blank">
           <button>View Project</button>
         </a>
       </div>
