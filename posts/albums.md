@@ -28,11 +28,11 @@ These are albums that came close. In reality, this is basically my top seven, bu
 
 ![Small Talk](img/blogs/albums/resized_128/smalltalk.jpeg)
 
-I discovered _Small Talk_ while flipping through the “local” section of an underground (literally underground) record shop in Bloomington, Indiana. This was around the time I had started getting into local music and house shows in Madison, so I was immediately drawn to it. I didn’t know the artist, but the cover art alone convinced me it was something I’d like — which, in hindsight, is an insane way to make purchasing decisions, but it worked.
+I discovered _Small Talk_ while flipping through the “local” section of an underground (literally underground) record shop in Bloomington, Indiana. This was around the time I had started getting into local music and house shows in Madison, so I was immediately drawn to it. I didn’t know the artist, but the cover art alone convinced me it was something I’d like, which, in hindsight, is an insane way to make purchasing decisions, but it worked.
 
 I bought it, listened to it nonstop for days, and eventually realized I had to see it live while I was still in Indiana. I reached out to Copeland James, caught them at a random bar show, and later through my involvement with WUD Music I ended up booking them in Madison multiple times over the next couple of years. Every show was a blast.
 
-This album doesn’t quite crack the top five because it isn’t tied to one singular emotional turning point — but it represents discovery, community, and one of the moments where music started bleeding into the rest of my life.
+This album doesn’t quite crack the top five because it isn’t tied to one singular emotional turning point, but it represents discovery, community, and one of the moments where music started bleeding into the rest of my life.
 
 ### _On Hold_ — **Fenne Lily**
 
