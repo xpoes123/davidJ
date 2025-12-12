@@ -24,13 +24,13 @@ But as I grew older I shifted my viewpoint away from music as being music, but r
 
 ### Expert in a Dying Field
 
-![Expert in a Dying Field](../img/blogs/albums/montgomery.jpeg)
+![Expert in a Dying Field](../img/blogs/albums/resized_128/expert_dying.jpg)
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
 
 ### On Hold
 
-![On Hold](../img/blogs/albums/montgomery.jpeg)
+![On Hold](../img/blogs/albums/resized_128/OnHold.jpeg)
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
 
@@ -40,30 +40,30 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
 ### 5) xInfinity
 
-![xInfinity](../img/blogs/albums/montgomery.jpeg)
+![xInfinity](../img/blogs/albums/resized_128/xinfinity.jpg)
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
 
 ### 4) Twenty One Pilots
 
-![Twenty One Pilots](../img/blogs/albums/montgomery.jpeg)
+![Twenty One Pilots](../img/blogs/albums/resized_128/top.png)
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
 
 ### 3) No Dogs Allowed
 
-![No Dogs Allowed](../img/blogs/albums/montgomery.jpeg)
+![No Dogs Allowed](../img/blogs/albums/resized_128/no_dogs_allowed.jpg)
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
 
 ### 2) Birthdays/Dear
 
-![Birthdays/Dear](../img/blogs/albums/montgomery.jpeg)
+![Birthdays/Dear](../img/blogs/albums/resized_128/birthdays.jpg)
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
 
 ### 1) Punisher
 
-![Punisher](../img/blogs/albums/montgomery.jpeg)
+![Punisher](../img/blogs/albums/resized_128/punisher.png)
 
 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
