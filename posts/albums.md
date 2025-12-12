@@ -22,17 +22,27 @@ But as I grew older I shifted my viewpoint away from music as being music, but r
 
 ## Honorable Mentions
 
+These are albums that came close. In reality, this is basically my top seven, but the distinction matters: the top five are albums that are inseparable from specific moments in my life. These honorable mentions almost get there.
+
 ### Expert in a Dying Field
 
-![Expert in a Dying Field](../img/blogs/albums/resized_128/expert_dying.jpg)
+![Small Talk](../img/blogs/albums/resized_128/smalltalk.jpeg)
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
+I discovered Small Talk while flipping through the “local” section of an underground (literally underground) record shop in Bloomington, Indiana. This was around the time I had started getting into local music and house shows in Madison, so I was immediately drawn to it. I didn’t know the artist, but the cover art alone convinced me it was something I’d like, which, in hindsight, is an insane way to make purchasing decisions, but it worked.
+
+I bought it, listened to it nonstop for days, and eventually realized I had to see it live while I was still in Indiana. I reached out to Copeland James, caught them at a random bar show, and later through my involvement with WUD Music I ended up booking them in Madison multiple times over the next couple of years. Every show was a blast.
+
+This album doesn’t quite crack the top five because it isn’t tied to one singular emotional turning point but it represents discovery, community, and one of the moments where music started bleeding into the rest of my life.
 
 ### On Hold
 
 ![On Hold](../img/blogs/albums/resized_128/OnHold.jpeg)
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
+On Hold found me through the Spotify algorithm at exactly the wrong (or right) time. I had been binge-listening to Keaton Henson, which was my first real introduction to sad, quiet, introspective music.
+
+I remember it vividly: around 2am, under the covers, scrolling for new music. The first time I heard “Car Park,” I cried. Immediately. No build-up. No warning.
+
+I fell in love with Fenne Lily and On Hold right away. Musically, this album is incredible, honestly, if I were ranking purely on sound, it might be higher. But the albums in the top five are tied to moments that feel heavier and more defining. On Hold is deeply emotional, but it feels more like a chapter than a turning point.
 
 ---
 
@@ -42,28 +52,58 @@ Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapi
 
 ![xInfinity](../img/blogs/albums/resized_128/xinfinity.jpg)
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
+Ok I lied, I said that the top 5 are super emotional and tied to chapters of my life. And to some sense this is a chapter, but not fully. There aren’t many heavy emotions tied to this album—it’s just a really good album.
+
+Many people consider xInfinity Watsky’s magnum opus, and I agree. The storytelling is strong, the production is polished, and the technical rapping is excellent. Watsky was the first artist I was truly a fan of; I listened to Cardboard Castles religiously before this album came out.
+
+More importantly, this album coincides with the first concert I ever went to. In that sense, xInfinity kickstarted my entire concert going life, which has since become a pretty significant part of who I am. It’s not the most emotionally intense album here but it’s foundational.
 
 ### 4) Twenty One Pilots
 
 ![Twenty One Pilots](../img/blogs/albums/resized_128/top.png)
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
+This album is emotionally heavy for reasons that have very little to do with the music itself.
+
+My best friend committed suicide. Before that, we were preparing to play “Migraine” (from Vessel) for a talent show, a song that explicitly touches on suicidal thoughts. A few months later, he was gone.
+
+I have strong memories of sitting in his basement, listening to the self-titled album, dissecting lyrics that probably didn’t mean much to us at the time. Now, some of these songs are difficult to listen to without tearing up.
+
+This album evokes some of the strongest emotions on this list, but it sits at #4 because it was never my favorite musically. Its importance comes from memory and loss not preference.
 
 ### 3) No Dogs Allowed
 
 ![No Dogs Allowed](../img/blogs/albums/resized_128/no_dogs_allowed.jpg)
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
+This album was recommended to me during a summer internship in Indiana. The funny part is that the person who recommended it hesitated, she assumed there was no way I hadn’t already heard of Sidney Gish.
+
+I hadn’t.
+
+When I finally listened, it felt oddly perfect for where I was in life. I was in a rough patch with my girlfriend at the time, and the album hit this strange balance: upbeat, playful, but lyrically sharp in a way that felt uncomfortably accurate. Sidney was just an awkward 20 year old going through life seeing life in a way that felt uncanny to me.
+
+I later saw Sidney Gish live in New York, opening for Katy Kirby, performing under the name Zelda Van Gutters. It was an intimate show, and her personality—playful, warm, and genuinely funny—made the music feel even more personal. This album represents a moment where music didn’t just reflect my emotions, it understood them.
 
 ### 2) Birthdays/Dear
 
 ![Birthdays/Dear](../img/blogs/albums/resized_128/birthdays.jpg)
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
+This was the first album that truly got me into music.
+
+I originally found it through the soundtrack for A Brilliant Young Mind (X+Y), but it quickly became associated with Griffin, who was the aforementioned friend who took his life. The emotional connection was so strong that I stopped listening to Keaton Henson entirely for several years because it was just too much.
+
+I feel obligated to mention the song "Metaphors" which I don't want to get into too much here, but if you know you know. Recently, his album Parade pulled me back in, and I’ve found myself reconnecting with his music in a healthier way.
+
+Looking back, this album played a huge role in shaping my taste. Before it, I mostly listened to mainstream rap and pop. After it, everything changed.
 
 ### 1) Punisher
 
 ![Punisher](../img/blogs/albums/resized_128/punisher.png)
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat...
+This is the album I associate most strongly with a specific era of my life.
+
+I played Punisher endlessly during COVID. When I listen to it now, I get vivid flashbacks to that time senior year of high school, isolation, uncertainty, and this strange mix of deep sadness and quiet happiness.
+
+Naomi introduced me to this album, and it felt like a gateway into the type of music I eventually fell in love with. Songs like “Kyoto” and “Garden Song” still hit hard. “Garden Song,” especially, reminds me of seeing Phoebe live when the opening of the song mirrored the opening of the book she read on stage. Hearing her perform “That Funny Feeling” live genuinely made me cry.
+
+This album feels like a phylogenetic split in my music taste—everything after it traces back to here. Every year I return to Punisher and find new meaning in it, shaped by wherever I am in life at the time. As a sophomore album, it speaks volumes about Phoebe Bridgers’ depth as an artist and her ability to provoke introspection.
+
+This one isn’t just influential. It’s permanent.
