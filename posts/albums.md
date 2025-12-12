@@ -24,7 +24,7 @@ But as I grew older I shifted my viewpoint away from music as being music, but r
 
 These are albums that came close. In reality, this is basically my top seven, but the distinction matters: the top five are albums that are inseparable from specific moments in my life. These honorable mentions almost get there.
 
-### _Expert in a Dying Field_ — **Small Talk**
+### _Small Talk_ — **Copeland James**
 
 ![Small Talk](img/blogs/albums/resized_128/smalltalk.jpeg)
 
