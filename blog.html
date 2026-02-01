@@ -47,7 +47,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
-      margin-top: 20px;
+      margin-top: 50px;
       padding: 0;
     }
 
@@ -93,9 +93,7 @@
     }
 
     #homepage h1 {
-      padding: 20px;
-      margin: 0;
-      color: #e4f221;
+      display: none;
     }
 
     #homepage p {
@@ -115,6 +113,17 @@
       border-radius: 4px;
     }
 
+    #readingProgress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: #e4f221;
+      transition: width 0.1s linear;
+      z-index: 10;
+    }
+
     /* Full post view */
     #postView {
       display: none;
@@ -123,43 +132,41 @@
       overflow: hidden;
     }
 
-    #postView header {
-      padding: 16px;
-      background: #2a2923;
-      color: #d4d3c8;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
     #postContent {
       flex: 1;
       overflow-y: auto;
       padding: 20px;
+      padding-top: 50px;
       color: #d4d3c8;
+      position: relative;
     }
 
     #backBtn {
-      background: #2a2923;
+      position: absolute;
+      top: 20px;
+      left: 20px;
       color: #a8a79e;
+      text-decoration: none;
+      padding: 4px 2px;
+      background: none;
       border: none;
-      padding: 8px 16px;
+      border-bottom: 1.5px solid transparent;
+      font-family: inherit;
       font-size: 1rem;
-      border-radius: 4px;
       cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-      margin-right: 16px;
+      transition: color 0.2s, border-color 0.2s;
+      z-index: 5;
     }
 
     #backBtn:hover {
-      background: #38362f;
-      transform: scale(1.05);
+      color: #e4f221;
+      border-bottom-color: #e4f221;
     }
 
     .home-link {
       position: absolute;
       top: 20px;
-      right: 20px;
+      left: 20px;
       color: #a8a79e;
       text-decoration: none;
       padding: 4px 2px;
@@ -185,16 +192,9 @@
         padding: 15px;
       }
 
-      #homepage h1 {
-        padding: 15px 0;
-        font-size: 1.5rem;
-        text-align: center;
-        margin-right: 60px;
-      }
-
       .home-link {
         top: 15px;
-        right: 15px;
+        left: 15px;
         padding: 6px 12px;
         font-size: 0.9rem;
       }
@@ -226,10 +226,6 @@
         margin-bottom: 15px;
       }
 
-      #postView header {
-        padding: 12px 15px;
-      }
-
       #postContent {
         padding: 15px;
         font-size: 1rem;
@@ -237,12 +233,7 @@
       }
 
       #backBtn {
-        padding: 6px 12px;
         font-size: 0.9rem;
-      }
-
-      #postTitle {
-        font-size: 1.1rem !important;
       }
     }
 
@@ -257,15 +248,9 @@
         padding: 10px;
       }
 
-      #homepage h1 {
-        padding: 10px 0;
-        font-size: 1.3rem;
-        margin-right: 50px;
-      }
-
       .home-link {
         top: 10px;
-        right: 10px;
+        left: 10px;
         padding: 5px 10px;
         font-size: 0.8rem;
       }
@@ -277,10 +262,6 @@
 
       .card {
         padding: 16px;
-      }
-
-      #postView header {
-        padding: 10px 12px;
       }
 
       #postContent {
@@ -302,10 +283,8 @@
 
     <!-- 2) Full post view -->
     <div id="postView">
-      <header>
-        <button id="backBtn">&#8592;</button>
-        <h2 id="postTitle" style="margin:0; font-size:1.2rem;"></h2>
-      </header>
+      <div id="readingProgress"></div>
+      <button id="backBtn">&#8592; Back</button>
       <div id="postContent"></div>
     </div>
   </div>
@@ -328,7 +307,6 @@
     const homepage       = document.getElementById("homepage");
     const postView       = document.getElementById("postView");
     const postContent    = document.getElementById("postContent");
-    const postTitle      = document.getElementById("postTitle");
     const backBtn        = document.getElementById("backBtn");
 
     async function buildPreviews() {
@@ -370,7 +348,6 @@
     async function showPost(post) {
       homepage.style.display  = "none";
       postView.style.display  = "flex";
-      postTitle.textContent   = post.title;
       postContent.textContent = "Loading…";
 
       try {
@@ -399,6 +376,14 @@
       postView.style.display = "none";
       homepage.style.display = "block";
     }
+
+    const readingProgress = document.getElementById("readingProgress");
+    postContent.addEventListener("scroll", () => {
+      const scrollable = postContent.scrollHeight - postContent.clientHeight;
+      readingProgress.style.width = scrollable > 0
+        ? (postContent.scrollTop / scrollable * 100) + "%"
+        : "0%";
+    });
 
     window.addEventListener('popstate', routeFromHash);
 
