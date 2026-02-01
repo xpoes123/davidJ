@@ -333,9 +333,7 @@ a:hover {
       </p>
       <div class="ask-me-about">
         Ask me about
-        <span class="typewrite"
-              data-period="2000"
-              data-type='[ "live music.", "Spotify data.", "LLMs.", "chess.", "Rubik&#8217;s cubes.", "integer partitions.", "poker.", "science bowl.", "GeoGuessr.", "Valorant.", "Madison.", "math competitions.", "indie rock.", "cooking without recipes.", "graph problems."]'>
+        <span class="typewrite" data-period="2000">
           <span class="wrap"></span>
         </span>
       </div>
@@ -398,16 +396,15 @@ a:hover {
     // ========== MAIN ONLOAD HANDLER ==========
     window.addEventListener('load', function() {
       // 1) Initialize the typewriter effect
-      var elements = document.getElementsByClassName('typewrite');
-      for (var i = 0; i < elements.length; i++) {
-        var toRotateStr = elements[i].getAttribute('data-type');
-        var period = elements[i].getAttribute('data-period');
-        if (toRotateStr) {
-          var toRotate = JSON.parse(toRotateStr);
-          toRotate = randomShuffle(toRotate);
-          new TxtType(elements[i], toRotate, period);
-        }
-      }
+      fetch('topics.json')
+        .then(r => r.json())
+        .then(topics => {
+          var elements = document.getElementsByClassName('typewrite');
+          for (var i = 0; i < elements.length; i++) {
+            var period = elements[i].getAttribute('data-period');
+            new TxtType(elements[i], randomShuffle(topics.slice()), period);
+          }
+        });
 
       // Check for ?skip parameter
       const urlParams = new URLSearchParams(window.location.search);
