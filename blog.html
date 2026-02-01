@@ -20,11 +20,9 @@
 
     .container {
       position: relative;
-      width: 80vw;
-      height: 90vh;
-      border: 2px solid #3d3b33;
+      width: 100vw;
+      height: 100vh;
       background: #1c1b17;
-      border-radius: 10px;
       transition: all 0.8s ease;
       overflow: hidden;
       display: flex;
@@ -162,26 +160,25 @@
       position: absolute;
       top: 20px;
       right: 20px;
-      background: #2a2923;
       color: #a8a79e;
       text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 4px;
+      padding: 4px 2px;
+      background: none;
+      border-bottom: 1.5px solid transparent;
       font-family: inherit;
-      transition: background 0.2s, transform 0.2s;
+      transition: color 0.2s, border-color 0.2s;
     }
 
     .home-link:hover {
-      background: #38362f;
-      transform: scale(1.05);
+      color: #e4f221;
+      border-bottom-color: #e4f221;
     }
 
     /* Mobile Styles */
     @media (max-width: 768px) {
       .container {
-        width: 95vw;
-        height: 95vh;
-        border-radius: 8px;
+        width: 100vw;
+        height: 100vh;
       }
 
       #homepage {
@@ -254,8 +251,6 @@
       .container {
         width: 100vw;
         height: 100vh;
-        border: none;
-        border-radius: 0;
       }
 
       #homepage {
@@ -301,7 +296,7 @@
     <!-- 1) Preview grid -->
     <div id="homepage">
       <h1>My Blog</h1>
-      <a href="index.html?skip" class="home-link">&#8592;</a>
+      <a href="index.html?skip" class="home-link">Home</a>
       <div class="cards-container"></div>
     </div>
 
@@ -364,7 +359,10 @@
             card.querySelector(".preview").textContent = "Preview failed";
           });
 
-        card.onclick = () => showPost(post);
+        card.onclick = () => {
+          history.pushState(null, '', `blog.html#${post.slug}`);
+          showPost(post);
+        };
         cardsContainer.append(card);
       }
     }
@@ -384,11 +382,28 @@
     }
 
     backBtn.onclick = () => {
+      history.pushState(null, '', 'blog.html');
       postView.style.display  = "none";
       homepage.style.display  = "block";
     };
 
+    function routeFromHash() {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        const post = POSTS.find(p => p.slug === hash);
+        if (post) {
+          showPost(post);
+          return;
+        }
+      }
+      postView.style.display = "none";
+      homepage.style.display = "block";
+    }
+
+    window.addEventListener('popstate', routeFromHash);
+
     buildPreviews();
+    routeFromHash();
   </script>
 
 </body>

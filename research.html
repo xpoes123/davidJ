@@ -20,11 +20,9 @@
 
     .container {
       position: relative;
-      width: 80vw;   
-      height: 90vh;  
-      border: 2px solid #3d3b33;
-      background: #1c1b17;        
-      border-radius: 10px;
+      width: 100vw;
+      height: 100vh;
+      background: #1c1b17;
       transition: all 0.8s ease;
     }
 
@@ -115,20 +113,20 @@
 }
 .home-link {
   position: absolute;
-  top: 20px;           /* match your h1’s padding */
+  top: 20px;
   right: 20px;
-  background: #2a2923;
   color: #a8a79e;
   text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 4px 2px;
+  background: none;
+  border-bottom: 1.5px solid transparent;
   font-family: inherit;
-  transition: background 0.2s, transform 0.2s;
+  transition: color 0.2s, border-color 0.2s;
 }
 
 .home-link:hover {
-  background: #38362f;
-  transform: scale(1.05);
+  color: #e4f221;
+  border-bottom-color: #e4f221;
 }
   </style>
 </head>
@@ -139,7 +137,7 @@
   <div id="homepage">
     <div class="homepage-left">
       <h1>Research</h1>
-      <a href="index.html?skip" class="home-link">←</a>
+      <a href="index.html?skip" class="home-link">Home</a>
     </div>
         
           <div class="cards-container">
