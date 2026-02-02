@@ -179,6 +179,16 @@ a:hover {
   color: #fafafa;
 }
 
+#raccoon-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
 @media (max-width: 768px) {
   .container.expanded {
     width: 95vw;
@@ -341,6 +351,7 @@ a:hover {
     </div>
   </div> <!-- /#homepage -->
 </div> <!-- /.container -->
+<canvas id="raccoon-canvas"></canvas>
 
 <script>
     // ========== TYPEWRITER CLASS ==========
@@ -448,6 +459,363 @@ a:hover {
 
       }, finalTimeout);
     });
+
+    // ========== RACCOON PIXEL ANIMATION ==========
+    (function() {
+      const canvas = document.getElementById('raccoon-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const PX = 3;
+      const RAD = 1.5;
+
+      function resize() {
+        canvas.width = window.innerWidth * devicePixelRatio;
+        canvas.height = window.innerHeight * devicePixelRatio;
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const W = () => window.innerWidth;
+      const H = () => window.innerHeight;
+
+      const C = { 1: '#e4f221', 2: '#8d9b15' };
+
+      // Cat body: 15 wide x 9 tall, facing right (no tail)
+      const walkA = [
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,2,1,2,0],
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,1,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,1,0,0,0,0,0],
+        [0,0,0,0,1,1,0,0,1,1,0,0,0,0,0],
+      ];
+      const walkB = [
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,2,1,2,0],
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,1,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,1,0,0,0,0,0,0],
+        [0,0,0,0,0,1,1,0,1,1,0,0,0,0,0],
+      ];
+      const sit = [
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,1,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0],
+        [0,0,0,0,1,1,1,1,1,1,1,0,0,0,0],
+        [0,0,0,1,1,0,0,0,0,0,1,1,0,0,0],
+        [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      ];
+      const held = [
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,1,1,1,0],
+        [0,0,0,0,0,0,0,0,0,0,1,2,1,2,0],
+        [0,0,0,0,0,0,0,0,0,0,0,1,1,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,1,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,1,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,1,0,0,0,0,0],
+      ];
+
+      const walkFrames = [walkA, walkB];
+
+      // Tail sprites (drawn behind body, anchored at col 5 row 4)
+      // Tail up - curves left then up
+      const tailUp = [
+        [0,1],
+        [1,0],
+        [0,1],
+        [0,1],
+      ];
+      // Tail mid - more relaxed curve
+      const tailMid = [
+        [0,0],
+        [1,0],
+        [1,0],
+        [0,1],
+      ];
+      // Tail down - drooping
+      const tailDown = [
+        [0,0],
+        [0,0],
+        [1,0],
+        [1,0],
+      ];
+      const tailFrames = [tailUp, tailMid, tailDown, tailMid];
+
+      const zSmall = [
+        [1,1,1],
+        [0,1,0],
+        [1,1,1],
+      ];
+      const zBig = [
+        [1,1,1,1],
+        [0,0,1,0],
+        [0,1,0,0],
+        [1,1,1,1],
+      ];
+
+      function drawBlock(x, y, color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.roundRect(x, y, PX, PX, RAD);
+        ctx.fill();
+      }
+
+      function drawSprite(sprite, ox, oy, flipX) {
+        const w = sprite[0].length;
+        for (let r = 0; r < sprite.length; r++) {
+          for (let c = 0; c < w; c++) {
+            const v = sprite[r][c];
+            if (!v) continue;
+            const px = flipX ? ox + (w - 1 - c) * PX : ox + c * PX;
+            drawBlock(px, oy + r * PX, C[v]);
+          }
+        }
+      }
+
+      const spriteW = 15 * PX, spriteH = 9 * PX;
+
+      const R = {
+        x: 200, y: H() - spriteH - 20,
+        dir: 1, dirY: 0, speed: 0.35,
+        frame: 0, animT: 0,
+        state: 'walk', stateT: 0,
+        dirChangeT: 0,
+        tailF: 0, tailT: 0,
+        dragging: false, dragOffX: 0, dragOffY: 0,
+      };
+
+      let mouse = { x: -999, y: -999 };
+
+      function hitTest(mx, my) {
+        return mx >= R.x - 4 && mx <= R.x + spriteW + 4 &&
+               my >= R.y - 4 && my <= R.y + spriteH + 4;
+      }
+
+      // Document-level events so we can detect clicks through the canvas
+      document.addEventListener('mousemove', function(e) {
+        mouse = { x: e.clientX, y: e.clientY };
+        if (R.dragging) {
+          R.x = e.clientX - R.dragOffX;
+          R.y = e.clientY - R.dragOffY;
+        } else if (hitTest(e.clientX, e.clientY)) {
+          document.body.style.cursor = 'grab';
+        } else {
+          document.body.style.cursor = '';
+        }
+      });
+
+      document.addEventListener('mousedown', function(e) {
+        if (hitTest(e.clientX, e.clientY)) {
+          e.preventDefault();
+          R.dragging = true;
+          R.dragOffX = e.clientX - R.x;
+          R.dragOffY = e.clientY - R.y;
+          R.state = 'held';
+          R.stateT = 0;
+          document.body.style.cursor = 'grabbing';
+          // Allow clicks through canvas except on raccoon
+          canvas.style.pointerEvents = 'auto';
+        }
+      });
+
+      document.addEventListener('mouseup', function() {
+        if (!R.dragging) return;
+        R.dragging = false;
+        R.state = 'walk';
+        R.stateT = 0;
+        // Clamp to viewport
+        R.x = Math.max(6, Math.min(R.x, W() - spriteW - 6));
+        R.y = Math.max(spriteH, Math.min(R.y, H() - spriteH - 6));
+        document.body.style.cursor = '';
+        canvas.style.pointerEvents = 'none';
+      });
+
+      // Touch support
+      document.addEventListener('touchstart', function(e) {
+        const t = e.touches[0];
+        if (hitTest(t.clientX, t.clientY)) {
+          e.preventDefault();
+          R.dragging = true;
+          R.dragOffX = t.clientX - R.x;
+          R.dragOffY = t.clientY - R.y;
+          R.state = 'held';
+          R.stateT = 0;
+        }
+      }, { passive: false });
+
+      document.addEventListener('touchmove', function(e) {
+        if (!R.dragging) return;
+        e.preventDefault();
+        const t = e.touches[0];
+        mouse = { x: t.clientX, y: t.clientY };
+        R.x = t.clientX - R.dragOffX;
+        R.y = t.clientY - R.dragOffY;
+      }, { passive: false });
+
+      document.addEventListener('touchend', function() {
+        if (!R.dragging) return;
+        R.dragging = false;
+        R.state = 'walk';
+        R.stateT = 0;
+        R.x = Math.max(6, Math.min(R.x, W() - spriteW - 6));
+        R.y = Math.max(spriteH, Math.min(R.y, H() - spriteH - 6));
+      });
+
+      let lastTime = 0;
+
+      function update(dt) {
+        if (R.state === 'held') return;
+
+        R.animT += dt;
+        R.stateT += dt;
+
+        // Cycle tail animation
+        R.tailT += dt;
+        if (R.tailT > 0.25) {
+          R.tailT = 0;
+          R.tailF = (R.tailF + 1) % tailFrames.length;
+        }
+
+        // Hover reaction: wake up and face cursor
+        const midX = R.x + spriteW / 2;
+        const midY = R.y + spriteH / 2;
+        const dx = mouse.x - midX;
+        const dy = mouse.y - midY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const hovering = mouse.x > -900 && dist < 80;
+
+        if (hovering && R.state === 'sit') {
+          R.state = 'walk';
+          R.stateT = 0;
+        }
+        if (hovering) {
+          R.dir = dx > 0 ? 1 : -1;
+        }
+
+        if (R.state === 'walk') {
+          if (R.animT > 0.3) {
+            R.animT = 0;
+            R.frame = (R.frame + 1) % walkFrames.length;
+          }
+
+          // Slowly drift toward cursor if visible, otherwise wander
+          const cursorVisible = mouse.x > -900;
+          const minX = 6, maxX = W() - spriteW - 6;
+          const minY = 6, maxY = H() - spriteH - 6;
+
+          if (cursorVisible) {
+            const tx = mouse.x - spriteW / 2;
+            const ty = mouse.y - spriteH / 2;
+            let toX = tx - R.x;
+            let toY = ty - R.y;
+            const d = Math.sqrt(toX * toX + toY * toY);
+
+            R.dir = toX > 0 ? 1 : -1;
+
+            if (d > 60) {
+              const spd = R.speed * dt * 60;
+              let nx = R.x + (toX / d) * spd;
+              let ny = R.y + (toY / d) * spd * 0.7;
+
+              // If hitting a wall on one axis, slide along the other
+              const blockedX = nx <= minX || nx >= maxX;
+              const blockedY = ny <= minY || ny >= maxY;
+
+              if (blockedX && !blockedY) {
+                // Can't go X, move Y only
+                ny = R.y + (toY > 0 ? 1 : -1) * spd * 0.7;
+              } else if (blockedY && !blockedX) {
+                // Can't go Y, move X only
+                nx = R.x + (toX > 0 ? 1 : -1) * spd;
+              }
+
+              R.x = Math.max(minX, Math.min(nx, maxX));
+              R.y = Math.max(minY, Math.min(ny, maxY));
+            }
+          } else {
+            R.x += R.speed * R.dir * dt * 60;
+            if (R.x >= maxX) { R.x = maxX; R.dir = -1; }
+            if (R.x <= minX) { R.x = minX; R.dir = 1; }
+          }
+          if (R.stateT > 8 + Math.random() * 6 && !hovering) {
+            R.state = 'sit';
+            R.stateT = 0;
+          }
+        } else if (R.state === 'sit') {
+          if (R.stateT > 2 + Math.random() * 2) {
+            R.state = 'walk';
+            R.stateT = 0;
+            if (Math.random() < 0.4) R.dir *= -1;
+          }
+        }
+      }
+
+      function loop(ts) {
+        const dt = Math.min((ts - lastTime) / 1000, 0.05);
+        lastTime = ts;
+        ctx.clearRect(0, 0, W(), H());
+        update(dt);
+
+        const flip = R.dir === -1;
+
+        if (R.state === 'held') {
+          // Draw tail behind held body
+          const htail = tailFrames[R.tailF];
+          const htailW = htail[0].length;
+          const htailH = htail.length;
+          const htx = flip ? R.x + 11 * PX : R.x + 5 * PX - htailW * PX;
+          const hty = R.y + (4 - htailH + 1) * PX;
+          drawSprite(htail, htx, hty, flip);
+          drawSprite(held, R.x, R.y, flip);
+          return requestAnimationFrame(loop);
+        }
+
+        const sp = R.state === 'sit' ? sit : walkFrames[R.frame];
+
+        // Draw animated tail behind body when walking (sit sprite has built-in curled tail)
+        if (R.state !== 'sit') {
+          const tail = tailFrames[R.tailF];
+          const tailW = tail[0].length;
+          const tailH = tail.length;
+          const tx = flip ? R.x + 11 * PX : R.x + 5 * PX - tailW * PX;
+          const ty = R.y + (4 - tailH + 1) * PX;
+          drawSprite(tail, tx, ty, flip);
+        }
+
+        drawSprite(sp, R.x, R.y, flip);
+
+        // Z's when sleeping
+        if (R.state === 'sit') {
+          const headX = flip ? R.x : R.x + 13 * PX;
+          const t = R.stateT;
+
+          const cyc1 = (t * 10) % 20;
+          ctx.globalAlpha = (1 - cyc1 / 20) * 0.8;
+          drawSprite(zSmall, headX, R.y - cyc1, false);
+
+          const cyc2 = (Math.max(0, t - 0.8) * 10) % 25;
+          ctx.globalAlpha = t > 0.8 ? (1 - cyc2 / 25) * 0.6 : 0;
+          drawSprite(zBig, headX + 4 * PX, R.y - 3 * PX - cyc2, false);
+          ctx.globalAlpha = 1;
+        }
+
+        requestAnimationFrame(loop);
+      }
+
+      requestAnimationFrame(function(ts) { lastTime = ts; loop(ts); });
+    })();
 
     function skipAnimation() {
       const container = document.getElementById('mainContainer');
