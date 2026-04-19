@@ -24,6 +24,7 @@
 
 .container {
   position: relative;
+  z-index: 1;
   width: 480px;   /* 24 columns * 20px */
   height: 100px;  /* 5 rows * 20px */
   border: 2px solid #3d3b33;
@@ -37,6 +38,7 @@
   height: 100vh;
   border: none;
   border-radius: 0;
+  background: rgba(28, 27, 23, 0.85);
 }
 
 .block {
@@ -63,7 +65,6 @@
 }
 
 #homepage {
-  display: none;
   opacity: 0;
   transition: opacity 0.8s ease;
 
@@ -179,6 +180,16 @@ a:hover {
   color: #fafafa;
 }
 
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
 #raccoon-canvas {
   position: fixed;
   top: 0;
@@ -188,6 +199,7 @@ a:hover {
   pointer-events: none;
   z-index: 9999;
 }
+
 
 @media (max-width: 768px) {
   .container.expanded {
@@ -232,6 +244,7 @@ a:hover {
 </head>
 <body>
 
+<canvas id="particle-canvas"></canvas>
 <div class="container" id="mainContainer">
 
 <!-- D (columns 0..3) -->
@@ -375,7 +388,11 @@ a:hover {
         this.txt = fullTxt.substring(0, this.txt.length + 1);
       }
 
-      this.el.innerHTML = '<span class="wrap">'+ this.txt +'</span>';
+      const wrap = document.createElement('span');
+      wrap.className = 'wrap';
+      wrap.textContent = this.txt;
+      this.el.innerHTML = '';
+      this.el.appendChild(wrap);
 
       var that = this;
       var delta = 100 - Math.random() * 100;
@@ -399,22 +416,33 @@ a:hover {
       }, delta);
     };
 
-    // Simple random shuffle
+    // Fisher-Yates shuffle (unbiased)
     function randomShuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
+      const arr = array.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+      }
+      return arr;
     }
 
     // ========== MAIN ONLOAD HANDLER ==========
     window.addEventListener('load', function() {
       // 1) Initialize the typewriter effect
       fetch('topics.json')
-        .then(r => r.json())
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
         .then(topics => {
           var elements = document.getElementsByClassName('typewrite');
           for (var i = 0; i < elements.length; i++) {
             var period = elements[i].getAttribute('data-period');
             new TxtType(elements[i], randomShuffle(topics.slice()), period);
           }
+        })
+        .catch(function(err) {
+          console.error('Failed to load topics:', err);
         });
 
       // Check for ?skip parameter
@@ -459,6 +487,177 @@ a:hover {
 
       }, finalTimeout);
     });
+
+    // ========== INTERACTIVE PARTICLE CONSTELLATION ==========
+    (function() {
+      const pCanvas = document.getElementById('particle-canvas');
+      if (!pCanvas) return;
+      const pCtx = pCanvas.getContext('2d');
+
+      let pW, pH;
+      function resizeParticles() {
+        const dpr = window.devicePixelRatio || 1;
+        pW = window.innerWidth;
+        pH = window.innerHeight;
+        pCanvas.width = pW * dpr;
+        pCanvas.height = pH * dpr;
+        pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      resizeParticles();
+      window.addEventListener('resize', resizeParticles);
+
+      const PARTICLE_COUNT = 90;
+      const CONNECTION_DIST = 140;
+      const MOUSE_RADIUS = 200;
+      const MOUSE_ATTRACT = 0.015;
+
+      const particles = [];
+      const pMouse = { x: -9999, y: -9999 };
+
+      document.addEventListener('mousemove', function(e) {
+        pMouse.x = e.clientX;
+        pMouse.y = e.clientY;
+      });
+      document.addEventListener('mouseleave', function() {
+        pMouse.x = -9999;
+        pMouse.y = -9999;
+      });
+
+      // Color palette - David's yellow/gold tones
+      const colors = [
+        { r: 228, g: 242, b: 33 },   // #e4f221 - primary yellow
+        { r: 141, g: 155, b: 21 },   // #8d9b15 - muted gold
+        { r: 200, g: 213, b: 29 },   // #c8d51d - mid yellow
+        { r: 170, g: 184, b: 25 },   // #aab819 - warm gold
+      ];
+
+      function createParticle() {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        return {
+          x: Math.random() * pW,
+          y: Math.random() * pH,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: Math.random() * 1.5 + 0.8,
+          color: color,
+          alpha: Math.random() * 0.4 + 0.15,
+          pulseSpeed: Math.random() * 0.002 + 0.001,
+          pulsePhase: Math.random() * Math.PI * 2,
+        };
+      }
+
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(createParticle());
+      }
+
+      let pLastTime = 0;
+
+      function particleLoop(ts) {
+        const dt = Math.min((ts - pLastTime) / 16.667, 3); // normalize to ~60fps
+        pLastTime = ts;
+
+        pCtx.clearRect(0, 0, pW, pH);
+
+        // Update particles
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+
+          // Mouse attraction
+          const dx = pMouse.x - p.x;
+          const dy = pMouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MOUSE_RADIUS && dist > 1) {
+            const force = MOUSE_ATTRACT * (1 - dist / MOUSE_RADIUS);
+            p.vx += (dx / dist) * force * dt;
+            p.vy += (dy / dist) * force * dt;
+          }
+
+          // Damping
+          p.vx *= 0.99;
+          p.vy *= 0.99;
+
+          // Move
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+
+          // Wrap around edges
+          if (p.x < -10) p.x = pW + 10;
+          if (p.x > pW + 10) p.x = -10;
+          if (p.y < -10) p.y = pH + 10;
+          if (p.y > pH + 10) p.y = -10;
+
+          // Pulsing alpha
+          const pulse = Math.sin(ts * p.pulseSpeed + p.pulsePhase) * 0.1;
+          p.currentAlpha = Math.max(0.05, p.alpha + pulse);
+        }
+
+        // Draw connections between particles
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const a = particles[i];
+            const b = particles[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < CONNECTION_DIST) {
+              const opacity = (1 - dist / CONNECTION_DIST) * 0.15;
+              pCtx.strokeStyle = 'rgba(228, 242, 33, ' + opacity + ')';
+              pCtx.lineWidth = 0.5;
+              pCtx.beginPath();
+              pCtx.moveTo(a.x, a.y);
+              pCtx.lineTo(b.x, b.y);
+              pCtx.stroke();
+            }
+          }
+        }
+
+        // Draw connections to mouse cursor
+        if (pMouse.x > -9000) {
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            const dx = pMouse.x - p.x;
+            const dy = pMouse.y - p.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < MOUSE_RADIUS) {
+              const opacity = (1 - dist / MOUSE_RADIUS) * 0.25;
+              pCtx.strokeStyle = 'rgba(228, 242, 33, ' + opacity + ')';
+              pCtx.lineWidth = 0.8;
+              pCtx.beginPath();
+              pCtx.moveTo(pMouse.x, pMouse.y);
+              pCtx.lineTo(p.x, p.y);
+              pCtx.stroke();
+            }
+          }
+        }
+
+        // Draw particles with glow
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          const c = p.color;
+
+          // Outer glow
+          const grad = pCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 4);
+          grad.addColorStop(0, 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + (p.currentAlpha * 0.5) + ')');
+          grad.addColorStop(1, 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',0)');
+          pCtx.fillStyle = grad;
+          pCtx.beginPath();
+          pCtx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2);
+          pCtx.fill();
+
+          // Core dot
+          pCtx.fillStyle = 'rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + p.currentAlpha + ')';
+          pCtx.beginPath();
+          pCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          pCtx.fill();
+        }
+
+        requestAnimationFrame(particleLoop);
+      }
+
+      requestAnimationFrame(function(ts) { pLastTime = ts; particleLoop(ts); });
+    })();
 
     // ========== RACCOON PIXEL ANIMATION ==========
     (function() {
