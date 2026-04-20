@@ -314,11 +314,15 @@
         const card = document.createElement("div");
         card.className = "card";
 
-        card.innerHTML = `
-          <h2>${post.title}</h2>
-          <p class="date">${post.date || ''}</p>
-          <div class="preview">Loading preview…</div>
-        `;
+        const h2 = document.createElement("h2");
+        h2.textContent = post.title;
+        const datep = document.createElement("p");
+        datep.className = "date";
+        datep.textContent = post.date || '';
+        const preview = document.createElement("div");
+        preview.className = "preview";
+        preview.textContent = "Loading preview…";
+        card.append(h2, datep, preview);
 
         fetch(`posts/${post.slug}.md`)
           .then(r => r.text())
@@ -331,10 +335,10 @@
             const snippetWords = words.slice(0, 20);
             const snippetMd    = snippetWords.join(' ') + (words.length > 20 ? '…' : '');
 
-            card.querySelector('.preview').innerHTML = marked.parse(snippetMd);
+            preview.innerHTML = marked.parse(snippetMd);
           })
           .catch(_ => {
-            card.querySelector(".preview").textContent = "Preview failed";
+            preview.textContent = "Preview failed";
           });
 
         card.onclick = () => {
