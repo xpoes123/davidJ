@@ -270,6 +270,7 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
 </head>
 
 <body>
@@ -321,7 +322,7 @@
         `;
 
         fetch(`posts/${post.slug}.md`)
-          .then(r => r.text())
+          .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
           .then(md => {
             const noHeaders = md
               .replace(/^(?:#{1,6}\s.*|\*\*Date:\*\*.*)$/gm, '')
@@ -331,9 +332,10 @@
             const snippetWords = words.slice(0, 20);
             const snippetMd    = snippetWords.join(' ') + (words.length > 20 ? '…' : '');
 
-            card.querySelector('.preview').innerHTML = marked.parse(snippetMd);
+            card.querySelector('.preview').innerHTML = DOMPurify.sanitize(marked.parse(snippetMd));
           })
-          .catch(_ => {
+          .catch(err => {
+            console.error('Failed to load preview:', err);
             card.querySelector(".preview").textContent = "Preview failed";
           });
 
@@ -351,8 +353,10 @@
       postContent.textContent = "Loading…";
 
       try {
-        const md = await (await fetch(`posts/${post.slug}.md`)).text();
-        postContent.innerHTML = marked.parse(md);
+        const resp = await fetch(`posts/${post.slug}.md`);
+        if (!resp.ok) throw new Error(resp.status);
+        const md = await resp.text();
+        postContent.innerHTML = DOMPurify.sanitize(marked.parse(md));
       } catch (e) {
         postContent.textContent = "Failed to load post.";
       }
