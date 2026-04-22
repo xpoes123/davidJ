@@ -240,6 +240,25 @@ a:hover {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    animation: none;
+    top: calc(var(--y) * 20px);
+  }
+  #homepage {
+    opacity: 1;
+    animation: none;
+    transition: none;
+  }
+  .container {
+    transition: none;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
     </style>
 </head>
 <body>
