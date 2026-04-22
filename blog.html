@@ -351,7 +351,9 @@
       postContent.textContent = "Loading…";
 
       try {
-        const md = await (await fetch(`posts/${post.slug}.md`)).text();
+        const resp = await fetch(`posts/${post.slug}.md`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const md = await resp.text();
         postContent.innerHTML = marked.parse(md);
       } catch (e) {
         postContent.textContent = "Failed to load post.";
