@@ -321,7 +321,7 @@
         `;
 
         fetch(`posts/${post.slug}.md`)
-          .then(r => r.text())
+          .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
           .then(md => {
             const noHeaders = md
               .replace(/^(?:#{1,6}\s.*|\*\*Date:\*\*.*)$/gm, '')
