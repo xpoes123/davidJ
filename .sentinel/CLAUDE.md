@@ -1,6 +1,6 @@
 # Sentinel Learnings for xpoes123/davidJ
 
-Auto-maintained by Sentinel's memory system. Last updated: 2026-04-23 03:02 UTC
+Auto-maintained by Sentinel's memory system. Last updated: 2026-04-24 07:17 UTC
 
 These are patterns learned from completed tasks on this repo.
 Claude Code loads this file automatically.
@@ -8,7 +8,7 @@ Claude Code loads this file automatically.
 ## Warnings (avoid these)
 
 - fetch() without .ok check silently accepts 404/500 responses (confidence: 23)
-- Broken asset paths fail silently—check browser console for 404s (confidence: 21)
+- Broken asset paths fail silently—check browser console for 404s (confidence: 22)
 - innerHTML is XSS-prone; prefer textContent or createElement (confidence: 21)
 - Bare catch blocks hide critical errors from debugging (confidence: 17)
 - Verify full implementation exists before opening PR (confidence: 13)
@@ -20,9 +20,9 @@ Claude Code loads this file automatically.
 
 ## Conventions & Preferences
 
+- Test asset paths work before commit (confidence: 21)
+- Security-first approach to XSS prevention (confidence: 21)
 - Proactive error handling over silent failures (confidence: 20)
-- Security-first approach to XSS prevention (confidence: 20)
-- Test asset paths work before commit (confidence: 19)
 - Explicit HTTP status validation in all fetch chains (confidence: 19)
 - Code cleanup as part of bug scanning (confidence: 17)
 - Secure git remotes with SSH keys or credential managers (confidence: 16)
@@ -36,7 +36,7 @@ Claude Code loads this file automatically.
 - Check response.ok before parsing fetch responses (confidence: 25)
 - Use textContent + createElement instead of innerHTML for dynamic content (confidence: 23)
 - Always prepend relative paths for assets (img/, css/, js/) (confidence: 21)
-- Scan .git/config for exposed tokens before commits (confidence: 19)
+- Scan .git/config for exposed tokens before commits (confidence: 20)
 - Always add catch blocks with console.error for fetch calls (confidence: 17)
 - Remove dead code during scans (unused functions) (confidence: 17)
 - Audit for subtle visual inconsistencies across multiple pages (confidence: 15)
