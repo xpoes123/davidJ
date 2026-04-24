@@ -391,8 +391,7 @@ a:hover {
       const wrap = document.createElement('span');
       wrap.className = 'wrap';
       wrap.textContent = this.txt;
-      this.el.innerHTML = '';
-      this.el.appendChild(wrap);
+      this.el.replaceChildren(wrap);
 
       var that = this;
       var delta = 100 - Math.random() * 100;
