@@ -333,7 +333,8 @@
 
             card.querySelector('.preview').innerHTML = marked.parse(snippetMd);
           })
-          .catch(_ => {
+          .catch(err => {
+            console.error('Failed to load preview for', post.slug, err);
             card.querySelector(".preview").textContent = "Preview failed";
           });
 
