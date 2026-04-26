@@ -354,6 +354,7 @@
         const md = await (await fetch(`posts/${post.slug}.md`)).text();
         postContent.innerHTML = marked.parse(md);
       } catch (e) {
+        console.error("Failed to load post:", e);
         postContent.textContent = "Failed to load post.";
       }
     }
