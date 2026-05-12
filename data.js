@@ -8,12 +8,12 @@ window.STACKS = [
     archiveHref: 'archive.html?stack=projects',
     sub: "Things I've shipped. A growing catalog of side projects, bots, and small useful tools.",
     cubes: [
-      { id: 'sentinel', title: 'Sentinel', subtitle: 'autonomous engineering bot', body: 'Writes, reviews, and deploys code from GitHub issues.', date: '2025-11' },
-      { id: 'sage', title: 'Sage', subtitle: 'personal AI assistant', body: 'Calendar, email, reminders, news. A Discord-native daily companion.', date: '2025-08' },
+      { id: 'sage', title: 'Sage', subtitle: 'personal AI assistant', body: 'Calendar, email, reminders, news. A Discord-native daily companion.', date: '2026-04' },
+      { id: 'sentinel', title: 'Sentinel', subtitle: 'autonomous engineering bot', body: 'Writes, reviews, and deploys code from GitHub issues.', date: '2026-03' },
+      { id: 'sharplab', title: 'SharpLab', subtitle: 'sports betting quant lab', body: 'Odds ingestion + CLV tracking for live sports markets.', date: '2025-11' },
       { id: 'stavid', title: 'Stavid', subtitle: 'apartment life bot', body: 'Budget, habits, and lists, built with Stephanie.', date: '2025-06' },
       { id: 'daytour', title: 'DayTour', subtitle: 'multi-stop day itinerary planner', body: 'A web app for planning, organizing, and visualizing multi-stop day itineraries. Construct and rearrange a sequence of locations for a single day in one place.', href: 'https://github.com/xpoes123/DayTour', date: '2025-04' },
       { id: 'sonder', title: 'Sonder', subtitle: 'music recommender via "song profiles"', body: 'An experimental app where you swipe on dating-profile-style songs to express musical preferences; a clustering engine then recommends new tracks based on inferred taste attributes.', href: 'https://github.com/xpoes123/Sonder', date: '2025-02' },
-      { id: 'sharplab', title: 'SharpLab', subtitle: 'sports betting quant lab', body: 'Odds ingestion + CLV tracking for live sports markets.', date: '2026-11' },
       { id: 'nba', title: 'NBA Modeling', subtitle: 'player ratings & spread prediction', body: 'Hybrid RAPM + Elo player ratings feeding a spread model.', date: '2024-03' }
     ]
   },
