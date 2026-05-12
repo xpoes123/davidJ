@@ -123,6 +123,7 @@
   .cube:hover polygon { filter: brightness(1.18); }
   .cube.dimmed { opacity: 0.08; }
   .cube.focused polygon { filter: brightness(1.3); }
+
   .cube.drop-in {
     transform: translateY(-70vh);
     opacity: 0;
@@ -487,6 +488,8 @@ function renderPartition() {
   // back-to-front
   cubeSpecs.sort((a, b) => a.depth - b.depth);
 
+  // Split into solid (at least one visible face) and ghost (fully occluded → outline overlay)
+  const ghostSpecs = [];
   cubeSpecs.forEach(spec => {
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     g.setAttribute('class', 'cube');
@@ -495,16 +498,22 @@ function renderPartition() {
     g._cube = spec.cube;
     g._stack = spec.stack;
 
+    // Track which camera-facing faces are interior — used for the ghost wireframe if all are interior
+    const interiorCameraFaces = [];
+
     for (const fname of FACE_NAMES) {
       const F = FACES[fname];
-      // skip if interior (neighbor exists in world coords — these are unchanged by rotation)
-      const [dx, dy, dz] = F.off;
-      if (worldHasCube(spec.i + dx, spec.j + dy, spec.k + dz)) continue;
       // skip if not facing camera
       const nRot = rotZ(F.n, theta);
       const dot = nRot[0]*CAM_DIR[0] + nRot[1]*CAM_DIR[1] + nRot[2]*CAM_DIR[2];
       if (dot <= 0.01) continue;
-      // compute & render
+      // check if interior (neighbor cube exists in world coords)
+      const [dx, dy, dz] = F.off;
+      if (worldHasCube(spec.i + dx, spec.j + dy, spec.k + dz)) {
+        interiorCameraFaces.push(fname);
+        continue;
+      }
+      // visible face: render solid
       const verts = F.verts(spec.i, spec.j, spec.k);
       const proj = verts.map(v => project3(rotateAroundCenter(v, theta)));
       const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
@@ -512,7 +521,25 @@ function renderPartition() {
       poly.setAttribute('fill', shade(spec.color, F.shade));
       g.appendChild(poly);
     }
-    if (g.children.length > 0) svg.appendChild(g);
+
+    if (g.children.length > 0) {
+      svg.appendChild(g);
+    } else {
+      // Fully occluded — defer to ghost pass so it draws on top of everything
+      ghostSpecs.push({ spec, faces: interiorCameraFaces });
+    }
+  });
+
+  // Occluded cubes get an empty <g> in the DOM so querySelector still finds them
+  // (lets the timeline scrubber and scroll handler focus them). No visible rendering.
+  ghostSpecs.forEach(({ spec }) => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'cube ghost');
+    g.setAttribute('data-cube', spec.cube.id);
+    g.setAttribute('data-stack', spec.stack.label.toLowerCase());
+    g._cube = spec.cube;
+    g._stack = spec.stack;
+    svg.appendChild(g);
   });
 
   // stack labels at rotated top-center of each stack
