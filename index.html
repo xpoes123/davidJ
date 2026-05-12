@@ -539,12 +539,8 @@ function renderPartition() {
       const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       group.setAttribute('class', 'stack-label-group');
       group.style.cursor = 'pointer';
-      // Invisible hit-rect behind the text so the whole bounding box is clickable
+      // Tight hit-rect sized to the actual rendered text bbox (+ small padding)
       const hit = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      hit.setAttribute('x', proj.x - 70);
-      hit.setAttribute('y', labelY - 14);
-      hit.setAttribute('width', 140);
-      hit.setAttribute('height', 22);
       hit.setAttribute('fill', 'transparent');
       group.appendChild(hit);
       group.appendChild(labelText);
@@ -554,6 +550,11 @@ function renderPartition() {
         window.location.href = stack.archiveHref;
       });
       svg.appendChild(group);
+      const b = labelText.getBBox();
+      hit.setAttribute('x', b.x - 3);
+      hit.setAttribute('y', b.y - 2);
+      hit.setAttribute('width', b.width + 6);
+      hit.setAttribute('height', b.height + 4);
     } else {
       svg.appendChild(labelText);
     }

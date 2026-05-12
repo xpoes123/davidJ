@@ -6,12 +6,12 @@ window.STACKS = [
   {
     i: 0, j: 0, label: 'Projects', color: '#c97c5d',
     archiveHref: 'archive.html?stack=projects',
-    sub: "Things I've shipped — a growing catalog of side projects, bots, and small useful tools.",
+    sub: "Things I've shipped. A growing catalog of side projects, bots, and small useful tools.",
     cubes: [
       { id: 'sentinel', title: 'Sentinel', subtitle: 'autonomous engineering bot', body: 'Writes, reviews, and deploys code from GitHub issues.', date: '2025-11' },
-      { id: 'sage', title: 'Sage', subtitle: 'personal AI assistant', body: 'Calendar, email, reminders, news — a Discord-native daily companion.', date: '2025-08' },
+      { id: 'sage', title: 'Sage', subtitle: 'personal AI assistant', body: 'Calendar, email, reminders, news. A Discord-native daily companion.', date: '2025-08' },
       { id: 'stavid', title: 'Stavid', subtitle: 'apartment life bot', body: 'Budget, habits, and lists, built with Stephanie.', date: '2025-06' },
-      { id: 'daytour', title: 'DayTour', subtitle: 'multi-stop day itinerary planner', body: 'A web app for planning, organizing, and visualizing multi-stop day itineraries — construct and rearrange a sequence of locations for a single day in one place.', href: 'https://github.com/xpoes123/DayTour', date: '2025-04' },
+      { id: 'daytour', title: 'DayTour', subtitle: 'multi-stop day itinerary planner', body: 'A web app for planning, organizing, and visualizing multi-stop day itineraries. Construct and rearrange a sequence of locations for a single day in one place.', href: 'https://github.com/xpoes123/DayTour', date: '2025-04' },
       { id: 'sonder', title: 'Sonder', subtitle: 'music recommender via "song profiles"', body: 'An experimental app where you swipe on dating-profile-style songs to express musical preferences; a clustering engine then recommends new tracks based on inferred taste attributes.', href: 'https://github.com/xpoes123/Sonder', date: '2025-02' },
       { id: 'sharplab', title: 'SharpLab', subtitle: 'sports betting quant lab', body: 'Odds ingestion + CLV tracking for live sports markets.', date: '2026-11' },
       { id: 'nba', title: 'NBA Modeling', subtitle: 'player ratings & spread prediction', body: 'Hybrid RAPM + Elo player ratings feeding a spread model.', date: '2024-03' }
@@ -20,7 +20,7 @@ window.STACKS = [
   {
     i: 1, j: 0, label: 'Research', color: '#6d83a5',
     archiveHref: 'archive.html?stack=research',
-    sub: 'Papers from college — mostly combinatorics, with detours through dynamical systems and folding.',
+    sub: 'Papers from college, mostly combinatorics with detours through dynamical systems and folding.',
     cubes: [
       { id: 'latent', title: 'Latent', subtitle: 'an essay on latent structure', href: 'papers/latent.pdf', date: '2024-08' },
       { id: 'orgi', title: 'Origami', subtitle: 'folds & flat-foldability', href: 'papers/orgi.pdf', date: '2023-12' },
@@ -47,16 +47,16 @@ window.STACKS = [
     archiveHref: 'archive.html?stack=life',
     sub: 'Roles and schools, newest first.',
     cubes: [
-      { id: 'ramp', title: 'Ramp', subtitle: 'GTM engineer · forward-deployed · current', body: 'Forward-deployed engineering on the go-to-market side — embedding with customers, shipping fast, occasionally surfacing to write about it.', date: '2026-01' },
+      { id: 'ramp', title: 'Ramp', subtitle: 'demo creator', body: 'Currently making demos at Ramp.', date: '2026-01' },
       { id: 'uncountable', title: 'Uncountable', subtitle: 'implementation engineer · 2025–2026', body: 'Materials informatics platform; implementation engineering.', date: '2025-06' },
-      { id: 'indiana-reu', title: 'Indiana REU', subtitle: 'summer 2023', body: 'Research Experience for Undergraduates at Indiana University — combinatorics.', date: '2023-06' },
-      { id: 'uw', title: 'UW–Madison', subtitle: 'CS + Math · 2021–2025', body: 'Computer science and math with detours through algorithms and ML.', date: '2021-09' }
+      { id: 'indiana-reu', title: 'Indiana REU', subtitle: 'summer 2023', body: 'Research Experience for Undergraduates at Indiana University. Combinatorics.', date: '2023-06' },
+      { id: 'uw', title: 'UW–Madison', subtitle: 'CS + Math · 2021–2025', body: 'Computer science and math with detours through Valorant and biochemistry.', date: '2021-09' }
     ]
   },
   {
     i: 0, j: 1, label: 'Reading', color: '#b54c4c',
     archiveHref: 'reading.html',
-    sub: 'A reading list — currently in progress, recently finished, with reviews when I get to them.',
+    sub: 'A reading list. Currently in progress, recently finished, with reviews when I get to them.',
     cubes: [
       { id: 'thinking-in-bets',     title: 'Thinking in Bets',           subtitle: 'Annie Duke',                  body: 'On decision-making under uncertainty. Review coming when I finish.', href: 'book.html?slug=thinking-in-bets',     date: '2026-04' },
       { id: 'logic-sports-betting', title: 'Logic of Sports Betting',    subtitle: 'Ed Miller & Matthew Davidow', body: 'Foundational text for the SharpLab side of things. Review coming.',    href: 'book.html?slug=logic-sports-betting', date: '2026-01' },
