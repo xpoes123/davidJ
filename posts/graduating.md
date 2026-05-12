@@ -4,7 +4,7 @@
 
 ## High School vs. College
 
-College isn’t mandatory—it’s an **investment**. Unlike high school, where attendance is compulsory, college asks you to stake both your time and your money on an uncertain future. People spend **hundreds of thousands** of dollars chasing a degree, and yet at 18 we’re expected to pick our path.
+College is an **investment**. Unlike high school, where attendance is compulsory, college asks you to stake both your time and your money on an uncertain future. People spend **hundreds of thousands** of dollars chasing a degree, and yet at 18 we’re expected to pick our path.
 
 In reality, most of us experiment first. I declared chemistry, then switched into software engineering, flirted with quant, then shifted to pure math. That trial‑and‑error comes at a cost, but it also reveals what truly fits. For me, math’s elegance was irresistible… until I hit the roadblocks that showed me loving a subject doesn’t guarantee it’ll love you back.
 
@@ -20,9 +20,9 @@ Even if I’d tried to climb that mountain, success was never guaranteed. Below 
 
 ### 1. People Are Too Smart
 
-Every mathematician hits a roadblock at some point—Algebra I for some; Calculus for many; for me, **Abstract Algebra 2** (Math 542 at UW–Madison). This class was taught by Paul Apisa, a notorious professor at UW known for being a great lecturer, but gave out impossibly difficult homeworks and exams. People often ask what the point of taking such a class is. It just sounds like being a masochist, but like what my roommate always says, enjoying math is masochistic in it of itself. Classes like these are ideal for becoming a research mathematician. The homeworks were sort of expositions into adjacent topics that applied the basic concepts you learned in class. Essentially an abridged version of how you might've discovered the underlying math yourself
+Every mathematician hits a roadblock at some point. For some it’s Algebra I; for many it’s Calculus; for me it was **Abstract Algebra 2** (Math 542 at UW–Madison). This class was taught by Paul Apisa, a notorious professor at UW known for being a great lecturer, but gave out impossibly difficult homeworks and exams. People often ask what the point of taking such a class is. It just sounds like being a masochist, but like what my roommate always says, enjoying math is masochistic in it of itself. Classes like these are ideal for becoming a research mathematician. The homeworks were sort of expositions into adjacent topics that applied the basic concepts you learned in class. Essentially an abridged version of how you might've discovered the underlying math yourself
 
-I caught **COVID** in week 4—just as we were covering _tensor products_. Missing that week left me completely lost. I spent countless hours:
+I caught **COVID** in week 4, right as we were covering _tensor products_. Missing that week left me completely lost. I spent countless hours:
 
 1. Reading the textbook
 2. Reviewing notes
@@ -36,7 +36,7 @@ Such a common trope in undergraduate is that one class doesn't matter and everyo
 
 ### 2. Research Bureaucracy
 
-My junior year summer I did an REU at UW-Madison on _Latent Network Learning_. In an abstract sense we were decomposing certain networks into their building blocks and reconstructing other networks. The project was interesting. But it wasn't really the research that caused me issues. The real issue that I had was how poorly the program was ran. My experience at my previous research experience in Indiana University was wonderful. Everything was ran very well and we were treated very well. **THIS WAS NOT THE NORM**.
+My junior year summer I did an REU at UW-Madison on _Latent Network Learning_. In an abstract sense we were decomposing certain networks into their building blocks and reconstructing other networks. The project was interesting. The problem was how poorly the program was run. My experience at my previous research experience in Indiana University was wonderful. Everything was ran very well and we were treated very well. **THIS WAS NOT THE NORM**.
 
 Research internships aren't meant to be considered a j\*b. Afterall, the money you make isn't even taxed since it's considered a stipend. But at the same time, many of these programs stipulate that you are not allowed to work a job concurrently. The program paid around $4,000 over 10 weeks, which is reasonable to live off of as a college student. However, what ended up happening was we never got paid.
 
