@@ -357,6 +357,7 @@
     font-size: 9px;
   }
 </style>
+<script src="analytics.js" defer></script>
 </head>
 <body>
   <div class="scene">
@@ -547,6 +548,7 @@ function renderPartition() {
       group.addEventListener('click', (e) => {
         if (dragDistance > 5) return;
         e.stopPropagation();
+        if (window.track) window.track('label_click', { stack: stack.label, href: stack.archiveHref });
         window.location.href = stack.archiveHref;
       });
       svg.appendChild(group);
@@ -631,6 +633,12 @@ function focusCube(cubeEl) {
   const cube = cubeEl._cube;
   const stack = cubeEl._stack;
   focusedCubeId = cube.id;
+  // Keep the scroll-navigation index in sync with whichever cube is now focused.
+  if (cube.date && typeof allCubes !== 'undefined') {
+    const idx = allCubes.findIndex(c => c.id === cube.id);
+    if (idx >= 0) scrollIdx = idx;
+  }
+  if (window.track) window.track('cube_click', { cube: cube.id, stack: stack.label });
   document.body.classList.add('focused');
   document.querySelectorAll('.cube').forEach(c => {
     c.classList.toggle('dimmed', c !== cubeEl);
@@ -652,6 +660,7 @@ function focusCube(cubeEl) {
 }
 function unfocus() {
   focusedCubeId = null;
+  scrollIdx = -1;
   document.body.classList.remove('focused');
   document.querySelectorAll('.cube').forEach(c => c.classList.remove('dimmed', 'focused'));
   document.querySelectorAll('.tick').forEach(t => t.classList.remove('active'));
@@ -697,6 +706,33 @@ stacks.forEach(stack => stack.cubes.forEach(cube => {
   allCubes.push({ ...cube, stackLabel: stack.label, color: stack.color });
 }));
 allCubes.sort((a, b) => a.date.localeCompare(b.date));
+
+// --- Scroll-to-navigate-timeline ---
+// The homepage has no normal scroll; route wheel events through the chronological
+// timeline so the user can flip through cubes by scrolling. Throttled so a single
+// wheel gesture doesn't blow past every cube at once.
+let scrollIdx = -1;
+let scrollLastTs = 0;
+const SCROLL_COOLDOWN = 110;  // ms between steps
+window.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  if (allCubes.length === 0) return;
+  const total = Math.abs(e.deltaY) + Math.abs(e.deltaX);
+  if (total < 8) return;  // ignore tiny micro-deltas
+  const now = Date.now();
+  if (now - scrollLastTs < SCROLL_COOLDOWN) return;
+  scrollLastTs = now;
+  const dir = (e.deltaY + e.deltaX) > 0 ? 1 : -1;
+  // dir > 0 (scrolling down/right) → newer cube (right on timeline)
+  if (scrollIdx === -1) {
+    scrollIdx = dir > 0 ? 0 : allCubes.length - 1;
+  } else {
+    scrollIdx = Math.max(0, Math.min(allCubes.length - 1, scrollIdx + dir));
+  }
+  const cube = allCubes[scrollIdx];
+  const el = document.querySelector(`.cube[data-cube="${cube.id}"]`);
+  if (el) focusCube(el);
+}, { passive: false });
 const minD = new Date(allCubes[0].date);
 const maxD = new Date(allCubes[allCubes.length - 1].date);
 const span = maxD - minD;

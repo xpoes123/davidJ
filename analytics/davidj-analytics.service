@@ -1,0 +1,17 @@
+[Unit]
+Description=davidJ analytics
+After=network.target
+
+[Service]
+Type=simple
+User=david
+Group=david
+WorkingDirectory=/opt/davidJ/analytics
+Environment="ANALYTICS_DB=/opt/davidJ/analytics/analytics.db"
+Environment="ANALYTICS_ORIGINS=https://djiang.xyz"
+ExecStart=/opt/davidJ/analytics/venv/bin/uvicorn app:app --host 127.0.0.1 --port 8001
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

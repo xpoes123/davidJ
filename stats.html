@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stats — David Jiang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14131a; --bg-2: #1c1b25;
+    --fg: #e8e3d8; --fg-soft: #a8a39a; --fg-dim: #6b6862;
+    --accent: #d4a955;
+    --rule: rgba(255,255,255,0.10);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at 50% 0%, #1f1d2c 0%, #14131a 60%); min-height: 100vh; }
+
+  .topbar { position: sticky; top: 0; background: rgba(20,19,26,0.85); backdrop-filter: blur(8px); z-index: 10; border-bottom: 1px solid var(--rule); }
+  .topbar-inner { max-width: 980px; margin: 0 auto; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Grotesk', sans-serif; }
+  .topbar a { color: var(--fg-soft); text-decoration: none; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .topbar a:hover { color: var(--fg); }
+  .topbar .site { color: var(--fg); font-weight: 500; font-size: 14px; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 64px 28px 120px; }
+
+  .page-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.32em; text-transform: uppercase; margin-bottom: 14px; }
+  .page-title { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 500; margin: 0 0 14px; letter-spacing: -0.01em; }
+  .page-sub { font-family: 'Newsreader', serif; font-style: italic; color: var(--fg-soft); margin: 0 0 56px; font-size: 18px; max-width: 560px; }
+
+  /* Big-number cards */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 18px; margin-bottom: 56px; }
+  .kpi { padding: 22px 22px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.02); }
+  .kpi .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 10px; }
+  .kpi .value { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 500; color: var(--fg); line-height: 1; }
+  .kpi .delta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-soft); margin-top: 8px; }
+
+  /* Section */
+  section { margin-bottom: 56px; }
+  section h2 { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-soft); margin: 0 0 18px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--rule); }
+  th { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
+  td.num { font-family: 'JetBrains Mono', monospace; text-align: right; color: var(--fg-soft); }
+  td.path { font-family: 'JetBrains Mono', monospace; color: var(--fg); }
+  td.ref { color: var(--fg-soft); }
+  td .bar { display: inline-block; height: 6px; background: var(--accent); opacity: 0.6; border-radius: 1px; margin-right: 8px; vertical-align: middle; }
+
+  /* Spark */
+  .spark { width: 100%; height: 80px; }
+  .spark-card { padding: 22px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.02); margin-bottom: 56px; }
+  .spark-card .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 14px; }
+
+  .status { text-align: center; color: var(--fg-dim); padding: 80px 0; font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.1em; }
+  .status.error { color: #d68a8a; }
+
+  @media (max-width: 600px) {
+    main { padding: 40px 22px 80px; }
+    .page-title { font-size: 32px; }
+    .kpi .value { font-size: 28px; }
+  }
+</style>
+<script src="analytics.js" defer></script>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html">← back</a>
+      <span class="site">David Jiang</span>
+      <span></span>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-kicker">Stats</div>
+    <h1 class="page-title">Who's looking?</h1>
+    <p class="page-sub">Live pageviews, top pages, cube clicks, time-on-page, and scroll depth from the self-hosted analytics service.</p>
+
+    <div id="container"><div class="status">loading…</div></div>
+  </main>
+
+<script>
+const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const ENDPOINT = window.__STATS_ENDPOINT__
+  || (_isLocal ? 'http://localhost:8001/stats' : '/api/analytics/stats');
+
+async function load() {
+  const c = document.getElementById('container');
+  try {
+    const r = await fetch(ENDPOINT);
+    if (!r.ok) throw new Error('stats fetch failed (' + r.status + ')');
+    const s = await r.json();
+    render(s);
+  } catch (e) {
+    c.innerHTML = '<div class="status error">' + e.message + '</div>';
+  }
+}
+
+function fmtSec(s) {
+  if (s == null) return '—';
+  if (s < 60) return s.toFixed(0) + 's';
+  if (s < 3600) return (s / 60).toFixed(1) + 'm';
+  return (s / 3600).toFixed(1) + 'h';
+}
+function fmtPct(p) { return p == null ? '—' : Math.round(p) + '%'; }
+
+function bar(value, max, w) {
+  const pct = max > 0 ? Math.max(2, Math.round((value / max) * (w || 60))) : 0;
+  return '<span class="bar" style="width:' + pct + 'px"></span>';
+}
+
+function trimRef(r) {
+  if (!r) return '—';
+  try { const u = new URL(r); return u.hostname + (u.pathname && u.pathname !== '/' ? u.pathname : ''); } catch (_) { return r; }
+}
+
+function spark(hourly) {
+  if (!hourly || !hourly.length) return '';
+  const max = Math.max(1, ...hourly.map(h => h.views));
+  const W = 900, H = 60, pad = 4;
+  const xs = hourly.map((_, i) => pad + (i / Math.max(1, hourly.length - 1)) * (W - 2 * pad));
+  const ys = hourly.map(h => H - pad - (h.views / max) * (H - 2 * pad));
+  const path = 'M ' + xs.map((x, i) => x.toFixed(1) + ' ' + ys[i].toFixed(1)).join(' L ');
+  const area = path + ' L ' + xs[xs.length - 1].toFixed(1) + ' ' + (H - pad) + ' L ' + xs[0].toFixed(1) + ' ' + (H - pad) + ' Z';
+  return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
+    '<path d="' + area + '" fill="rgba(212,169,85,0.12)" />' +
+    '<path d="' + path + '" stroke="#d4a955" stroke-width="1.2" fill="none" />' +
+    '</svg>';
+}
+
+function render(s) {
+  const c = document.getElementById('container');
+  const html = `
+    <div class="kpis">
+      <div class="kpi"><div class="label">Pageviews · all-time</div><div class="value">${s.total_pageviews}</div></div>
+      <div class="kpi"><div class="label">Visitors · all-time</div><div class="value">${s.unique_visitors}</div><div class="delta">${s.unique_ips} unique IPs</div></div>
+      <div class="kpi"><div class="label">Last 24h</div><div class="value">${s.pv_24h}</div></div>
+      <div class="kpi"><div class="label">Last 7 days</div><div class="value">${s.pv_7d}</div></div>
+      <div class="kpi"><div class="label">Last 30 days</div><div class="value">${s.pv_30d}</div></div>
+    </div>
+
+    <div class="spark-card">
+      <div class="label">Pageviews per hour · last 7 days</div>
+      ${spark(s.hourly)}
+    </div>
+
+    <section>
+      <h2>Top pages</h2>
+      ${tableTopPages(s.top_pages)}
+    </section>
+
+    <section>
+      <h2>Top referrers</h2>
+      ${tableReferrers(s.top_referrers)}
+    </section>
+
+    <section>
+      <h2>Cube clicks</h2>
+      ${tableCubeClicks(s.cube_clicks)}
+    </section>
+
+    <section>
+      <h2>Column-label clicks</h2>
+      ${tableLabelClicks(s.label_clicks)}
+    </section>
+
+    <section>
+      <h2>Time on page</h2>
+      ${tableDuration(s.duration_per_page)}
+    </section>
+
+    <section>
+      <h2>Scroll depth · posts &amp; books</h2>
+      ${tableScroll(s.scroll_per_page)}
+    </section>
+  `;
+  c.innerHTML = html;
+}
+
+function tableTopPages(rows) {
+  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no data yet</p>';
+  const max = rows[0].views;
+  return `<table><thead><tr><th>Path</th><th></th><th class="num">Views</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="path">${escapeHtml(r.page)}</td><td>${bar(r.views, max)}</td><td class="num">${r.views}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+function tableReferrers(rows) {
+  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no external referrers yet</p>';
+  const max = rows[0].count;
+  return `<table><thead><tr><th>Source</th><th></th><th class="num">Hits</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="ref">${escapeHtml(trimRef(r.ref))}</td><td>${bar(r.count, max)}</td><td class="num">${r.count}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+function tableCubeClicks(rows) {
+  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no clicks tracked yet</p>';
+  const max = rows[0].count;
+  return `<table><thead><tr><th>Cube</th><th>Stack</th><th></th><th class="num">Clicks</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="path">${escapeHtml(r.cube || '')}</td><td class="ref">${escapeHtml(r.stack || '')}</td><td>${bar(r.count, max)}</td><td class="num">${r.count}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+function tableLabelClicks(rows) {
+  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no label clicks tracked yet</p>';
+  const max = rows[0].count;
+  return `<table><thead><tr><th>Label</th><th></th><th class="num">Clicks</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="ref">${escapeHtml(r.stack || '')}</td><td>${bar(r.count, max)}</td><td class="num">${r.count}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+function tableDuration(rows) {
+  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no duration samples yet</p>';
+  return `<table><thead><tr><th>Path</th><th class="num">Avg</th><th class="num">Max</th><th class="num">Samples</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="path">${escapeHtml(r.page)}</td><td class="num">${fmtSec(r.avg_sec)}</td><td class="num">${fmtSec(r.max_sec)}</td><td class="num">${r.samples}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+function tableScroll(rows) {
+  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no scroll data yet</p>';
+  return `<table><thead><tr><th>Path</th><th class="num">Avg scroll</th><th class="num">Samples</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="path">${escapeHtml(r.page)}</td><td class="num">${fmtPct(r.avg_scroll)}</td><td class="num">${r.samples}</td></tr>`).join('') +
+    `</tbody></table>`;
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+}
+
+load();
+</script>
+</body>
+</html>
