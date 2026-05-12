@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Jiang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+  :root {
+    --bg: #14131a; --bg-2: #1c1b25;
+    --fg: #e8e3d8; --fg-soft: #a8a39a; --fg-dim: #6b6862;
+    --accent: #d4a955;
+    --rule: rgba(255,255,255,0.10);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Newsreader', Georgia, serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at 50% 0%, #1f1d2c 0%, #14131a 60%); min-height: 100vh; }
+
+  .topbar { position: sticky; top: 0; background: rgba(20, 19, 26, 0.85); backdrop-filter: blur(8px); z-index: 10; border-bottom: 1px solid var(--rule); }
+  .topbar-inner { max-width: 760px; margin: 0 auto; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Grotesk', sans-serif; }
+  .topbar a { color: var(--fg-soft); text-decoration: none; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s ease; }
+  .topbar a:hover { color: var(--fg); }
+  .topbar .site { color: var(--fg); font-weight: 500; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 80px 28px 120px; }
+
+  .page-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.32em; text-transform: uppercase; margin-bottom: 14px; }
+  .page-title { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 500; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 14px; color: var(--fg); }
+  .page-sub { font-family: 'Newsreader', serif; font-style: italic; font-size: 18px; color: var(--fg-soft); margin: 0 0 64px; max-width: 580px; }
+
+  .year-header { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-dim); letter-spacing: 0.24em; text-transform: uppercase; margin: 56px 0 24px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+  .year-header:first-of-type { margin-top: 0; }
+
+  .entry { display: block; padding: 24px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; transition: padding-left 0.25s ease; }
+  .entry:hover { padding-left: 12px; }
+  .entry-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 6px; }
+  .entry-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 500; color: var(--fg); transition: color 0.2s ease; }
+  .entry:hover .entry-title { color: var(--accent); }
+  .entry-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--fg-dim); letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+  .entry-sub { font-family: 'Newsreader', serif; font-style: italic; font-size: 15px; color: var(--fg-soft); margin: 0 0 10px; }
+  .entry-body { font-size: 15px; line-height: 1.6; color: var(--fg-soft); margin: 0; }
+  .entry-link { color: var(--accent); font-family: 'Space Grotesk', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 10px; display: inline-block; }
+
+  .status { text-align: center; color: var(--fg-dim); font-family: 'Space Grotesk', sans-serif; margin-top: 40vh; }
+
+  @media (max-width: 600px) {
+    main { padding: 56px 22px 80px; }
+    .page-title { font-size: 32px; }
+    .entry-title { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html">← back</a>
+      <span class="site">David Jiang</span>
+      <span></span>
+    </div>
+  </nav>
+
+  <main>
+    <div id="container"><div class="status">loading…</div></div>
+  </main>
+
+<script>
+const MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m] = d.split('-');
+  return `${MONTHS[parseInt(m, 10)] || ''} ${y}`.trim();
+}
+
+const params = new URLSearchParams(location.search);
+const stackId = (params.get('stack') || '').toLowerCase();
+const stack = (window.STACKS || []).find(s => s.label.toLowerCase() === stackId);
+
+const container = document.getElementById('container');
+
+if (!stack) {
+  container.innerHTML = `<div class="status">unknown stack — try ?stack=projects</div>`;
+} else {
+  document.title = `${stack.label} — David Jiang`;
+  document.documentElement.style.setProperty('--accent', stack.color);
+  render();
+}
+
+function render() {
+  let html = `
+    <div class="page-kicker" style="color:${stack.color}">${stack.label}</div>
+    <h1 class="page-title">${stack.label}</h1>
+    ${stack.sub ? `<p class="page-sub">${stack.sub}</p>` : ''}
+  `;
+
+  // sort newest-first; cubes without dates go to the end (in original order)
+  const sorted = [...stack.cubes].sort((a, b) => {
+    if (a.date && b.date) return b.date.localeCompare(a.date);
+    if (a.date) return -1;
+    if (b.date) return 1;
+    return 0;
+  });
+
+  // year grouping (skip if no dates)
+  const hasDates = sorted.some(c => c.date);
+  if (hasDates) {
+    const groups = {};
+    sorted.forEach(c => {
+      const y = c.date ? c.date.slice(0, 4) : '—';
+      (groups[y] = groups[y] || []).push(c);
+    });
+    const years = Object.keys(groups).sort().reverse();
+    for (const y of years) {
+      html += `<div class="year-header">${y === '—' ? 'Undated' : y}</div>`;
+      for (const c of groups[y]) html += renderEntry(c);
+    }
+  } else {
+    for (const c of sorted) html += renderEntry(c);
+  }
+
+  container.innerHTML = html;
+}
+
+function renderEntry(c) {
+  const wrap = c.href ? 'a' : 'div';
+  const hrefAttr = c.href ? `href="${c.href}" target="${c.href.startsWith('http') ? '_blank' : '_self'}"` : '';
+  return `
+    <${wrap} class="entry" ${hrefAttr}>
+      <div class="entry-top">
+        <span class="entry-title">${c.title}</span>
+        ${c.date ? `<span class="entry-date">${formatDate(c.date)}</span>` : ''}
+      </div>
+      ${c.subtitle ? `<div class="entry-sub">${c.subtitle}</div>` : ''}
+      ${c.body ? `<p class="entry-body">${c.body}</p>` : ''}
+    </${wrap}>
+  `;
+}
+</script>
+</body>
+</html>

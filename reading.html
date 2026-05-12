@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading — David Jiang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14131a; --bg-2: #1c1b25;
+    --fg: #e8e3d8; --fg-soft: #a8a39a; --fg-dim: #6b6862;
+    --accent: #b54c4c;
+    --rule: rgba(255,255,255,0.10);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Newsreader', Georgia, serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at 50% 0%, #1f1d2c 0%, #14131a 60%); min-height: 100vh; }
+
+  .topbar { position: sticky; top: 0; background: rgba(20, 19, 26, 0.85); backdrop-filter: blur(8px); z-index: 10; border-bottom: 1px solid var(--rule); }
+  .topbar-inner { max-width: 760px; margin: 0 auto; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Grotesk', sans-serif; }
+  .topbar a { color: var(--fg-soft); text-decoration: none; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s ease; }
+  .topbar a:hover { color: var(--fg); }
+  .topbar .site { color: var(--fg); font-weight: 500; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 80px 28px 120px; }
+
+  .page-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.32em; text-transform: uppercase; margin-bottom: 14px; }
+  .page-title { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 500; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 14px; color: var(--fg); }
+  .page-sub { font-family: 'Newsreader', serif; font-style: italic; font-size: 18px; color: var(--fg-soft); margin: 0 0 64px; max-width: 540px; }
+
+  .section-header { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; margin: 56px 0 24px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+  .section-header.current { color: var(--accent); }
+  .section-header.finished { color: var(--fg-dim); }
+  .section-header:first-of-type { margin-top: 0; }
+
+  .entry { display: block; padding: 22px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; transition: padding-left 0.25s ease; }
+  .entry:hover { padding-left: 12px; }
+  .entry:last-child { border-bottom: none; }
+  .entry-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 6px; }
+  .entry-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 500; color: var(--fg); transition: color 0.2s ease; }
+  .entry:hover .entry-title { color: var(--accent); }
+  .entry-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--fg-dim); letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+  .entry-author { font-family: 'Newsreader', serif; font-style: italic; font-size: 16px; color: var(--fg-soft); margin: 0 0 8px; }
+  .entry-note { font-size: 15px; line-height: 1.55; color: var(--fg-soft); margin: 0; }
+
+  @media (max-width: 600px) {
+    main { padding: 56px 22px 80px; }
+    .page-title { font-size: 32px; }
+    .entry-title { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html">← back</a>
+      <span class="site">David Jiang</span>
+      <a href="writing.html">writing →</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-kicker">Reading</div>
+    <h1 class="page-title">What I'm reading</h1>
+    <p class="page-sub">A reading list — currently in progress, recently finished, with reviews when I've had a chance to write them up.</p>
+
+    <div id="list">loading…</div>
+  </main>
+
+<script>
+const books = [
+  { slug: 'thinking-in-bets',     title: 'Thinking in Bets',           author: 'Annie Duke',                       date: '2026-04', status: 'reading',  note: 'On decision-making under uncertainty.' },
+  { slug: 'logic-sports-betting', title: 'The Logic of Sports Betting', author: 'Ed Miller & Matthew Davidow',      date: '2026-01', status: 'finished', note: 'Foundational text for the SharpLab side of things.' },
+  { slug: 'pragmatic-programmer', title: 'The Pragmatic Programmer',    author: 'Andrew Hunt & David Thomas',       date: '2025-11', status: 'finished', note: 'A re-read. Stays relevant.' }
+];
+
+const MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function formatDate(d) {
+  const [y, m] = d.split('-');
+  return `${MONTHS[parseInt(m, 10)]} ${y}`;
+}
+
+function build() {
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  const current = books.filter(b => b.status === 'reading').sort((a,b) => b.date.localeCompare(a.date));
+  const finished = books.filter(b => b.status === 'finished').sort((a,b) => b.date.localeCompare(a.date));
+
+  if (current.length) {
+    const h = document.createElement('div');
+    h.className = 'section-header current';
+    h.textContent = 'Currently reading';
+    list.appendChild(h);
+    current.forEach(b => list.appendChild(makeRow(b, 'Started')));
+  }
+  if (finished.length) {
+    const h = document.createElement('div');
+    h.className = 'section-header finished';
+    h.textContent = 'Finished';
+    list.appendChild(h);
+    finished.forEach(b => list.appendChild(makeRow(b, 'Finished')));
+  }
+}
+
+function makeRow(b, label) {
+  const a = document.createElement('a');
+  a.className = 'entry';
+  a.href = `book.html?slug=${b.slug}`;
+  a.innerHTML = `
+    <div class="entry-top">
+      <span class="entry-title">${b.title}</span>
+      <span class="entry-date">${label} ${formatDate(b.date)}</span>
+    </div>
+    <div class="entry-author">${b.author}</div>
+    <p class="entry-note">${b.note || ''}</p>
+  `;
+  return a;
+}
+
+build();
+</script>
+</body>
+</html>

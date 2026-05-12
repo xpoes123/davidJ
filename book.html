@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Jiang — Reading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  :root {
+    --bg: #14131a; --bg-2: #1c1b25;
+    --fg: #e8e3d8; --fg-soft: #a8a39a; --fg-dim: #6b6862;
+    --accent: #b54c4c;
+    --rule: rgba(255,255,255,0.10);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Newsreader', Georgia, serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at 50% 0%, #1f1d2c 0%, #14131a 60%); min-height: 100vh; }
+
+  .topbar { position: sticky; top: 0; background: rgba(20, 19, 26, 0.85); backdrop-filter: blur(8px); z-index: 10; border-bottom: 1px solid var(--rule); }
+  .topbar-inner { max-width: 720px; margin: 0 auto; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Grotesk', sans-serif; }
+  .topbar a { color: var(--fg-soft); text-decoration: none; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s ease; }
+  .topbar a:hover { color: var(--fg); }
+  .topbar .site { color: var(--fg); font-weight: 500; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
+
+  article { max-width: 680px; margin: 0 auto; padding: 80px 28px 140px; }
+
+  /* book metadata header */
+  .book-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 18px; }
+  .book-title { font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 500; line-height: 1.15; letter-spacing: -0.005em; margin: 0 0 8px; color: var(--fg); }
+  .book-author { font-family: 'Newsreader', serif; font-style: italic; font-size: 19px; color: var(--fg-soft); margin: 0 0 28px; }
+  .book-meta { display: flex; gap: 24px; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 40px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-dim); letter-spacing: 0.12em; text-transform: uppercase; flex-wrap: wrap; }
+  .book-meta .item .label { color: var(--fg-dim); display: block; font-size: 9px; margin-bottom: 4px; }
+  .book-meta .item .val { color: var(--fg); font-size: 12px; letter-spacing: 0.16em; }
+  .book-meta .item .val.reading { color: var(--accent); }
+
+  .content { font-size: 18px; line-height: 1.75; color: var(--fg); }
+  .content h2 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 500; margin: 48px 0 14px; color: var(--fg); }
+  .content p { margin: 0 0 22px; }
+  .content em { color: var(--fg-soft); }
+  .content a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(181, 76, 76, 0.4); }
+  .content a:hover { border-bottom-color: var(--accent); }
+  .content blockquote { margin: 28px 0; padding: 4px 0 4px 24px; border-left: 2px solid var(--accent); color: var(--fg-soft); font-style: italic; }
+  .content hr { border: none; height: 1px; background: var(--rule); margin: 48px auto; width: 60%; }
+  .content code { font-family: 'JetBrains Mono', monospace; font-size: 0.88em; background: rgba(255,255,255,0.07); padding: 1px 6px; border-radius: 3px; }
+
+  .post-footer { max-width: 680px; margin: 0 auto; padding: 0 28px 80px; text-align: center; }
+  .post-footer a { color: var(--fg-soft); text-decoration: none; letter-spacing: 0.14em; font-size: 11px; text-transform: uppercase; border: 1px solid var(--rule); padding: 10px 18px; font-family: 'Space Grotesk', sans-serif; transition: color 0.2s ease, border-color 0.2s ease; }
+  .post-footer a:hover { color: var(--fg); border-color: rgba(255,255,255,0.3); }
+
+  .status { text-align: center; color: var(--fg-dim); font-family: 'Space Grotesk', sans-serif; font-size: 14px; margin-top: 40vh; letter-spacing: 0.1em; }
+  .status.error { color: #d68a8a; }
+
+  @media (max-width: 600px) {
+    article { padding: 56px 22px 100px; }
+    .book-title { font-size: 32px; }
+    .content { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="reading.html">← reading list</a>
+      <span class="site">David Jiang</span>
+      <a href="index.html" style="visibility:hidden">·</a>
+    </div>
+  </nav>
+
+  <article id="article">
+    <div class="status" id="status">loading…</div>
+  </article>
+
+  <footer class="post-footer" id="footer" style="display:none">
+    <a href="reading.html">← all reading</a>
+  </footer>
+
+<script>
+const params = new URLSearchParams(location.search);
+const slug = params.get('slug');
+const article = document.getElementById('article');
+const status = document.getElementById('status');
+const footer = document.getElementById('footer');
+
+if (!slug) {
+  status.className = 'status error';
+  status.textContent = 'no book specified — try ?slug=thinking-in-bets';
+} else {
+  fetch(`books/${slug}.md`)
+    .then(r => { if (!r.ok) throw new Error(`couldn't load book (${r.status})`); return r.text(); })
+    .then(md => render(md))
+    .catch(e => { status.className = 'status error'; status.textContent = e.message; });
+}
+
+function pickField(md, name) {
+  const re = new RegExp(`^\\*\\*${name}:\\*\\*\\s*(.+?)$`, 'm');
+  const m = md.match(re);
+  if (m) {
+    md = md.replace(re, '');
+    return [md, m[1].trim()];
+  }
+  return [md, null];
+}
+
+function render(md) {
+  let title = null;
+  md = md.replace(/^#\s+(.+?)$/m, (m, t) => { title = t.trim(); return ''; });
+  let author, dStarted, dFinished, dStatus;
+  [md, author] = pickField(md, 'Author');
+  [md, dStarted] = pickField(md, 'Started');
+  [md, dFinished] = pickField(md, 'Finished');
+  [md, dStatus] = pickField(md, 'Status');
+
+  const html = marked.parse(md.trim());
+
+  const isReading = dStatus && /reading/i.test(dStatus);
+  const dateLabel = dFinished ? 'Finished' : (dStarted ? 'Started' : null);
+  const dateVal = dFinished || dStarted;
+
+  document.title = `${title || 'Reading'} — David Jiang`;
+
+  let metaItems = '';
+  if (dStatus) metaItems += `<div class="item"><span class="label">Status</span><span class="val${isReading ? ' reading' : ''}">${dStatus}</span></div>`;
+  if (dateLabel) metaItems += `<div class="item"><span class="label">${dateLabel}</span><span class="val">${dateVal}</span></div>`;
+
+  article.innerHTML = `
+    <div class="book-kicker">Reading list</div>
+    <h1 class="book-title">${title || ''}</h1>
+    ${author ? `<div class="book-author">by ${author}</div>` : ''}
+    ${metaItems ? `<div class="book-meta">${metaItems}</div>` : ''}
+    <div class="content">${html}</div>
+  `;
+  footer.style.display = '';
+}
+</script>
+</body>
+</html>
