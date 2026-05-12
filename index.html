@@ -709,19 +709,24 @@ allCubes.sort((a, b) => a.date.localeCompare(b.date));
 
 // --- Scroll-to-navigate-timeline ---
 // The homepage has no normal scroll; route wheel events through the chronological
-// timeline so the user can flip through cubes by scrolling. Throttled so a single
-// wheel gesture doesn't blow past every cube at once.
+// timeline. Trackpad inertia fires dozens of wheel events per gesture, so we
+// step exactly ONCE per gesture and ignore the rest until the user pauses.
 let scrollIdx = -1;
-let scrollLastTs = 0;
-const SCROLL_COOLDOWN = 110;  // ms between steps
+let scrollGestureActive = false;
+let scrollGestureTimer = null;
+const SCROLL_GESTURE_END_MS = 160;  // pause that resets the gesture
 window.addEventListener('wheel', (e) => {
   e.preventDefault();
   if (allCubes.length === 0) return;
-  const total = Math.abs(e.deltaY) + Math.abs(e.deltaX);
-  if (total < 8) return;  // ignore tiny micro-deltas
-  const now = Date.now();
-  if (now - scrollLastTs < SCROLL_COOLDOWN) return;
-  scrollLastTs = now;
+  if (Math.abs(e.deltaY) + Math.abs(e.deltaX) < 4) return;
+
+  // Refresh the end-of-gesture timer on every wheel event
+  clearTimeout(scrollGestureTimer);
+  scrollGestureTimer = setTimeout(() => { scrollGestureActive = false; }, SCROLL_GESTURE_END_MS);
+
+  if (scrollGestureActive) return;  // already stepped for this gesture
+  scrollGestureActive = true;
+
   const dir = (e.deltaY + e.deltaX) > 0 ? 1 : -1;
   // dir > 0 (scrolling down/right) → newer cube (right on timeline)
   if (scrollIdx === -1) {
