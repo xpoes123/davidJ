@@ -18,6 +18,21 @@ No cookies. Session/visitor ID is stored in localStorage as a random UUID. Raw I
 - `GET /stats` — aggregated stats JSON (consumed by `/stats.html`)
 - `GET /recent?limit=100` — recent event feed
 - `GET /health` — liveness check
+- `POST /subscribe` — newsletter signup (`{email, source}`); dedupes on email
+- `GET /subscribers` — subscriber count + recent (no PII)
+
+## Newsletter
+
+Email collection only — no sending built in. To send a post:
+
+```sh
+sqlite3 /opt/davidJ/analytics/analytics.db \
+  "SELECT email FROM subscribers ORDER BY ts" | xclip
+```
+
+then BCC from Gmail (500/day limit) or paste into Buttondown / Resend when ready
+to migrate. The signup form lives on every blog post and at the bottom of
+`writing.html`.
 
 ## Local development
 

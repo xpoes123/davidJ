@@ -84,15 +84,18 @@
 
 <script>
 const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-const ENDPOINT = window.__STATS_ENDPOINT__
-  || (_isLocal ? 'http://localhost:8001/stats' : '/api/analytics/stats');
+const ANALYTICS_BASE = window.__ANALYTICS_BASE__
+  || (_isLocal ? 'http://localhost:8001' : '/api/analytics');
+const ENDPOINT = window.__STATS_ENDPOINT__ || (ANALYTICS_BASE + '/stats');
+const SUBS_ENDPOINT = ANALYTICS_BASE + '/subscribers';
 
 async function load() {
   const c = document.getElementById('container');
   try {
-    const r = await fetch(ENDPOINT);
-    if (!r.ok) throw new Error('stats fetch failed (' + r.status + ')');
-    const s = await r.json();
+    const [statsR, subsR] = await Promise.all([fetch(ENDPOINT), fetch(SUBS_ENDPOINT).catch(() => null)]);
+    if (!statsR.ok) throw new Error('stats fetch failed (' + statsR.status + ')');
+    const s = await statsR.json();
+    s.subs = subsR && subsR.ok ? await subsR.json() : { total: 0, recent: [] };
     render(s);
   } catch (e) {
     c.innerHTML = '<div class="status error">' + e.message + '</div>';
@@ -140,6 +143,7 @@ function render(s) {
       <div class="kpi"><div class="label">Last 24h</div><div class="value">${s.pv_24h}</div></div>
       <div class="kpi"><div class="label">Last 7 days</div><div class="value">${s.pv_7d}</div></div>
       <div class="kpi"><div class="label">Last 30 days</div><div class="value">${s.pv_30d}</div></div>
+      <div class="kpi"><div class="label">Subscribers</div><div class="value">${s.subs.total}</div><div class="delta">${s.subs.recent && s.subs.recent.length ? `latest ${new Date(s.subs.recent[0].ts).toLocaleDateString()}` : 'none yet'}</div></div>
     </div>
 
     <div class="spark-card">

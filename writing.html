@@ -42,6 +42,19 @@
   .entry:hover .entry-title { color: var(--accent); }
   .entry-excerpt { font-size: 16px; line-height: 1.6; color: var(--fg-soft); margin: 0; }
 
+  .newsletter { max-width: 760px; margin: 80px auto 0; }
+  .newsletter-inner { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 36px 0; text-align: center; }
+  .newsletter h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 500; margin: 0 0 6px; color: var(--fg); letter-spacing: 0.01em; }
+  .newsletter-pitch { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--fg-dim); margin: 0 0 20px; }
+  .newsletter form { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; }
+  .newsletter input[type="email"] { flex: 1; background: var(--bg-2); border: 1px solid var(--rule); color: var(--fg); font-family: 'Inter', sans-serif; font-size: 14px; padding: 10px 14px; border-radius: 3px; outline: none; transition: border-color 0.2s ease; }
+  .newsletter input[type="email"]:focus { border-color: var(--accent); }
+  .newsletter button { background: var(--accent); color: #14131a; border: none; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 18px; border-radius: 3px; cursor: pointer; transition: opacity 0.2s ease; }
+  .newsletter button:hover { opacity: 0.88; }
+  .newsletter button:disabled { opacity: 0.5; cursor: default; }
+  .subscribe-msg { margin-top: 14px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--fg-soft); min-height: 18px; }
+  .subscribe-msg.error { color: #d68a8a; }
+
   @media (max-width: 600px) {
     main { padding: 56px 22px 80px; }
     .page-title { font-size: 32px; }
@@ -65,6 +78,18 @@
     <p class="page-sub">Whatever I've been thinking long enough to write down. Mostly tech, school, taste, and the long arc of things.</p>
 
     <div id="list">loading…</div>
+
+    <section class="newsletter">
+      <div class="newsletter-inner">
+        <h3>Get new posts in your inbox</h3>
+        <p class="newsletter-pitch">Occasional, never spammy. Unsubscribe whenever.</p>
+        <form id="subscribe-form" novalidate>
+          <input type="email" id="subscribe-email" placeholder="you@example.com" required autocomplete="email">
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="subscribe-msg" id="subscribe-msg"></div>
+      </div>
+    </section>
   </main>
 
 <script>
@@ -146,6 +171,42 @@ async function build() {
 }
 
 build();
+
+// Newsletter signup
+const subscribeForm = document.getElementById('subscribe-form');
+const subscribeMsg = document.getElementById('subscribe-msg');
+const subscribeEmail = document.getElementById('subscribe-email');
+subscribeForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = subscribeEmail.value.trim();
+  if (!email) return;
+  const btn = subscribeForm.querySelector('button');
+  btn.disabled = true;
+  subscribeMsg.className = 'subscribe-msg';
+  subscribeMsg.textContent = '';
+  try {
+    const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const ep = _isLocal ? 'http://localhost:8001/subscribe' : '/api/analytics/subscribe';
+    const r = await fetch(ep, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source: 'writing-index' }),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      subscribeMsg.textContent = data.msg || "You're on the list.";
+      subscribeEmail.value = '';
+    } else {
+      subscribeMsg.className = 'subscribe-msg error';
+      subscribeMsg.textContent = data.msg || 'Something went wrong.';
+    }
+  } catch (err) {
+    subscribeMsg.className = 'subscribe-msg error';
+    subscribeMsg.textContent = "Couldn't reach the server. Try again later.";
+  } finally {
+    btn.disabled = false;
+  }
+});
 </script>
 </body>
 </html>

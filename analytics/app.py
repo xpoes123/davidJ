@@ -41,6 +41,18 @@ def init_db() -> None:
         c.execute("CREATE INDEX IF NOT EXISTS idx_ts ON events(ts)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_sid ON events(sid)")
         c.execute("CREATE INDEX IF NOT EXISTS idx_type ON events(type)")
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS subscribers (
+                id INTEGER PRIMARY KEY,
+                email TEXT NOT NULL UNIQUE,
+                ts INTEGER NOT NULL,
+                source TEXT,
+                ip_hash TEXT,
+                ua TEXT,
+                confirmed INTEGER DEFAULT 1
+            )"""
+        )
+        c.execute("CREATE INDEX IF NOT EXISTS idx_sub_ts ON subscribers(ts)")
 
 
 @contextmanager
@@ -197,3 +209,53 @@ async def recent(limit: int = 100) -> list[dict[str, Any]]:
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+# --- Email subscriptions ---
+import re
+import time as _time
+
+EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
+
+
+class Subscribe(BaseModel):
+    email: str
+    source: Optional[str] = ""
+
+
+@app.post("/subscribe")
+async def subscribe(s: Subscribe, request: Request) -> dict[str, Any]:
+    email = s.email.strip().lower()
+    if not EMAIL_RE.match(email) or len(email) > 254:
+        return {"ok": False, "msg": "Looks like that email isn't quite right."}
+
+    ua = (request.headers.get("user-agent") or "")[:240]
+    fwd = request.headers.get("x-forwarded-for", "")
+    ip = fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "")
+    ip_hash = hashlib.sha256(ip.encode()).hexdigest()[:16] if ip else ""
+    now = int(_time.time() * 1000)
+
+    with _conn() as c:
+        # Already subscribed?
+        existing = c.execute("SELECT id FROM subscribers WHERE email = ?", (email,)).fetchone()
+        if existing:
+            return {"ok": True, "msg": "You're already on the list. Welcome back."}
+        c.execute(
+            "INSERT INTO subscribers (email, ts, source, ip_hash, ua) VALUES (?, ?, ?, ?, ?)",
+            (email, now, s.source or "", ip_hash, ua),
+        )
+    return {"ok": True, "msg": "Thanks — you're on the list."}
+
+
+@app.get("/subscribers")
+async def subscribers_count() -> dict[str, Any]:
+    """Aggregate subscriber stats (no PII)."""
+    with _conn() as c:
+        total = c.execute("SELECT COUNT(*) FROM subscribers").fetchone()[0]
+        recent = c.execute(
+            "SELECT ts, source FROM subscribers ORDER BY ts DESC LIMIT 20"
+        ).fetchall()
+    return {
+        "total": total,
+        "recent": [{"ts": r["ts"], "source": r["source"]} for r in recent],
+    }
