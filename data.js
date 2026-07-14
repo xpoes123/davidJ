@@ -49,8 +49,8 @@ window.STACKS = [
     cubes: [
       { id: 'ramp', title: 'Ramp', subtitle: 'demo creator', body: 'Currently making demos at Ramp.', href: 'https://ramp.com', date: '2026-01' },
       { id: 'uncountable', title: 'Uncountable', subtitle: 'implementation engineer · 2025–2026', body: 'Materials informatics platform; implementation engineering.', href: 'https://uncountable.com', date: '2025-06' },
-      { id: 'indiana-reu', title: 'Indiana REU', subtitle: 'summer 2023', body: 'Research Experience for Undergraduates at Indiana University. Combinatorics.', date: '2023-06' },
-      { id: 'uw', title: 'UW–Madison', subtitle: 'CS + Math · 2021–2025', body: 'Computer science and math with detours through Valorant and biochemistry.', date: '2021-09' }
+      { id: 'uw', title: 'UW–Madison', subtitle: 'CS + Math · 2021–2025', body: '2021–2025 graduate with a degree in computer science and math.', date: '2025-05' },
+      { id: 'indiana-reu', title: 'Indiana REU', subtitle: 'summer 2023', body: 'Research Experience for Undergraduates at Indiana University. Combinatorics.', date: '2023-06' }
     ]
   },
   {
