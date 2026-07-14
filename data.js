@@ -8,13 +8,13 @@ window.STACKS = [
     archiveHref: 'archive.html?stack=projects',
     sub: "Things I've shipped. A growing catalog of side projects, bots, and small useful tools.",
     cubes: [
+      { id: 'vigil', title: 'Vigil', subtitle: 'basketball prediction-market terminal', body: 'A live prediction-market trading terminal for basketball — de-vigged fair value against the Kalshi order book, maker/taker edge, and a CLV-tracked bet ledger.', date: '2026-07' },
+      { id: 'lebot', title: 'LeBot', subtitle: 'anticipation-based ML buzzer', body: 'A Science Bowl buzzer bot that uses a model to anticipate the answer and buzz mid-question.', href: 'https://github.com/xpoes123/LeBot', date: '2026-07' },
+      { id: 'nsba', title: 'NSBA Markets', subtitle: 'community automated prediction market', body: 'A community-run, automated prediction market.', href: 'https://nsba.djiang.xyz', date: '2026-06' },
+      { id: 'scibowl', title: 'SciBowl.Live', subtitle: 'National Science Bowl platform', body: 'A platform for running National Science Bowl competitions online. React/TS + Django.', href: 'https://scibowl.live', date: '2026-06' },
       { id: 'sage', title: 'Sage', subtitle: 'personal AI assistant', body: 'Calendar, email, reminders, news. A Discord-native daily companion.', date: '2026-04' },
-      { id: 'sentinel', title: 'Sentinel', subtitle: 'autonomous engineering bot', body: 'Writes, reviews, and deploys code from GitHub issues.', date: '2026-03' },
-      { id: 'sharplab', title: 'SharpLab', subtitle: 'sports betting quant lab', body: 'Odds ingestion + CLV tracking for live sports markets.', date: '2025-11' },
-      { id: 'stavid', title: 'Stavid', subtitle: 'apartment life bot', body: 'Budget, habits, and lists, built with Stephanie.', date: '2025-06' },
-      { id: 'daytour', title: 'DayTour', subtitle: 'multi-stop day itinerary planner', body: 'A web app for planning, organizing, and visualizing multi-stop day itineraries. Construct and rearrange a sequence of locations for a single day in one place.', href: 'https://github.com/xpoes123/DayTour', date: '2025-04' },
-      { id: 'sonder', title: 'Sonder', subtitle: 'music recommender via "song profiles"', body: 'An experimental app where you swipe on dating-profile-style songs to express musical preferences; a clustering engine then recommends new tracks based on inferred taste attributes.', href: 'https://github.com/xpoes123/Sonder', date: '2025-02' },
-      { id: 'nba', title: 'NBA Modeling', subtitle: 'player ratings & spread prediction', body: 'Hybrid RAPM + Elo player ratings feeding a spread model.', date: '2024-03' }
+      { id: 'sharplab', title: 'SharpLab', subtitle: 'sports betting quant lab', body: 'Odds ingestion + CLV tracking for live sports markets.', href: 'https://sharplab.djiang.xyz/hq', date: '2025-11' },
+      { id: 'daytour', title: 'DayTour', subtitle: 'multi-stop day itinerary planner', body: 'A web app for planning, organizing, and visualizing multi-stop day itineraries. Construct and rearrange a sequence of locations for a single day in one place.', href: 'https://daytour.djiang.xyz', date: '2025-04' }
     ]
   },
   {
@@ -47,8 +47,8 @@ window.STACKS = [
     archiveHref: 'archive.html?stack=life',
     sub: 'Roles and schools, newest first.',
     cubes: [
-      { id: 'ramp', title: 'Ramp', subtitle: 'demo creator', body: 'Currently making demos at Ramp.', date: '2026-01' },
-      { id: 'uncountable', title: 'Uncountable', subtitle: 'implementation engineer · 2025–2026', body: 'Materials informatics platform; implementation engineering.', date: '2025-06' },
+      { id: 'ramp', title: 'Ramp', subtitle: 'demo creator', body: 'Currently making demos at Ramp.', href: 'https://ramp.com', date: '2026-01' },
+      { id: 'uncountable', title: 'Uncountable', subtitle: 'implementation engineer · 2025–2026', body: 'Materials informatics platform; implementation engineering.', href: 'https://uncountable.com', date: '2025-06' },
       { id: 'indiana-reu', title: 'Indiana REU', subtitle: 'summer 2023', body: 'Research Experience for Undergraduates at Indiana University. Combinatorics.', date: '2023-06' },
       { id: 'uw', title: 'UW–Madison', subtitle: 'CS + Math · 2021–2025', body: 'Computer science and math with detours through Valorant and biochemistry.', date: '2021-09' }
     ]
@@ -70,6 +70,15 @@ window.STACKS = [
     cubes: [
       { id: 'albums',     title: "Albums of '25", subtitle: 'a yearly ritual',                 href: 'post.html?slug=albums',     date: '2025-12' },
       { id: 'graduating', title: 'Graduating',     subtitle: 'the lie of the four-year arc',   href: 'post.html?slug=graduating', date: '2023-08' }
+    ]
+  },
+  {
+    i: 2, j: 1, label: 'Fun', color: '#9b7bb5',
+    archiveHref: 'https://pokemon.djiang.xyz',
+    sub: 'Hobbies and small toys built for no reason other than joy.',
+    cubes: [
+      { id: 'games', title: 'Games', subtitle: 'online multiplayer card games', body: 'Real-time multiplayer card games in the browser — a bridge variant first.', href: 'https://games.djiang.xyz', date: '2026-07' },
+      { id: 'pokemon', title: 'Pokémon Ledger', subtitle: 'TCG collection tracker', body: 'A tracker for my Pokémon card master sets: card art, per-variant progress, set completion, and rough market values. Seeded from a spreadsheet.', href: 'https://pokemon.djiang.xyz', date: '2026-07' }
     ]
   }
 ];

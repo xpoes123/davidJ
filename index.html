@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>David Jiang — A Plane Partition</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<title>Home</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -54,12 +55,59 @@
   .titlebar .sub {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--fg-dim);
-    margin-top: 6px;
-    letter-spacing: 0.18em;
+    color: var(--fg-soft);
+    margin-top: 7px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
+  .titlebar .explore-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--fg-dim);
+    margin-top: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: opacity 0.6s ease;
+  }
+  body.interacted .explore-hint { opacity: 0; }
   body.focused .titlebar { opacity: 0; }
+
+  /* contact strip — top-left, hidden when cube is focused */
+  .contact-strip {
+    position: absolute;
+    top: 34px; left: 36px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--fg-dim);
+    z-index: 6;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    transition: opacity 0.3s ease;
+  }
+  .contact-strip a {
+    color: var(--fg-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+  .contact-strip a:hover { color: var(--fg-soft); }
+  .contact-strip .sep { color: var(--fg-dim); opacity: 0.4; }
+  body.focused .contact-strip { opacity: 0; pointer-events: none; }
+
+  /* private label shown in content when no href */
+  .private-label {
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
 
   /* partition matrix (top-right, mathematical notation) */
   .matrix {
@@ -364,6 +412,18 @@
   <div class="scene">
     <div class="titlebar">
       <h1>David Jiang</h1>
+      <div class="sub">Software Engineer &middot; Ramp &middot; New York</div>
+      <div class="explore-hint">click any cube &middot; drag to rotate &middot; scroll to browse</div>
+    </div>
+
+    <div class="contact-strip">
+      <a href="mailto:jiangdavid144@gmail.com">jiangdavid144@gmail.com</a>
+      <span class="sep">&middot;</span>
+      <a href="https://www.linkedin.com/in/xpoes/" target="_blank">linkedin</a>
+      <span class="sep">&middot;</span>
+      <a href="https://github.com/xpoes123" target="_blank">github</a>
+      <span class="sep">&middot;</span>
+      <a href="/resume.pdf" target="_blank">résumé</a>
     </div>
 
     <svg class="partition" viewBox="-260 -440 620 760" preserveAspectRatio="xMidYMid meet" id="partitionSvg"></svg>
@@ -380,7 +440,8 @@
       <div class="kicker" id="contentKicker"></div>
       <h2 id="contentTitle"></h2>
       <p id="contentBody"></p>
-      <a id="contentLink" href="#" target="_blank">view</a>
+      <a id="contentLink" href="#" target="_blank">view →</a>
+      <span class="private-label" id="contentPrivate">private</span>
     </div>
 
     <div class="timeline" id="timeline">
@@ -654,6 +715,7 @@ const contentKicker = document.getElementById('contentKicker');
 const contentTitle = document.getElementById('contentTitle');
 const contentBody = document.getElementById('contentBody');
 const contentLink = document.getElementById('contentLink');
+const contentPrivate = document.getElementById('contentPrivate');
 
 function focusCube(cubeEl) {
   labelEl.classList.remove('visible');
@@ -666,7 +728,7 @@ function focusCube(cubeEl) {
     if (idx >= 0) scrollIdx = idx;
   }
   if (window.track) window.track('cube_click', { cube: cube.id, stack: stack.label });
-  document.body.classList.add('focused');
+  document.body.classList.add('focused', 'interacted');
   document.querySelectorAll('.cube').forEach(c => {
     c.classList.toggle('dimmed', c !== cubeEl);
     c.classList.toggle('focused', c === cubeEl);
@@ -678,8 +740,10 @@ function focusCube(cubeEl) {
   if (cube.href) {
     contentLink.href = cube.href;
     contentLink.style.display = '';
+    contentPrivate.style.display = 'none';
   } else {
     contentLink.style.display = 'none';
+    contentPrivate.style.display = 'inline';
   }
   document.querySelectorAll('.tick').forEach(t => {
     t.classList.toggle('active', t.dataset.cubeId === cube.id);
@@ -746,6 +810,7 @@ window.addEventListener('wheel', (e) => {
   e.preventDefault();
   if (allCubes.length === 0) return;
   if (Math.abs(e.deltaY) + Math.abs(e.deltaX) < 4) return;
+  document.body.classList.add('interacted');
 
   // Refresh the end-of-gesture timer on every wheel event
   clearTimeout(scrollGestureTimer);
