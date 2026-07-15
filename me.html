@@ -95,8 +95,10 @@ const ME = {
 const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 const API = window.__ANALYTICS_BASE__ || (_isLocal ? 'http://localhost:8001' : '/api/analytics');
 const $ = id => document.getElementById(id);
+// Escape anything derived from a third-party API before it touches innerHTML.
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tile = (label, value, sub) =>
-  `<div class="tile"><div class="label">${label}</div><div class="value">${value ?? '—'}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+  `<div class="tile"><div class="label">${esc(label)}</div><div class="value">${esc(value ?? '—')}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>`;
 const fail = (id, msg) => { const el = $(id); if (el) el.innerHTML = `<div class="dim">${msg}</div>`; };
 
 // ---- Chess (Lichess, direct) ----
@@ -158,7 +160,7 @@ const fail = (id, msg) => { const el = $(id); if (el) el.innerHTML = `<div class
     let recent = '';
     if (rR.ok) {
       const repos = await rR.json();
-      recent = repos.slice(0, 3).map(x => x.name).join(' · ');
+      recent = repos.slice(0, 3).map(x => esc(x.name)).join(' · ');
     }
     $('code-tiles').innerHTML =
       tile('Public repos', u.public_repos) +
@@ -185,10 +187,10 @@ const fail = (id, msg) => { const el = $(id); if (el) el.innerHTML = `<div class
     let html = '';
     if (top.length) {
       html += '<div class="track-list">' + top.slice(0, 5).map(a =>
-        `<div class="track"><span class="t">${a.name}</span><span class="a">${a.playcount} plays</span></div>`).join('') + '</div>';
+        `<div class="track"><span class="t">${esc(a.name)}</span><span class="a">${esc(a.playcount)} plays</span></div>`).join('') + '</div>';
     } else if (recent.length) {
       html += '<div class="track-list">' + recent.slice(0, 5).map(t =>
-        `<div class="track"><span class="t">${t.name}</span><span class="a">${t.artist}</span></div>`).join('') + '</div>';
+        `<div class="track"><span class="t">${esc(t.name)}</span><span class="a">${esc(t.artist)}</span></div>`).join('') + '</div>';
     }
     $('music-body').innerHTML = html;
   } catch (_) { fail('music-body', 'last.fm unavailable'); }
@@ -213,9 +215,9 @@ function renderNow() {
   const listening = ME.listening_now || ME.listening_fallback;
   $('now-grid').innerHTML = [
     ['Reading', link(ME.reading)],
-    ['Listening', listening],
+    ['Listening', esc(listening)],
     ['Building', link(ME.building)],
-    ['Based in', ME.based],
+    ['Based in', esc(ME.based)],
   ].map(([k, v]) => `<div class="now-item"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
 }
 renderNow();

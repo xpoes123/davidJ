@@ -257,7 +257,7 @@ async def sessions(limit: int = 30) -> list[dict[str, Any]]:
         sids = [r[0] for r in c.execute(
             """SELECT sid FROM events WHERE sid IS NOT NULL AND sid != ''
                GROUP BY sid ORDER BY MAX(ts) DESC LIMIT ?""",
-            (min(limit, 100),),
+            (max(1, min(limit, 100)),),
         ).fetchall()]
 
         result = []
@@ -297,7 +297,7 @@ async def recent(limit: int = 100) -> list[dict[str, Any]]:
     with _conn() as c:
         rows = c.execute(
             "SELECT ts, type, page, ref, sid, data FROM events ORDER BY ts DESC LIMIT ?",
-            (min(limit, 500),),
+            (max(1, min(limit, 500)),),
         ).fetchall()
     return [dict(r) for r in rows]
 
@@ -374,10 +374,17 @@ async def _cached_get(key: str, url: str, ttl: float, params: Optional[dict] = N
     return data
 
 
+# These proxies exist only to feed the /me page, so they serve exactly one
+# identifier each — an allowlist, not arbitrary user input. That bounds the
+# cache to a handful of keys and prevents using them to amplify outbound
+# requests to arbitrary WCA/Last.fm resources.
+WCA_ID = "2016JIAN13"
+
+
 @app.get("/wca/{wca_id}")
 async def wca(wca_id: str) -> Any:
-    if not re.fullmatch(r"[0-9]{4}[A-Z]{4}[0-9]{2}", wca_id):
-        return {"error": "bad id"}
+    if wca_id != WCA_ID:
+        return {"error": "not found"}
     try:
         return await _cached_get(
             f"wca:{wca_id}",
@@ -389,14 +396,15 @@ async def wca(wca_id: str) -> Any:
 
 
 LASTFM_KEY = os.environ.get("LASTFM_API_KEY", "")
+LASTFM_USER = "xpoes"
 
 
 @app.get("/lastfm/{user}")
 async def lastfm(user: str) -> Any:
     if not LASTFM_KEY:
         return {"disabled": True}
-    if not re.fullmatch(r"[A-Za-z0-9_-]{1,32}", user):
-        return {"error": "bad user"}
+    if user != LASTFM_USER:
+        return {"error": "not found"}
     base = "https://ws.audioscrobbler.com/2.0/"
     common = {"api_key": LASTFM_KEY, "format": "json", "user": user}
     try:
