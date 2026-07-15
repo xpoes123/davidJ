@@ -4,8 +4,6 @@ After=network.target
 
 [Service]
 Type=simple
-User=david
-Group=david
 WorkingDirectory=/opt/davidJ/analytics
 Environment="ANALYTICS_DB=/opt/davidJ/analytics/analytics.db"
 Environment="ANALYTICS_ORIGINS=https://djiang.xyz"
