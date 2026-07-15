@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>David Jiang — Writing</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<title>Writing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -397,7 +398,7 @@ function render(md) {
   }
   if (title) {
     header += `<h1 style="font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:500;line-height:1.18;letter-spacing:-0.005em;margin:0 0 36px;color:var(--fg)">${title}</h1>`;
-    document.title = `${title} — David Jiang`;
+    document.title = title;
   }
 
   article.innerHTML = `<div class="content">${header}${html}</div>`;

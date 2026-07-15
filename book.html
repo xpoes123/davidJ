@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>David Jiang — Reading</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<title>Reading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -120,7 +121,7 @@ function render(md) {
   const dateLabel = dFinished ? 'Finished' : (dStarted ? 'Started' : null);
   const dateVal = dFinished || dStarted;
 
-  document.title = `${title || 'Reading'} — David Jiang`;
+  document.title = title || 'Reading';
 
   let metaItems = '';
   if (dStatus) metaItems += `<div class="item"><span class="label">Status</span><span class="val${isReading ? ' reading' : ''}">${dStatus}</span></div>`;
