@@ -242,10 +242,13 @@ async def stats(range_: str = Query("7d", alias="range")) -> dict[str, Any]:
             f"""SELECT COUNT(*) FROM (
                   SELECT sid FROM events WHERE type='pageview' AND sid != '' AND {W}
                   GROUP BY sid HAVING COUNT(*) = 1)""", a)
+        # engaged time per visitor from duration events (sid is a persistent
+        # visitor id, so wall-clock max-min would span days — use measured ms)
         avg_dur = one(
-            f"""SELECT AVG(span) FROM (
-                  SELECT MAX(ts) - MIN(ts) AS span FROM events WHERE sid != '' AND {W}
-                  GROUP BY sid HAVING COUNT(*) > 1)""", a) or 0
+            f"""SELECT AVG(total) FROM (
+                  SELECT SUM(CAST(json_extract(data, '$.ms') AS REAL)) AS total
+                  FROM events WHERE type='duration' AND data IS NOT NULL AND sid != '' AND {W}
+                  GROUP BY sid)""", a) or 0
         sessions = {
             "total": n_sessions,
             "new": n_sessions - returning,

@@ -346,7 +346,7 @@ function render(s) {
       <div class="kpi"><div class="label">New / Returning</div><div class="value">${se.new}<span style="color:var(--fg-dim);font-size:20px"> / ${se.returning}</span></div></div>
       <div class="kpi"><div class="label">Bounce rate</div><div class="value">${se.bounce_rate}%</div></div>
       <div class="kpi"><div class="label">Pages / session</div><div class="value">${se.avg_pages}</div></div>
-      <div class="kpi"><div class="label">Avg session</div><div class="value">${fmtSec(se.avg_duration_sec)}</div></div>
+      <div class="kpi"><div class="label">Avg time on site</div><div class="value">${fmtSec(se.avg_duration_sec)}</div></div>
       <div class="kpi"><div class="label">Unique IPs</div><div class="value">${s.unique_ips.value}</div>${deltaChip(s.unique_ips.value, s.unique_ips.prev)}</div>
       <div class="kpi"><div class="label">Subscribers</div><div class="value">${s.subs.total}</div><div class="delta">${s.subs.recent && s.subs.recent.length ? 'latest ' + new Date(s.subs.recent[0].ts).toLocaleDateString() : 'none yet'}</div></div>
     </div>
