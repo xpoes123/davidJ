@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<title>David Jiang · by the numbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14131a; --bg-2: #1c1b25;
+    --fg: #e8e3d8; --fg-soft: #a8a39a; --fg-dim: #6b6862;
+    --accent: #d4a955;
+    --rule: rgba(255,255,255,0.10);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at 50% 0%, #1f1d2c 0%, #14131a 60%); min-height: 100vh; }
+
+  .topbar { position: sticky; top: 0; background: rgba(20,19,26,0.85); backdrop-filter: blur(8px); z-index: 10; border-bottom: 1px solid var(--rule); }
+  .topbar-inner { max-width: 980px; margin: 0 auto; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Grotesk', sans-serif; }
+  .topbar a { color: var(--fg-soft); text-decoration: none; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s ease; }
+  .topbar a:hover { color: var(--fg); }
+  .topbar .site { color: var(--fg); font-weight: 500; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
+
+  main { max-width: 980px; margin: 0 auto; padding: 64px 28px 120px; }
+  .page-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.32em; text-transform: uppercase; margin-bottom: 14px; }
+  .page-title { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 500; margin: 0 0 14px; letter-spacing: -0.01em; }
+  .page-sub { font-family: 'Newsreader', serif; font-style: italic; color: var(--fg-soft); margin: 0 0 56px; font-size: 18px; max-width: 620px; }
+
+  section { margin-bottom: 56px; }
+  section > h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-soft); margin: 0 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; }
+  section > h2 .h2-link { font-size: 10px; letter-spacing: 0.18em; color: var(--fg-dim); text-decoration: none; }
+  section > h2 .h2-link:hover { color: var(--accent); }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+  .tile { padding: 20px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.02); }
+  .tile .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 10px; }
+  .tile .value { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 500; color: var(--fg); line-height: 1; }
+  .tile .sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-soft); margin-top: 8px; }
+
+  .now-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .now-item { display: flex; flex-direction: column; gap: 6px; }
+  .now-item .k { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
+  .now-item .v { font-family: 'Newsreader', serif; font-size: 19px; color: var(--fg); }
+  .now-item .v a { color: var(--accent); text-decoration: none; }
+  .now-item .v a:hover { text-decoration: underline; }
+
+  .track-list { display: flex; flex-direction: column; gap: 10px; }
+  .track { display: flex; justify-content: space-between; gap: 16px; font-size: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .track .t { color: var(--fg); } .track .a { color: var(--fg-dim); white-space: nowrap; }
+
+  .dim { color: var(--fg-dim); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .updated { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin-top: 72px; text-align: center; }
+</style>
+<script src="analytics.js" defer></script>
+<script src="data.js"></script>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html">← back</a>
+      <span class="site">David Jiang</span>
+      <span></span>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-kicker">Me</div>
+    <h1 class="page-title">By the numbers</h1>
+    <p class="page-sub">Chess, cubing, code, and whatever else I keep score of — pulled live where I can, curated where I can't.</p>
+
+    <section id="chess"><h2>Chess <a class="h2-link" href="https://lichess.org/@/d_jiang" target="_blank">lichess ↗</a></h2><div class="tiles" id="chess-tiles"><div class="dim">loading…</div></div></section>
+    <section id="cubing"><h2>Cubing <a class="h2-link" href="https://www.worldcubeassociation.org/persons/2016JIAN13" target="_blank">wca ↗</a></h2><div class="tiles" id="cubing-tiles"><div class="dim">loading…</div></div></section>
+    <section id="code"><h2>Code <a class="h2-link" href="https://github.com/xpoes123" target="_blank">github ↗</a></h2><div class="tiles" id="code-tiles"><div class="dim">loading…</div></div></section>
+    <section id="music"><h2>Music <a class="h2-link" href="https://www.last.fm/user/xpoes" target="_blank">last.fm ↗</a></h2><div id="music-body"><div class="dim">loading…</div></div></section>
+    <section id="site"><h2>This site</h2><div class="tiles" id="site-tiles"></div></section>
+    <section id="now"><h2>Now</h2><div class="now-grid" id="now-grid"></div></section>
+
+    <div class="updated" id="updated"></div>
+  </main>
+
+<script>
+// ---- curated bits: edit this and nothing else ----
+const ME = {
+  reading:  { text: "Thinking in Bets", href: "book.html?slug=thinking-in-bets" },
+  building: { text: "Vigil", href: null },
+  based:    "New York City",
+  // listening auto-fills from Last.fm; this is the fallback if not scrobbling
+  listening_fallback: "—",
+};
+
+const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const API = window.__ANALYTICS_BASE__ || (_isLocal ? 'http://localhost:8001' : '/api/analytics');
+const $ = id => document.getElementById(id);
+const tile = (label, value, sub) =>
+  `<div class="tile"><div class="label">${label}</div><div class="value">${value ?? '—'}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+const fail = (id, msg) => { const el = $(id); if (el) el.innerHTML = `<div class="dim">${msg}</div>`; };
+
+// ---- Chess (Lichess, direct) ----
+(async () => {
+  try {
+    const r = await fetch('https://lichess.org/api/user/d_jiang');
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    const p = d.perfs || {};
+    const rt = k => p[k] && p[k].rating ? p[k].rating : null;
+    const tiles = [
+      tile('Classical', rt('classical'), p.classical && p.classical.games + ' games'),
+      tile('Rapid', rt('rapid'), p.rapid && p.rapid.games + ' games'),
+      tile('Blitz', rt('blitz'), p.blitz && p.blitz.games + ' games'),
+      tile('Bullet', rt('bullet'), p.bullet && p.bullet.games + ' games'),
+      tile('Puzzles', rt('puzzle')),
+      tile('Games played', (d.count && d.count.all) ? d.count.all.toLocaleString() : null),
+    ].join('');
+    $('chess-tiles').innerHTML = tiles;
+  } catch (_) { fail('chess-tiles', 'lichess unavailable'); }
+})();
+
+// ---- Cubing (WCA, via proxy — WCA blocks CORS) ----
+(async () => {
+  try {
+    const r = await fetch(API + '/wca/2016JIAN13');
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    const pr = d.personal_records || {};
+    // time events in centiseconds; 333fm is move count (avg ×100)
+    const secs = cs => (cs / 100).toFixed(2) + 's';
+    const single = ev => pr[ev] && pr[ev].single ? pr[ev].single.best : null;
+    const avg = ev => pr[ev] && pr[ev].average ? pr[ev].average.best : null;
+    const EV = [
+      ['333', '3×3'], ['222', '2×2'], ['444', '4×4'], ['555', '5×5'],
+      ['333oh', '3×3 OH'], ['333bf', '3×3 BLD'], ['pyram', 'Pyraminx'],
+      ['skewb', 'Skewb'], ['minx', 'Megaminx'], ['clock', 'Clock'], ['sq1', 'Square-1'],
+    ];
+    const evTiles = EV.filter(([e]) => single(e) != null).map(([e, name]) =>
+      tile(name, secs(single(e)), avg(e) != null ? 'avg ' + secs(avg(e)) : 'single')
+    );
+    const fm = single('333fm');
+    if (fm != null) evTiles.unshift(tile('3×3 FMC', fm, avg('333fm') != null ? 'avg ' + (avg('333fm') / 100).toFixed(2) : 'moves'));
+    const head = tile('Competitions', d.competition_count != null ? d.competition_count : null,
+      Object.keys(pr).length + ' events');
+    $('cubing-tiles').innerHTML = head + evTiles.join('');
+  } catch (_) { fail('cubing-tiles', 'wca unavailable'); }
+})();
+
+// ---- Code (GitHub, direct) ----
+(async () => {
+  try {
+    const [uR, rR] = await Promise.all([
+      fetch('https://api.github.com/users/xpoes123'),
+      fetch('https://api.github.com/users/xpoes123/repos?sort=pushed&per_page=3'),
+    ]);
+    if (!uR.ok) throw 0;
+    const u = await uR.json();
+    let recent = '';
+    if (rR.ok) {
+      const repos = await rR.json();
+      recent = repos.slice(0, 3).map(x => x.name).join(' · ');
+    }
+    $('code-tiles').innerHTML =
+      tile('Public repos', u.public_repos) +
+      tile('Followers', u.followers) +
+      tile('Following', u.following) +
+      (recent ? `<div class="tile" style="grid-column:1/-1"><div class="label">Recently pushed</div><div class="sub" style="margin-top:2px">${recent}</div></div>` : '');
+  } catch (_) { fail('code-tiles', 'github unavailable'); }
+})();
+
+// ---- Music (Last.fm, via proxy — needs API key + scrobbling) ----
+(async () => {
+  try {
+    const r = await fetch(API + '/lastfm/xpoes');
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    if (d.disabled) { fail('music-body', 'music widget not configured yet'); return; }
+    const recent = (d.recent || []);
+    const top = (d.top_artists || []);
+    if (!recent.length && !top.length) { fail('music-body', 'nothing scrobbled yet — connecting Apple Music soon'); return; }
+    if (recent[0]) {
+      const nowText = recent[0].nowplaying ? recent[0].name + ' — ' + recent[0].artist : null;
+      if (nowText) ME.listening_now = nowText;
+    }
+    let html = '';
+    if (top.length) {
+      html += '<div class="track-list">' + top.slice(0, 5).map(a =>
+        `<div class="track"><span class="t">${a.name}</span><span class="a">${a.playcount} plays</span></div>`).join('') + '</div>';
+    } else if (recent.length) {
+      html += '<div class="track-list">' + recent.slice(0, 5).map(t =>
+        `<div class="track"><span class="t">${t.name}</span><span class="a">${t.artist}</span></div>`).join('') + '</div>';
+    }
+    $('music-body').innerHTML = html;
+  } catch (_) { fail('music-body', 'last.fm unavailable'); }
+  renderNow();
+})();
+
+// ---- This site (from data.js, always available) ----
+(() => {
+  const stacks = window.STACKS || [];
+  const count = label => { const s = stacks.find(x => x.label === label); return s ? s.cubes.length : '—'; };
+  $('site-tiles').innerHTML = [
+    tile('Projects', count('Projects')),
+    tile('Posts', count('Writing')),
+    tile('Book reviews', count('Reading')),
+    tile('Papers', count('Research')),
+  ].join('');
+})();
+
+// ---- Now (curated + live listening if available) ----
+function renderNow() {
+  const link = o => o.href ? `<a href="${o.href}">${o.text}</a>` : o.text;
+  const listening = ME.listening_now || ME.listening_fallback;
+  $('now-grid').innerHTML = [
+    ['Reading', link(ME.reading)],
+    ['Listening', listening],
+    ['Building', link(ME.building)],
+    ['Based in', ME.based],
+  ].map(([k, v]) => `<div class="now-item"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+}
+renderNow();
+
+$('updated').textContent = 'live · loaded ' + new Date().toLocaleDateString();
+</script>
+</body>
+</html>
