@@ -104,4 +104,4 @@ I played _Punisher_ endlessly during COVID. When I listen to it now, I get vivid
 
 Naomi introduced me to this album, and it felt like a gateway into the type of music I eventually fell in love with. Songs like “Kyoto” and “Garden Song” still hit hard. “Garden Song,” especially, reminds me of seeing Phoebe live when the opening of the song mirrored the opening of the book she read on stage. Hearing her perform “That Funny Feeling” live genuinely made me cry.
 
-This album feels like a phylogenetic split in my music taste everything after it traces back to here. Every year I return to _Punisher_ and find new meaning in it, shaped by wherever I am in life at the time. As a sophomore album, it speaks volumes about Phoebe Bridgers’ depth as an artist and her ability to provoke introspection.
+This album feels like a phylogenetic split in my music taste everything after it traces back to here. Every year I return to _Punisher_ and find new meaning in it, shaped by wherever I am in life at the time.
