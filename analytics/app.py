@@ -18,12 +18,15 @@ from contextlib import asynccontextmanager, contextmanager
 from typing import Any, Iterator, Optional
 
 import httpx
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
 
 DB_PATH = os.environ.get("ANALYTICS_DB", "analytics.db")
 ALLOWED_ORIGINS = os.environ.get("ANALYTICS_ORIGINS", "https://djiang.xyz,http://localhost:4747").split(",")
+# Secret gating the private dashboard read endpoints. Fail closed: if unset,
+# those endpoints reject everything. The public page passes it via ?token=.
+STATS_TOKEN = os.environ.get("STATS_TOKEN", "")
 
 _geo_client: Optional[httpx.AsyncClient] = None
 
@@ -116,6 +119,17 @@ app.add_middleware(
 )
 
 
+async def require_token(
+    authorization: str = Header(default=""),
+    x_stats_token: str = Header(default=""),
+) -> None:
+    """Gate the private dashboard reads. Token comes via `Authorization: Bearer`
+    or `X-Stats-Token`. Fails closed when STATS_TOKEN is unset."""
+    tok = authorization[7:] if authorization.lower().startswith("bearer ") else x_stats_token
+    if not STATS_TOKEN or tok != STATS_TOKEN:
+        raise HTTPException(status_code=401, detail="unauthorized")
+
+
 class Event(BaseModel):
     model_config = ConfigDict(extra="allow")
     type: str
@@ -152,7 +166,7 @@ async def record(event: Event, request: Request) -> dict[str, bool]:
     return {"ok": True}
 
 
-@app.get("/stats")
+@app.get("/stats", dependencies=[Depends(require_token)])
 async def stats() -> dict[str, Any]:
     now = int(time.time() * 1000)
     day = 24 * 60 * 60 * 1000
@@ -250,7 +264,7 @@ async def stats() -> dict[str, Any]:
     }
 
 
-@app.get("/sessions")
+@app.get("/sessions", dependencies=[Depends(require_token)])
 async def sessions(limit: int = 30) -> list[dict[str, Any]]:
     """Recent sessions with their full event timelines."""
     with _conn() as c:
@@ -292,7 +306,7 @@ async def sessions(limit: int = 30) -> list[dict[str, Any]]:
     return result
 
 
-@app.get("/recent")
+@app.get("/recent", dependencies=[Depends(require_token)])
 async def recent(limit: int = 100) -> list[dict[str, Any]]:
     with _conn() as c:
         rows = c.execute(
@@ -340,7 +354,7 @@ async def subscribe(s: Subscribe, request: Request) -> dict[str, Any]:
     return {"ok": True, "msg": "Thanks — you're on the list."}
 
 
-@app.get("/subscribers")
+@app.get("/subscribers", dependencies=[Depends(require_token)])
 async def subscribers_count() -> dict[str, Any]:
     """Aggregate subscriber stats (no PII)."""
     with _conn() as c:

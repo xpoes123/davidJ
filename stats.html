@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stats — David Jiang</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<title>Stats</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -30,14 +31,12 @@
   .page-title { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 500; margin: 0 0 14px; letter-spacing: -0.01em; }
   .page-sub { font-family: 'Newsreader', serif; font-style: italic; color: var(--fg-soft); margin: 0 0 56px; font-size: 18px; max-width: 560px; }
 
-  /* Big-number cards */
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 18px; margin-bottom: 56px; }
   .kpi { padding: 22px 22px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.02); }
   .kpi .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 10px; }
   .kpi .value { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 500; color: var(--fg); line-height: 1; }
   .kpi .delta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-soft); margin-top: 8px; }
 
-  /* Section */
   section { margin-bottom: 56px; }
   section h2 { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-soft); margin: 0 0 18px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
 
@@ -46,16 +45,38 @@
   th { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
   td.num { font-family: 'JetBrains Mono', monospace; text-align: right; color: var(--fg-soft); }
   td.path { font-family: 'JetBrains Mono', monospace; color: var(--fg); }
-  td.ref { color: var(--fg-soft); }
+  td.ref { color: var(--fg-soft); font-size: 13px; word-break: break-all; }
   td .bar { display: inline-block; height: 6px; background: var(--accent); opacity: 0.6; border-radius: 1px; margin-right: 8px; vertical-align: middle; }
 
-  /* Spark */
   .spark { width: 100%; height: 80px; }
   .spark-card { padding: 22px; border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.02); margin-bottom: 56px; }
   .spark-card .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 14px; }
 
+  /* Two-column geo layout */
+  .geo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  @media (max-width: 640px) { .geo-grid { grid-template-columns: 1fr; } }
+  .geo-grid h3 { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); margin: 0 0 12px; }
+
+  /* Session cards */
+  .session-card { border: 1px solid var(--rule); border-radius: 4px; background: rgba(255,255,255,0.02); margin-bottom: 12px; overflow: hidden; }
+  .session-header { display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; padding: 14px 18px; cursor: pointer; user-select: none; }
+  .session-header:hover { background: rgba(255,255,255,0.03); }
+  .session-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); min-width: 90px; }
+  .session-loc { font-size: 13px; color: var(--fg); font-weight: 500; }
+  .session-device { font-size: 12px; color: var(--fg-soft); }
+  .session-ref { font-size: 12px; color: var(--fg-dim); font-family: 'JetBrains Mono', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+  .session-body { padding: 0 18px 14px; display: none; }
+  .session-body.open { display: block; }
+  .session-timeline { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .evt-chip { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 8px; border-radius: 3px; background: rgba(255,255,255,0.05); color: var(--fg-soft); }
+  .evt-chip.pageview { color: var(--fg); background: rgba(122,162,247,0.12); }
+  .evt-chip.cube_click { color: var(--accent); background: rgba(212,169,85,0.12); }
+  .evt-chip.duration { color: #9ece6a; background: rgba(158,206,106,0.10); }
+  .session-org { font-size: 11px; color: var(--fg-dim); margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
+
   .status { text-align: center; color: var(--fg-dim); padding: 80px 0; font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.1em; }
   .status.error { color: #d68a8a; }
+  .dim { color: var(--fg-dim); font-size: 13px; }
 
   @media (max-width: 600px) {
     main { padding: 40px 22px 80px; }
@@ -88,18 +109,40 @@ const ANALYTICS_BASE = window.__ANALYTICS_BASE__
   || (_isLocal ? 'http://localhost:8001' : '/api/analytics');
 const ENDPOINT = window.__STATS_ENDPOINT__ || (ANALYTICS_BASE + '/stats');
 const SUBS_ENDPOINT = ANALYTICS_BASE + '/subscribers';
+const SESSIONS_ENDPOINT = ANALYTICS_BASE + '/sessions';
+
+// Private dashboard token. Pass once via ?token=… (bookmark it); cached after.
+// The secret never lives in this file — only in your URL and the server env.
+const _tok = new URLSearchParams(location.search).get('token');
+if (_tok) localStorage.setItem('stats_token', _tok);
+const TOKEN = _tok || localStorage.getItem('stats_token') || '';
+const AUTH = { headers: { 'Authorization': 'Bearer ' + TOKEN } };
 
 async function load() {
   const c = document.getElementById('container');
   try {
-    const [statsR, subsR] = await Promise.all([fetch(ENDPOINT), fetch(SUBS_ENDPOINT).catch(() => null)]);
+    const [statsR, subsR, sessR] = await Promise.all([
+      fetch(ENDPOINT, AUTH),
+      fetch(SUBS_ENDPOINT, AUTH).catch(() => null),
+      fetch(SESSIONS_ENDPOINT, AUTH).catch(() => null),
+    ]);
+    if (statsR.status === 401) throw new Error('unauthorized — add ?token=YOUR_TOKEN to the URL');
     if (!statsR.ok) throw new Error('stats fetch failed (' + statsR.status + ')');
     const s = await statsR.json();
     s.subs = subsR && subsR.ok ? await subsR.json() : { total: 0, recent: [] };
+    s.sessions = sessR && sessR.ok ? await sessR.json() : [];
     render(s);
   } catch (e) {
     c.innerHTML = '<div class="status error">' + e.message + '</div>';
   }
+}
+
+function timeAgo(ms) {
+  const sec = Math.floor((Date.now() - ms) / 1000);
+  if (sec < 60) return sec + 's ago';
+  if (sec < 3600) return Math.floor(sec / 60) + 'm ago';
+  if (sec < 86400) return Math.floor(sec / 3600) + 'h ago';
+  return Math.floor(sec / 86400) + 'd ago';
 }
 
 function fmtSec(s) {
@@ -117,7 +160,32 @@ function bar(value, max, w) {
 
 function trimRef(r) {
   if (!r) return '—';
-  try { const u = new URL(r); return u.hostname + (u.pathname && u.pathname !== '/' ? u.pathname : ''); } catch (_) { return r; }
+  try {
+    const u = new URL(r);
+    const path = u.pathname && u.pathname !== '/' ? u.pathname : '';
+    return u.hostname + path;
+  } catch (_) { return r; }
+}
+
+function parseUA(ua) {
+  if (!ua) return 'Unknown';
+  if (/LinkedInApp/i.test(ua)) {
+    const dev = /iPhone/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : 'Mobile';
+    return dev + ' · LinkedIn App';
+  }
+  const os = /iPhone/.test(ua) ? 'iPhone' :
+              /iPad/.test(ua) ? 'iPad' :
+              /Android/.test(ua) ? 'Android' :
+              /Windows/.test(ua) ? 'Windows' :
+              /Macintosh|Mac OS X/.test(ua) ? 'Mac' :
+              /Linux/.test(ua) ? 'Linux' : '';
+  const browser = /Edg\//.test(ua) ? 'Edge' :
+                  /CriOS/.test(ua) ? 'Chrome' :
+                  /FxiOS/.test(ua) ? 'Firefox' :
+                  /Chrome/.test(ua) ? 'Chrome' :
+                  /Firefox/.test(ua) ? 'Firefox' :
+                  /Safari/.test(ua) ? 'Safari' : '';
+  return [os, browser].filter(Boolean).join(' · ') || ua.slice(0, 50);
 }
 
 function spark(hourly) {
@@ -134,6 +202,38 @@ function spark(hourly) {
     '</svg>';
 }
 
+function evtChip(e) {
+  let label = e.type;
+  if (e.type === 'pageview') label = e.page || '/';
+  else if (e.type === 'cube_click') {
+    try { const d = JSON.parse(e.data || '{}'); label = 'click:' + (d.cube || '?'); } catch (_) {}
+  } else if (e.type === 'duration') {
+    try { const d = JSON.parse(e.data || '{}'); label = fmtSec(d.ms / 1000); } catch (_) {}
+  }
+  return '<span class="evt-chip ' + e.type + '">' + escapeHtml(label) + '</span>';
+}
+
+function renderSessions(sessions) {
+  if (!sessions || !sessions.length) return '<p class="dim">no sessions yet</p>';
+  return sessions.map((sess, i) => {
+    const loc = [sess.city, sess.country].filter(Boolean).join(', ') || 'Unknown location';
+    const ref = sess.ref ? trimRef(sess.ref) : '';
+    const chips = (sess.events || []).map(evtChip).join('');
+    return `<div class="session-card">
+      <div class="session-header" onclick="toggleSession(${i})">
+        <span class="session-time">${timeAgo(sess.first_ts)}</span>
+        <span class="session-loc">${escapeHtml(loc)}</span>
+        <span class="session-device">${escapeHtml(parseUA(sess.ua))}</span>
+        ${ref ? '<span class="session-ref">via ' + escapeHtml(ref) + '</span>' : ''}
+      </div>
+      <div class="session-body" id="sess-${i}">
+        <div class="session-timeline">${chips}</div>
+        ${sess.org ? '<div class="session-org">' + escapeHtml(sess.org) + '</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function render(s) {
   const c = document.getElementById('container');
   const html = `
@@ -143,13 +243,32 @@ function render(s) {
       <div class="kpi"><div class="label">Last 24h</div><div class="value">${s.pv_24h}</div></div>
       <div class="kpi"><div class="label">Last 7 days</div><div class="value">${s.pv_7d}</div></div>
       <div class="kpi"><div class="label">Last 30 days</div><div class="value">${s.pv_30d}</div></div>
-      <div class="kpi"><div class="label">Subscribers</div><div class="value">${s.subs.total}</div><div class="delta">${s.subs.recent && s.subs.recent.length ? `latest ${new Date(s.subs.recent[0].ts).toLocaleDateString()}` : 'none yet'}</div></div>
+      <div class="kpi"><div class="label">Subscribers</div><div class="value">${s.subs.total}</div><div class="delta">${s.subs.recent && s.subs.recent.length ? 'latest ' + new Date(s.subs.recent[0].ts).toLocaleDateString() : 'none yet'}</div></div>
     </div>
 
     <div class="spark-card">
       <div class="label">Pageviews per hour · last 7 days</div>
       ${spark(s.hourly)}
     </div>
+
+    <section>
+      <h2>Recent sessions</h2>
+      ${renderSessions(s.sessions)}
+    </section>
+
+    <section>
+      <h2>Geography</h2>
+      <div class="geo-grid">
+        <div>
+          <h3>Countries</h3>
+          ${tableGeo(s.top_countries, 'country')}
+        </div>
+        <div>
+          <h3>Cities</h3>
+          ${tableGeo(s.top_cities, 'city')}
+        </div>
+      </div>
+    </section>
 
     <section>
       <h2>Top pages</h2>
@@ -184,45 +303,62 @@ function render(s) {
   c.innerHTML = html;
 }
 
+function tableGeo(rows, key) {
+  if (!rows || !rows.length) return '<p class="dim">no geo data yet</p>';
+  const max = rows[0].visitors || rows[0].pageviews || 1;
+  return `<table><thead><tr><th>${key === 'city' ? 'City' : 'Country'}</th><th class="num">Visitors</th><th class="num">PV</th></tr></thead><tbody>` +
+    rows.map(r => `<tr>
+      <td class="ref">${escapeHtml(r[key] || '—')}${key === 'city' && r.country ? ' <span style="color:var(--fg-dim)">· ' + escapeHtml(r.country) + '</span>' : ''}</td>
+      <td class="num">${r.visitors || '—'}</td>
+      <td class="num">${r.pageviews}</td>
+    </tr>`).join('') +
+    `</tbody></table>`;
+}
+
 function tableTopPages(rows) {
-  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no data yet</p>';
+  if (!rows || !rows.length) return '<p class="dim">no data yet</p>';
   const max = rows[0].views;
   return `<table><thead><tr><th>Path</th><th></th><th class="num">Views</th></tr></thead><tbody>` +
     rows.map(r => `<tr><td class="path">${escapeHtml(r.page)}</td><td>${bar(r.views, max)}</td><td class="num">${r.views}</td></tr>`).join('') +
     `</tbody></table>`;
 }
 function tableReferrers(rows) {
-  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no external referrers yet</p>';
+  if (!rows || !rows.length) return '<p class="dim">no external referrers yet</p>';
   const max = rows[0].count;
   return `<table><thead><tr><th>Source</th><th></th><th class="num">Hits</th></tr></thead><tbody>` +
     rows.map(r => `<tr><td class="ref">${escapeHtml(trimRef(r.ref))}</td><td>${bar(r.count, max)}</td><td class="num">${r.count}</td></tr>`).join('') +
     `</tbody></table>`;
 }
 function tableCubeClicks(rows) {
-  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no clicks tracked yet</p>';
+  if (!rows || !rows.length) return '<p class="dim">no clicks tracked yet</p>';
   const max = rows[0].count;
   return `<table><thead><tr><th>Cube</th><th>Stack</th><th></th><th class="num">Clicks</th></tr></thead><tbody>` +
     rows.map(r => `<tr><td class="path">${escapeHtml(r.cube || '')}</td><td class="ref">${escapeHtml(r.stack || '')}</td><td>${bar(r.count, max)}</td><td class="num">${r.count}</td></tr>`).join('') +
     `</tbody></table>`;
 }
 function tableLabelClicks(rows) {
-  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no label clicks tracked yet</p>';
+  if (!rows || !rows.length) return '<p class="dim">no label clicks tracked yet</p>';
   const max = rows[0].count;
   return `<table><thead><tr><th>Label</th><th></th><th class="num">Clicks</th></tr></thead><tbody>` +
     rows.map(r => `<tr><td class="ref">${escapeHtml(r.stack || '')}</td><td>${bar(r.count, max)}</td><td class="num">${r.count}</td></tr>`).join('') +
     `</tbody></table>`;
 }
 function tableDuration(rows) {
-  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no duration samples yet</p>';
+  if (!rows || !rows.length) return '<p class="dim">no duration samples yet</p>';
   return `<table><thead><tr><th>Path</th><th class="num">Avg</th><th class="num">Max</th><th class="num">Samples</th></tr></thead><tbody>` +
     rows.map(r => `<tr><td class="path">${escapeHtml(r.page)}</td><td class="num">${fmtSec(r.avg_sec)}</td><td class="num">${fmtSec(r.max_sec)}</td><td class="num">${r.samples}</td></tr>`).join('') +
     `</tbody></table>`;
 }
 function tableScroll(rows) {
-  if (!rows || !rows.length) return '<p style="color:var(--fg-dim)">no scroll data yet</p>';
+  if (!rows || !rows.length) return '<p class="dim">no scroll data yet</p>';
   return `<table><thead><tr><th>Path</th><th class="num">Avg scroll</th><th class="num">Samples</th></tr></thead><tbody>` +
     rows.map(r => `<tr><td class="path">${escapeHtml(r.page)}</td><td class="num">${fmtPct(r.avg_scroll)}</td><td class="num">${r.samples}</td></tr>`).join('') +
     `</tbody></table>`;
+}
+
+function toggleSession(i) {
+  const el = document.getElementById('sess-' + i);
+  if (el) el.classList.toggle('open');
 }
 
 function escapeHtml(s) {

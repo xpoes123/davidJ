@@ -9,6 +9,8 @@ Group=david
 WorkingDirectory=/opt/davidJ/analytics
 Environment="ANALYTICS_DB=/opt/davidJ/analytics/analytics.db"
 Environment="ANALYTICS_ORIGINS=https://djiang.xyz"
+# Secrets (STATS_TOKEN, LASTFM_API_KEY) live here, chmod 600. Optional (-).
+EnvironmentFile=-/opt/davidJ/analytics/.env
 ExecStart=/opt/davidJ/analytics/venv/bin/uvicorn app:app --host 127.0.0.1 --port 8001
 Restart=on-failure
 RestartSec=5
