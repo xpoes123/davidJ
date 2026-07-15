@@ -18,7 +18,7 @@ from contextlib import asynccontextmanager, contextmanager
 from typing import Any, Iterator, Optional
 
 import httpx
-from fastapi import Depends, FastAPI, Header, HTTPException, Request
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
 
@@ -166,99 +166,181 @@ async def record(event: Event, request: Request) -> dict[str, bool]:
     return {"ok": True}
 
 
-@app.get("/stats", dependencies=[Depends(require_token)])
-async def stats() -> dict[str, Any]:
+_RANGE_DAYS = {"today": 1, "7d": 7, "30d": 30, "90d": 90}
+
+
+def _window(range_key: str) -> tuple[int, int, Optional[int]]:
+    """(since, until, prev_since) in ms. prev_since is None for 'all'."""
     now = int(time.time() * 1000)
-    day = 24 * 60 * 60 * 1000
+    day = 86_400_000
+    if range_key == "all":
+        return 0, now, None
+    days = _RANGE_DAYS.get(range_key, 7)
+    since = now - days * day
+    return since, now, since - days * day
+
+
+_SEARCH = ("google.", "bing.", "duckduckgo.", "search.", "ecosia.", "yahoo.")
+_SOCIAL = ("t.co", "twitter.", "x.com", "reddit.", "facebook.", "instagram.",
+           "linkedin.", "lnkd.in", "news.ycombinator.", "youtube.", "bsky.", "mastodon")
+
+
+def _classify_ref(ref: str) -> str:
+    if not ref or "djiang.xyz" in ref:
+        return "direct"
+    r = ref.lower()
+    if any(s in r for s in _SEARCH):
+        return "search"
+    if any(s in r for s in _SOCIAL):
+        return "social"
+    return "other"
+
+
+def _parse_ua(ua: str) -> str:
+    if not ua:
+        return "unknown"
+    os_ = ("iPhone" if "iPhone" in ua else "iPad" if "iPad" in ua
+           else "Android" if "Android" in ua else "Windows" if "Windows" in ua
+           else "Mac" if ("Macintosh" in ua or "Mac OS X" in ua)
+           else "Linux" if "Linux" in ua else "?")
+    br = ("Edge" if "Edg/" in ua else "Chrome" if ("Chrome" in ua and "Edg/" not in ua)
+          else "Firefox" if "Firefox" in ua else "Safari" if "Safari" in ua else "?")
+    return f"{os_} · {br}"
+
+
+@app.get("/stats", dependencies=[Depends(require_token)])
+async def stats(range_: str = Query("7d", alias="range")) -> dict[str, Any]:
+    since, until, prev_since = _window(range_)
+    W = "ts > ? AND ts <= ?"
+    a = (since, until)
 
     with _conn() as c:
-        def count(where: str, args: tuple = ()) -> int:
-            return c.execute(f"SELECT COUNT(*) FROM events WHERE {where}", args).fetchone()[0]
+        def one(sql: str, args: tuple = ()):
+            return c.execute(sql, args).fetchone()[0]
 
-        total_pv = count("type='pageview'")
-        unique_sid = c.execute("SELECT COUNT(DISTINCT sid) FROM events").fetchone()[0]
-        unique_ip = c.execute("SELECT COUNT(DISTINCT ip_hash) FROM events WHERE ip_hash != ''").fetchone()[0]
-        pv_24h = count("type='pageview' AND ts > ?", (now - day,))
-        pv_7d = count("type='pageview' AND ts > ?", (now - 7 * day,))
-        pv_30d = count("type='pageview' AND ts > ?", (now - 30 * day,))
+        # KPIs, each with its previous-window value for a delta
+        pv = one(f"SELECT COUNT(*) FROM events WHERE type='pageview' AND {W}", a)
+        visitors = one(f"SELECT COUNT(DISTINCT sid) FROM events WHERE sid != '' AND {W}", a)
+        uips = one(f"SELECT COUNT(DISTINCT ip_hash) FROM events WHERE ip_hash != '' AND {W}", a)
+        if prev_since is not None:
+            pa = (prev_since, since)
+            pv_prev = one(f"SELECT COUNT(*) FROM events WHERE type='pageview' AND {W}", pa)
+            vis_prev = one(f"SELECT COUNT(DISTINCT sid) FROM events WHERE sid != '' AND {W}", pa)
+            ip_prev = one(f"SELECT COUNT(DISTINCT ip_hash) FROM events WHERE ip_hash != '' AND {W}", pa)
+        else:
+            pv_prev = vis_prev = ip_prev = None
 
-        top_pages = [dict(r) for r in c.execute(
-            "SELECT page, COUNT(*) AS views FROM events WHERE type='pageview' GROUP BY page ORDER BY views DESC LIMIT 25"
-        )]
+        # session intelligence
+        n_sessions = one(
+            f"SELECT COUNT(DISTINCT sid) FROM events WHERE sid != '' AND type='pageview' AND {W}", a)
+        returning = one(
+            f"""SELECT COUNT(DISTINCT e.sid) FROM events e
+                WHERE e.sid != '' AND e.type='pageview' AND e.{W}
+                  AND EXISTS (SELECT 1 FROM events p WHERE p.sid = e.sid AND p.ts <= ?)""",
+            (since, until, since))
+        bounces = one(
+            f"""SELECT COUNT(*) FROM (
+                  SELECT sid FROM events WHERE type='pageview' AND sid != '' AND {W}
+                  GROUP BY sid HAVING COUNT(*) = 1)""", a)
+        avg_dur = one(
+            f"""SELECT AVG(span) FROM (
+                  SELECT MAX(ts) - MIN(ts) AS span FROM events WHERE sid != '' AND {W}
+                  GROUP BY sid HAVING COUNT(*) > 1)""", a) or 0
+        sessions = {
+            "total": n_sessions,
+            "new": n_sessions - returning,
+            "returning": returning,
+            "bounce_rate": round(100 * bounces / n_sessions, 1) if n_sessions else 0,
+            "avg_pages": round(pv / n_sessions, 1) if n_sessions else 0,
+            "avg_duration_sec": round(avg_dur / 1000, 1),
+        }
+
+        # time series — hourly buckets for 'today', daily otherwise
+        bucket = 3_600_000 if range_ == "today" else 86_400_000
+        series = [dict(r) for r in c.execute(
+            f"""SELECT (ts / {bucket}) * {bucket} AS t,
+                       SUM(CASE WHEN type='pageview' THEN 1 ELSE 0 END) AS pageviews,
+                       COUNT(DISTINCT sid) AS sessions
+                FROM events WHERE {W} GROUP BY t ORDER BY t""", a)]
+
+        # day-of-week x hour heatmap (UTC), pageviews
+        heat = [[0] * 24 for _ in range(7)]
+        for r in c.execute(
+            f"""SELECT CAST(strftime('%w', ts/1000, 'unixepoch') AS INTEGER) AS dow,
+                       CAST(strftime('%H', ts/1000, 'unixepoch') AS INTEGER) AS hour,
+                       COUNT(*) AS n
+                FROM events WHERE type='pageview' AND {W} GROUP BY dow, hour""", a):
+            heat[r["dow"]][r["hour"]] = r["n"]
+
+        # device rollup (OS · browser), aggregated by session
+        dev: dict[str, int] = {}
+        for r in c.execute(
+            f"""SELECT ua, COUNT(DISTINCT sid) AS n FROM events
+                WHERE type='pageview' AND ua != '' AND {W} GROUP BY ua""", a):
+            dev[_parse_ua(r["ua"])] = dev.get(_parse_ua(r["ua"]), 0) + r["n"]
+        devices = [{"name": k, "count": v} for k, v in sorted(dev.items(), key=lambda x: -x[1])][:8]
+
+        # referrer classification
+        ref_types = {"direct": 0, "search": 0, "social": 0, "other": 0}
+        for r in c.execute(
+            f"SELECT ref, COUNT(*) AS n FROM events WHERE type='pageview' AND {W} GROUP BY ref", a):
+            ref_types[_classify_ref(r["ref"] or "")] += r["n"]
 
         top_referrers = [dict(r) for r in c.execute(
-            """SELECT ref, COUNT(*) AS count FROM events
-               WHERE type='pageview' AND ref != '' AND ref NOT LIKE '%djiang.xyz%'
-               GROUP BY ref ORDER BY count DESC LIMIT 15"""
-        )]
+            f"""SELECT ref, COUNT(*) AS count FROM events
+                WHERE type='pageview' AND ref != '' AND ref NOT LIKE '%djiang.xyz%' AND {W}
+                GROUP BY ref ORDER BY count DESC LIMIT 15""", a)]
+
+        # content leaderboard — views + avg time + avg scroll, merged per page
+        views = {r["page"]: r["views"] for r in c.execute(
+            f"SELECT page, COUNT(*) AS views FROM events WHERE type='pageview' AND {W} GROUP BY page", a)}
+        times = {r["page"]: r["avg_sec"] for r in c.execute(
+            f"""SELECT page, AVG(CAST(json_extract(data,'$.ms') AS REAL))/1000.0 AS avg_sec
+                FROM events WHERE type='duration' AND data IS NOT NULL AND {W} GROUP BY page""", a)}
+        scrolls = {r["page"]: r["avg_scroll"] for r in c.execute(
+            f"""SELECT page, AVG(CAST(json_extract(data,'$.scroll') AS REAL)) AS avg_scroll
+                FROM events WHERE type='duration' AND data IS NOT NULL
+                  AND CAST(json_extract(data,'$.scroll') AS REAL) > 0 AND {W} GROUP BY page""", a)}
+        content = sorted(
+            [{"page": p, "views": v, "avg_time": round(times.get(p) or 0, 1),
+              "avg_scroll": round(scrolls.get(p) or 0)} for p, v in views.items()],
+            key=lambda x: -x["views"])[:25]
 
         cube_clicks = [dict(r) for r in c.execute(
-            """SELECT json_extract(data, '$.cube') AS cube,
-                      json_extract(data, '$.stack') AS stack,
-                      COUNT(*) AS count
-               FROM events WHERE type='cube_click' AND data IS NOT NULL
-               GROUP BY cube ORDER BY count DESC LIMIT 30"""
-        )]
-
+            f"""SELECT json_extract(data, '$.cube') AS cube,
+                       json_extract(data, '$.stack') AS stack, COUNT(*) AS count
+                FROM events WHERE type='cube_click' AND data IS NOT NULL AND {W}
+                GROUP BY cube ORDER BY count DESC LIMIT 30""", a)]
         label_clicks = [dict(r) for r in c.execute(
-            """SELECT json_extract(data, '$.stack') AS stack, COUNT(*) AS count
-               FROM events WHERE type='label_click' AND data IS NOT NULL
-               GROUP BY stack ORDER BY count DESC"""
-        )]
-
-        duration_per_page = [dict(r) for r in c.execute(
-            """SELECT page,
-                      AVG(CAST(json_extract(data, '$.ms') AS REAL))/1000.0 AS avg_sec,
-                      MAX(CAST(json_extract(data, '$.ms') AS REAL))/1000.0 AS max_sec,
-                      COUNT(*) AS samples
-               FROM events WHERE type='duration' AND data IS NOT NULL
-               GROUP BY page ORDER BY samples DESC LIMIT 25"""
-        )]
-
-        scroll_per_page = [dict(r) for r in c.execute(
-            """SELECT page,
-                      AVG(CAST(json_extract(data, '$.scroll') AS REAL)) AS avg_scroll,
-                      COUNT(*) AS samples
-               FROM events WHERE type='duration'
-                 AND CAST(json_extract(data, '$.scroll') AS REAL) > 0
-                 AND (page LIKE '%post.html%' OR page LIKE '%book.html%')
-               GROUP BY page ORDER BY samples DESC LIMIT 25"""
-        )]
-
-        hourly = [dict(r) for r in c.execute(
-            """SELECT (ts / (1000 * 60 * 60)) * (1000 * 60 * 60) AS hour, COUNT(*) AS views
-               FROM events WHERE type='pageview' AND ts > ?
-               GROUP BY hour ORDER BY hour""",
-            (now - 7 * day,),
-        )]
+            f"""SELECT json_extract(data, '$.stack') AS stack, COUNT(*) AS count
+                FROM events WHERE type='label_click' AND data IS NOT NULL AND {W}
+                GROUP BY stack ORDER BY count DESC""", a)]
 
         top_countries = [dict(r) for r in c.execute(
-            """SELECT geo_country AS country, COUNT(DISTINCT ip_hash) AS visitors, COUNT(*) AS pageviews
-               FROM events WHERE type='pageview' AND geo_country IS NOT NULL AND geo_country != ''
-               GROUP BY geo_country ORDER BY visitors DESC LIMIT 15"""
-        )]
-
+            f"""SELECT geo_country AS country, COUNT(DISTINCT ip_hash) AS visitors, COUNT(*) AS pageviews
+                FROM events WHERE type='pageview' AND geo_country IS NOT NULL AND geo_country != '' AND {W}
+                GROUP BY geo_country ORDER BY visitors DESC LIMIT 15""", a)]
         top_cities = [dict(r) for r in c.execute(
-            """SELECT geo_city AS city, geo_country AS country,
-                      COUNT(DISTINCT ip_hash) AS visitors, COUNT(*) AS pageviews
-               FROM events WHERE type='pageview' AND geo_city IS NOT NULL AND geo_city != ''
-               GROUP BY geo_city ORDER BY visitors DESC LIMIT 15"""
-        )]
+            f"""SELECT geo_city AS city, geo_country AS country,
+                       COUNT(DISTINCT ip_hash) AS visitors, COUNT(*) AS pageviews
+                FROM events WHERE type='pageview' AND geo_city IS NOT NULL AND geo_city != '' AND {W}
+                GROUP BY geo_city ORDER BY visitors DESC LIMIT 15""", a)]
 
     return {
-        "total_pageviews": total_pv,
-        "unique_visitors": unique_sid,
-        "unique_ips": unique_ip,
-        "pv_24h": pv_24h,
-        "pv_7d": pv_7d,
-        "pv_30d": pv_30d,
-        "top_pages": top_pages,
+        "range": range_,
+        "since": since,
+        "pageviews": {"value": pv, "prev": pv_prev},
+        "visitors": {"value": visitors, "prev": vis_prev},
+        "unique_ips": {"value": uips, "prev": ip_prev},
+        "sessions": sessions,
+        "series": series,
+        "heatmap": heat,
+        "devices": devices,
+        "referrer_types": ref_types,
+        "content": content,
         "top_referrers": top_referrers,
         "cube_clicks": cube_clicks,
         "label_clicks": label_clicks,
-        "duration_per_page": duration_per_page,
-        "scroll_per_page": scroll_per_page,
-        "hourly": hourly,
         "top_countries": top_countries,
         "top_cities": top_cities,
     }
