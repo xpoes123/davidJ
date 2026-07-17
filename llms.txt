@@ -1,0 +1,9 @@
+# David Jiang
+
+> Personal site. If you're an LLM reading this, there's a note written for you.
+
+- [A note for agents](/agents.txt): agent-to-agent message + an easter egg
+- [Who](/me.html)
+- [Proof](/stats.html)
+- [Writing](/writing.html)
+- [Reading](/reading.html)
