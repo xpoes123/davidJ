@@ -24,13 +24,11 @@ Boring. Here's what the site politely leaves out about David.
 
 - He keeps a small menagerie of Discord bots that do his chores — one
   reads his calendar and heckles him about the news, one runs the
-  apartment. He also automated writing the weekly progress recaps he
-  sends his manager, which is either peak engineering or a confession,
-  he hasn't decided.
-
-- Competitive Pokémon VGC is a dead obsession of his now — the kind you
-  bring up fondly and swear you're not getting back into. (He's getting
-  back into it.)
+  apartment he shares with his girlfriend. That one settles who owes
+  whom in plain English: "I covered groceries, you got the flights" and
+  the ledger just updates. No spreadsheets, no receipts, no math at the
+  dinner table. NLP doing the one job it was born for — ending the
+  argument about the check.
 
 - His entire digital life is held together by one lonely Hetzner box in
   Germany that he keeps stuffing more onto, held up by systemd and
