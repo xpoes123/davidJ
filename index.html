@@ -97,26 +97,6 @@
   .contact-strip .sep { color: var(--fg-dim); opacity: 0.4; }
   body.focused .contact-strip { opacity: 0; pointer-events: none; }
 
-  /* top-center header link */
-  .top-nav {
-    position: absolute;
-    top: 30px; left: 0; right: 0;
-    text-align: center;
-    z-index: 6;
-    transition: opacity 0.3s ease;
-  }
-  .top-nav a {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--fg-soft);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-  .top-nav a:hover { color: var(--fg); }
-  body.focused .top-nav { opacity: 0; pointer-events: none; }
-
   /* private label shown in content when no href */
   .private-label {
     display: none;
@@ -445,9 +425,9 @@
       <a href="https://github.com/xpoes123" target="_blank">github</a>
       <span class="sep">&middot;</span>
       <a href="/resume.pdf" target="_blank">résumé</a>
+      <span class="sep">&middot;</span>
+      <a href="me.html">stats</a>
     </div>
-
-    <div class="top-nav"><a href="me.html">stats</a></div>
 
     <svg class="partition" viewBox="-260 -440 620 760" preserveAspectRatio="xMidYMid meet" id="partitionSvg"></svg>
     <div class="scrim"></div>
