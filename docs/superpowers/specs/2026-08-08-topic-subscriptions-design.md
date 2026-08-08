@@ -23,6 +23,10 @@ change: a single `subscribe` link in the contact strip.
 - Markdown-in-browser preview for the composer (plain HTML body box first).
 - Open/click-rate analytics.
 - Own SMTP/MTA on the VPS (delivery goes through Resend).
+- **User login / accounts.** No concrete "save X" use case yet, and it's a
+  large security surface. If a real need appears, the lazy path is an email
+  magic-link reusing the subscriber emails (no passwords) or `localStorage`
+  for device-local state — added only when the use case is nameable.
 
 ## Decisions locked
 
