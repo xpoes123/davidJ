@@ -36,7 +36,6 @@ window.STACKS = [
     sub: 'Where to find me elsewhere.',
     cubes: [
       { id: 'linkedin',  title: 'LinkedIn',  subtitle: '/in/xpoes',           href: 'https://www.linkedin.com/in/xpoes/' },
-      { id: 'spotify',   title: 'Spotify',   subtitle: 'music' },
       { id: 'instagram', title: 'Instagram', subtitle: '@david.jiang1729',    href: 'https://www.instagram.com/david.jiang1729/' },
       { id: 'discord',   title: 'Discord',   subtitle: 'xpoes' },
       { id: 'github',    title: 'GitHub',    subtitle: '@xpoes123',           href: 'https://github.com/xpoes123' }
