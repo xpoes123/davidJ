@@ -22,7 +22,7 @@ window.STACKS = [
     archiveHref: 'archive.html?stack=research',
     sub: 'Papers from college, mostly combinatorics with detours through dynamical systems and folding.',
     cubes: [
-      { id: 'latent', title: 'Latent', subtitle: 'an essay on latent structure', href: 'papers/latent.pdf', date: '2024-08' },
+      { id: 'latent', title: 'Latent', subtitle: 'network regression · REU 2024', href: 'papers/latent.pdf', date: '2024-08' },
       { id: 'orgi', title: 'Origami', subtitle: 'folds & flat-foldability', href: 'papers/orgi.pdf', date: '2023-12' },
       { id: 'poker', title: 'Poker', subtitle: 'combinatorics from Indiana REU', href: 'papers/poker.pdf', date: '2023-08' },
       { id: 'pp', title: 'Plane Partitions', subtitle: 'asymptotics & bijections', href: 'papers/plane_partition.pdf', date: '2023-05' },
@@ -58,7 +58,7 @@ window.STACKS = [
     archiveHref: 'reading.html',
     sub: 'A reading list. Currently in progress, recently finished, with reviews when I get to them.',
     cubes: [
-      { id: 'thinking-in-bets',     title: 'Thinking in Bets',           subtitle: 'Annie Duke',                  body: 'On decision-making under uncertainty. Review coming when I finish.', href: 'book.html?slug=thinking-in-bets',     date: '2026-04' },
+      { id: 'thinking-in-bets',     title: 'Thinking in Bets',           subtitle: 'Annie Duke',                  body: 'On decision-making under uncertainty. Review in progress.', href: 'book.html?slug=thinking-in-bets',     date: '2026-11' },
       { id: 'logic-sports-betting', title: 'Logic of Sports Betting',    subtitle: 'Ed Miller & Matthew Davidow', body: 'Foundational text for the SharpLab side of things. Review coming.',    href: 'book.html?slug=logic-sports-betting', date: '2026-01' },
       { id: 'pragmatic-programmer', title: 'Pragmatic Programmer',        subtitle: 'Hunt & Thomas',               body: 'A re-read. Review coming.',                                            href: 'book.html?slug=pragmatic-programmer', date: '2025-11' }
     ]
