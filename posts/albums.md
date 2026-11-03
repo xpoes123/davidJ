@@ -1,14 +1,12 @@
 # Top 5 Influential Albums
 
-**Date:** December 12th, 2025
+**Date:** December 12, 2025
 
 ## Preamble
 
-Every year Spotify Wrapped rolls around and I get nostalgic about all the good music I've listened throughout my life. Whether it be the song that I had forgotten I listened to that year, or me going through my old playlists and seeing what type of music I enjoyed in middle school.
+Every year Spotify Wrapped rolls around and I get nostalgic about all the good music I've listened to throughout my life. Whether it be the song that I had forgotten I listened to that year, or me going through my old playlists and seeing what type of music I enjoyed in middle school.
 
 We live in a world full of data, and although data is great, it doesn't always paint the full picture of where we stand emotionally. I may have listened to _Apt._ 41 times, but it doesn't mean I have any emotional connection to the song itself.
-
-In a world where AI is taking over, it's often important to slow down and remember what makes humans special. It's the fact that we don't necessarily need data to make our choices and form our emotions.
 
 ---
 
@@ -40,7 +38,7 @@ This album doesn’t quite crack the top five because it isn’t tied to one sin
 
 _On Hold_ found me through the Spotify algorithm at exactly the wrong (or right) time. I had been binge listening to Keaton Henson, which was my first real introduction to sad, quiet, introspective music.
 
-I remember it vividly: around 2am, under the covers, scrolling for new music. The first time I heard “Car Park,” I cried. Immediately. No build-up. No warning.
+I remember it vividly: around 2am, under the covers, scrolling for new music. The first time I heard “Car Park,” I cried immediately.
 
 I fell in love with Fenne Lily and _On Hold_ right away. Musically, this album is incredible. Honestly, if I were ranking purely on sound, it might be higher. But the albums in the top five are tied to moments that feel heavier and more defining. _On Hold_ is deeply emotional, but it feels more like a chapter than a turning point.
 
@@ -52,11 +50,11 @@ I fell in love with Fenne Lily and _On Hold_ right away. Musically, this album i
 
 ![xInfinity](img/blogs/albums/resized_128/xinfinity.jpg)
 
-Ok I lied, I said that the top 5 are super emotional and tied to chapters of my life. And to some sense this is a chapter, but not fully. There aren’t many heavy emotions tied to this album it’s just a really good album.
+Ok I lied, I said that the top 5 are super emotional and tied to chapters of my life. And to some sense this is a chapter, but not fully. There aren’t many heavy emotions tied to this album; it’s just a really good album.
 
 Many people consider _xInfinity_ Watsky’s magnum opus, and I agree. The storytelling is strong, the production is polished, and the technical rapping is excellent. Watsky was the first artist I was truly a fan of; I listened to _Cardboard Castles_ religiously before this album came out.
 
-More importantly, this album coincides with the first concert I ever went to. In that sense, _xInfinity_ kickstarted my entire concert going life, which has since become a pretty significant part of who I am. It’s foundational.
+More importantly, this album coincides with the first concert I ever went to. In that sense, _xInfinity_ kickstarted my entire concert going life, which has since become a pretty significant part of who I am.
 
 ### 4) _Twenty One Pilots_
 
@@ -74,13 +72,13 @@ This album evokes some of the strongest emotions on this list, but it sits at #4
 
 ![No Dogs Allowed](img/blogs/albums/resized_128/no_dogs_allowed.jpg)
 
-This album was recommended to me during a summer internship in Indiana. The funny part is that the person who recommended it hesitated she assumed there was no way I hadn’t already heard of Sidney Gish.
+This album was recommended to me during a summer internship in Indiana. The funny part is that the person who recommended it hesitated, since she assumed there was no way I hadn’t already heard of Sidney Gish.
 
 I hadn’t.
 
 When I finally listened, it felt oddly perfect for where I was in life. I was in a rough patch with my girlfriend at the time, and the album hit this strange balance: upbeat, playful, but lyrically sharp in a way that felt uncomfortably accurate. Sidney was just an awkward 20 year old going through life seeing life in a way that felt uncanny to me.
 
-I later saw Sidney Gish live in New York, opening for Katy Kirby, performing under the name Zelda Van Gutters. It was an intimate show, and her personality, playful, warm, and genuinely funny made the music feel even more personal. This album felt like one of the first times music understood what I was going through.
+I later saw Sidney Gish live in New York, opening for Katy Kirby, performing under the name Zelda Van Gutters. It was an intimate show, and her personality (playful, warm, genuinely funny) made the music feel even more personal. This album felt like one of the first times music understood what I was going through.
 
 ### 2) _Birthdays / Dear_ · **Keaton Henson**
 
@@ -104,4 +102,4 @@ I played _Punisher_ endlessly during COVID. When I listen to it now, I get vivid
 
 Naomi introduced me to this album, and it felt like a gateway into the type of music I eventually fell in love with. Songs like “Kyoto” and “Garden Song” still hit hard. “Garden Song,” especially, reminds me of seeing Phoebe live when the opening of the song mirrored the opening of the book she read on stage. Hearing her perform “That Funny Feeling” live genuinely made me cry.
 
-This album feels like a phylogenetic split in my music taste everything after it traces back to here. Every year I return to _Punisher_ and find new meaning in it, shaped by wherever I am in life at the time.
+This album feels like a phylogenetic split in my music taste: everything after it traces back to here. Every year I return to _Punisher_ and find new meaning in it, shaped by wherever I am in life at the time.

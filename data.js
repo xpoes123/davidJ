@@ -26,7 +26,7 @@ window.STACKS = [
       { id: 'orgi', title: 'Origami', subtitle: 'folds & flat-foldability', href: 'papers/orgi.pdf', date: '2023-12' },
       { id: 'poker', title: 'Poker', subtitle: 'combinatorics from Indiana REU', href: 'papers/poker.pdf', date: '2023-08' },
       { id: 'pp', title: 'Plane Partitions', subtitle: 'asymptotics & bijections', href: 'papers/plane_partition.pdf', date: '2023-05' },
-      { id: 'tiling-ferrers', title: 'Tiling Ferrers Boards', subtitle: 'an exposition · arXiv 2312.06698', body: 'A necessary and sufficient condition for a Ferrers board (Young diagram) to be fully tileable with 1×2 dominoes: the board must be 2-colorable such that no color is adjacent to its own color. Proven via induction and a graph-theory approach, with all prerequisite background and failed attempts included. Written as exposition during my research on plane partitions.', href: 'https://arxiv.org/abs/2312.06698', date: '2023-04' },
+      { id: 'tiling-ferrers', title: 'Tiling Ferrers Diagrams', subtitle: 'an exposition · arXiv 2312.06698', body: 'A necessary and sufficient condition for a Ferrers board (Young diagram) to be fully tileable with 1×2 dominoes: the board must be 2-colorable such that no color is adjacent to its own color. Proven via induction and a graph-theory approach, with all prerequisite background and failed attempts included. Written as exposition during my research on plane partitions.', href: 'https://arxiv.org/abs/2312.06698', date: '2023-04' },
       { id: 'chaos', title: 'Chaos Game', subtitle: 'dynamical systems', href: 'papers/chaos.pdf', date: '2023-03' }
     ]
   },
@@ -36,7 +36,7 @@ window.STACKS = [
     sub: 'Where to find me elsewhere.',
     cubes: [
       { id: 'linkedin',  title: 'LinkedIn',  subtitle: '/in/xpoes',           href: 'https://www.linkedin.com/in/xpoes/' },
-      { id: 'spotify',   title: 'Spotify',   subtitle: 'open profile',         href: 'https://open.spotify.com/' },
+      { id: 'spotify',   title: 'Spotify',   subtitle: 'music' },
       { id: 'instagram', title: 'Instagram', subtitle: '@david.jiang1729',    href: 'https://www.instagram.com/david.jiang1729/' },
       { id: 'discord',   title: 'Discord',   subtitle: 'xpoes' },
       { id: 'github',    title: 'GitHub',    subtitle: '@xpoes123',           href: 'https://github.com/xpoes123' }
@@ -68,8 +68,8 @@ window.STACKS = [
     archiveHref: 'writing.html',
     sub: 'Essays & half-thoughts.',
     cubes: [
-      { id: 'albums',     title: "Albums of '25", subtitle: 'a yearly ritual',                 href: 'post.html?slug=albums',     date: '2025-12' },
-      { id: 'graduating', title: 'Graduating',     subtitle: 'the lie of the four-year arc',   href: 'post.html?slug=graduating', date: '2023-08' }
+      { id: 'albums',     title: 'Top 5 Albums',  subtitle: 'and the moments behind them',                 href: 'post.html?slug=albums',     date: '2025-12' },
+      { id: 'graduating', title: 'Graduating',     subtitle: "why I didn't do a math PhD",     href: 'post.html?slug=graduating', date: '2025-05' }
     ]
   },
   {
