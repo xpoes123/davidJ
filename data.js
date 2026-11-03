@@ -8,13 +8,14 @@ window.STACKS = [
     archiveHref: 'archive.html?stack=projects',
     sub: "Things I've shipped. A growing catalog of side projects, bots, and small useful tools.",
     cubes: [
+      { id: 'tv', title: 'TV OS', subtitle: 'phone-controlled homelab TV', body: 'A FastAPI router plus a kiosk on the box behind my TV. Phones scan a QR and become the remote and the controllers. Games are cartridges that an agent writes, simulates, and screenshots headlessly.', date: '2026-10' },
+      { id: 'party', title: 'Party', subtitle: 'live social graph for a birthday party', body: 'Guests scan a QR, tap who they are, and tap the people they meet. Each connection lights up an edge on a live graph on the wall and unlocks contact info. Polls, a song queue, and a blob battle between real guests on the side.', date: '2026-07' },
       { id: 'vigil', title: 'Vigil', subtitle: 'basketball prediction-market terminal', body: 'A live prediction-market trading terminal for basketball — de-vigged fair value against the Kalshi order book, maker/taker edge, and a CLV-tracked bet ledger.', date: '2026-07' },
       { id: 'lebot', title: 'LeBot', subtitle: 'anticipation-based ML buzzer', body: 'A Science Bowl buzzer bot that uses a model to anticipate the answer and buzz mid-question.', href: 'https://github.com/xpoes123/LeBot', date: '2026-07' },
       { id: 'nsba', title: 'NSBA Markets', subtitle: 'community automated prediction market', body: 'A community-run, automated prediction market.', href: 'https://nsba.djiang.xyz', date: '2026-06' },
       { id: 'scibowl', title: 'SciBowl.Live', subtitle: 'National Science Bowl platform', body: 'A platform for running National Science Bowl competitions online. React/TS + Django.', href: 'https://scibowl.live', date: '2026-06' },
       { id: 'sage', title: 'Sage', subtitle: 'personal AI assistant', body: 'Calendar, email, reminders, news. A Discord-native daily companion.', date: '2026-04' },
-      { id: 'sharplab', title: 'SharpLab', subtitle: 'sports betting quant lab', body: 'Odds ingestion + CLV tracking for live sports markets.', href: 'https://sharplab.djiang.xyz/hq', date: '2025-11' },
-      { id: 'daytour', title: 'DayTour', subtitle: 'multi-stop day itinerary planner', body: 'A web app for planning, organizing, and visualizing multi-stop day itineraries. Construct and rearrange a sequence of locations for a single day in one place.', href: 'https://daytour.djiang.xyz', date: '2025-04' }
+      { id: 'sharplab', title: 'SharpLab', subtitle: 'sports betting quant lab', body: 'Odds ingestion + CLV tracking for live sports markets.', href: 'https://sharplab.djiang.xyz/hq', date: '2025-11' }
     ]
   },
   {
