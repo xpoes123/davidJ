@@ -1,7 +1,7 @@
 # Thinking in Bets
 
 **Author:** Annie Duke
-**Status:** Currently reading
-**Started:** April 2026
+**Status:** Finished
+**Finished:** November 2026
 
-_Review coming soon._
+_Review in progress._
