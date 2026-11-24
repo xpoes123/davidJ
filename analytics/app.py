@@ -77,6 +77,14 @@ def init_db() -> None:
             )"""
         )
         c.execute("CREATE INDEX IF NOT EXISTS idx_sub_ts ON subscribers(ts)")
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS coffee (
+                id INTEGER PRIMARY KEY,
+                ts INTEGER NOT NULL,
+                mode TEXT, place TEXT, name TEXT, email TEXT, availability TEXT, note TEXT,
+                ip_hash TEXT, notified INTEGER DEFAULT 0
+            )"""
+        )
 
 
 @contextmanager
@@ -411,6 +419,12 @@ async def health() -> dict[str, str]:
 EMAIL_RE = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
 
+def _ip_hash(request: Request) -> str:
+    fwd = request.headers.get("x-forwarded-for", "")
+    ip = fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "")
+    return hashlib.sha256(ip.encode()).hexdigest()[:16] if ip else ""
+
+
 class Subscribe(BaseModel):
     email: str
     source: Optional[str] = ""
@@ -423,9 +437,7 @@ async def subscribe(s: Subscribe, request: Request) -> dict[str, Any]:
         return {"ok": False, "msg": "Looks like that email isn't quite right."}
 
     ua = (request.headers.get("user-agent") or "")[:240]
-    fwd = request.headers.get("x-forwarded-for", "")
-    ip = fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "")
-    ip_hash = hashlib.sha256(ip.encode()).hexdigest()[:16] if ip else ""
+    ip_hash = _ip_hash(request)
     now = int(time.time() * 1000)
 
     with _conn() as c:
@@ -548,3 +560,64 @@ async def where() -> Any:
         return {"error": "finance fetch failed"}
     return {"trips": [{"city": t["name"], "from": t["start_date"], "to": t["end_date"]}
                       for t in d.get("trips", []) if t.get("status") in ("current", "upcoming")]}
+
+
+# --- let's get coffee (/where page) -----------------------------------------
+# Requests are stored first, then Sage pings David on Discord. ok=False when the
+# ping fails so the page falls back to a prefilled email instead.
+SAGE_URL = os.environ.get("SAGE_URL", "http://127.0.0.1:7779")
+SAGE_KEY = os.environ.get("SAGE_CONSOLE_KEY", "")
+
+
+class Coffee(BaseModel):
+    mode: str
+    where: Optional[str] = ""
+    name: str
+    email: str
+    when: Optional[str] = ""
+    note: Optional[str] = ""
+    website: Optional[str] = ""  # honeypot: humans never see this field
+
+
+def _quiet(s: str) -> str:
+    """Visitor text goes into a plain Discord message; break @everyone/@here/<@id> pings."""
+    return s.replace("@", "@\u200b")
+
+
+@app.post("/coffee")
+async def coffee(c: Coffee, request: Request) -> dict[str, Any]:
+    if c.website:
+        return {"ok": True}
+    email = c.email.strip().lower()
+    name = c.name.strip()[:80]
+    if not name or not EMAIL_RE.match(email) or len(email) > 254 or "<" in email or ">" in email:
+        return {"ok": False, "invalid": True, "msg": "Need a name and a valid email so David can reply."}
+    mode = "virtual" if c.mode == "virtual" else "in person"
+    place = "" if mode == "virtual" else (c.where or "").strip()[:80]
+    when, note = (c.when or "").strip()[:200], (c.note or "").strip()[:1000]
+    ip_hash, now = _ip_hash(request), int(time.time() * 1000)
+
+    with _conn() as db:
+        recent = db.execute("SELECT COUNT(*) FROM coffee WHERE ip_hash = ? AND ts > ?",
+                            (ip_hash, now - 3600_000)).fetchone()[0]
+        if recent >= 3:
+            return {"ok": False, "invalid": True, "msg": "Got your requests already — David will be in touch."}
+        row = db.execute(
+            "INSERT INTO coffee (ts, mode, place, name, email, availability, note, ip_hash) VALUES (?,?,?,?,?,?,?,?)",
+            (now, mode, place, name, email, when, note, ip_hash)).lastrowid
+
+    q = _quiet
+    title = f"☕ Coffee request: {q(name)} ({mode}{', ' + q(place) if place else ''})"
+    body = "\n".join(x for x in [f"Reply to: {email}", when and f"When: {q(when)}", note and q(note)] if x)
+    try:
+        if not SAGE_KEY:
+            raise RuntimeError("SAGE_CONSOLE_KEY not set")
+        async with httpx.AsyncClient(timeout=10) as client:
+            r = await client.post(f"{SAGE_URL}/notify", headers={"Authorization": f"Bearer {SAGE_KEY}"},
+                                  json={"level": "info", "title": title, "body": body})
+            r.raise_for_status()
+    except Exception:
+        return {"ok": False}
+    with _conn() as db:
+        db.execute("UPDATE coffee SET notified = 1 WHERE id = ?", (row,))
+    return {"ok": True, "msg": f"Sent! David will email you at {email}."}
