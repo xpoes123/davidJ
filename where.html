@@ -82,10 +82,12 @@
         </div>
         <label class="field" id="whereField"><span>Where</span><select name="where" id="where"></select></label>
         <label class="field"><span>Your name</span><input type="text" name="name" required></label>
+        <label class="field"><span>Your email</span><input type="email" name="email" required></label>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
         <label class="field"><span>When works</span><input type="text" name="when" placeholder="e.g. week of Dec 8, weekday mornings"></label>
         <label class="field"><span>What's on your mind</span><textarea name="note" placeholder="Optional — what you'd like to chat about"></textarea></label>
         <button type="submit">Send request →</button>
-        <div class="dim">Opens your email app with everything filled in.</div>
+        <div class="dim" id="coffeeMsg">Goes straight to my phone. I'll reply by email.</div>
       </form>
     </section>
   </main>
@@ -111,9 +113,22 @@ loadWhere().then(w => {
 
 const form = $('coffeeForm');
 form.addEventListener('change', () => { $('whereField').hidden = form.mode.value === 'virtual'; });
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
   e.preventDefault();
   const f = Object.fromEntries(new FormData(form));
+  form.querySelector('button').disabled = true;
+  let d = {};
+  try {
+    const local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const r = await fetch((local ? 'http://localhost:8001' : '/api/analytics') + '/coffee', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(f) });
+    d = await r.json();
+  } catch (_) {}
+  form.querySelector('button').disabled = false;
+  if (d.msg) $('coffeeMsg').textContent = d.msg;
+  if (d.ok) { form.querySelectorAll('input, select, textarea, button').forEach(el => el.disabled = true); return; }
+  if (d.invalid) return;
+  // Server or Discord ping failed: hand off to the visitor's email app instead.
   const virtual = f.mode === 'virtual';
   const subject = `Coffee? (${virtual ? 'virtual' : 'in person, ' + f.where})`;
   const body = `Hi David,\n\nI'd love to grab a ${virtual ? 'virtual coffee' : 'coffee in ' + f.where}.\n`
