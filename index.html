@@ -427,6 +427,8 @@
       <a href="/resume.pdf" target="_blank">résumé</a>
       <span class="sep">&middot;</span>
       <a href="me.html">stats</a>
+      <span class="sep">&middot;</span>
+      <a href="where.html" id="whereLink">where's david?</a>
     </div>
 
     <svg class="partition" viewBox="-260 -440 620 760" preserveAspectRatio="xMidYMid meet" id="partitionSvg"></svg>
@@ -456,6 +458,8 @@
   </div>
 
 <script src="data.js"></script>
+<script src="travel.js"></script>
+<script>document.getElementById('whereLink').textContent = '📍 ' + whereIsDavid().city + ' · coffee?';</script>
 <script>
 // Site content lives in data.js (window.STACKS). Plane partition rules: heights weakly decreasing in both i and j.
 const stacks = window.STACKS;
