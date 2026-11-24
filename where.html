@@ -93,20 +93,21 @@
 <script>
 const $ = id => document.getElementById(id);
 const fmt = d => new Date(d + 'T12:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-const range = t => t.from === t.to ? fmt(t.from) : fmt(t.from) + ' – ' + fmt(t.to);
+const range = t => !t.to || t.from === t.to ? fmt(t.from) : fmt(t.from) + ' – ' + fmt(t.to);
 const row = (t, a) => { const el = document.createElement('div'); el.className = 'track'; el.innerHTML = '<span class="t"></span><span class="a"></span>'; el.children[0].textContent = t; el.children[1].textContent = a; return el; };
 
-const w = whereIsDavid();
-$('city').textContent = w.city;
-const next = w.upcoming[0];
-$('status').textContent = w.trip
-  ? `On the road through ${fmt(w.trip.to)}. Home base is ${HOME}.`
-  : next ? `Home base. Next stop: ${next.city}, ${range(next)}.` : 'Home base. No trips on the books.';
-if (w.upcoming.length) w.upcoming.forEach(t => $('trips').append(row(t.city, range(t))));
-else $('trips').innerHTML = '<div class="dim">Nothing scheduled — I\'m around.</div>';
+loadWhere().then(w => {
+  $('city').textContent = w.city;
+  const next = w.upcoming[0];
+  $('status').textContent = w.trip
+    ? `On the road${w.trip.to ? ' through ' + fmt(w.trip.to) : ''}. Home base is ${HOME}.`
+    : next ? `Home base. Next stop: ${next.city}, ${range(next)}.` : 'Home base. No trips on the books.';
+  if (w.upcoming.length) w.upcoming.forEach(t => $('trips').append(row(t.city, range(t))));
+  else $('trips').innerHTML = '<div class="dim">Nothing scheduled — I\'m around.</div>';
 
-// In-person options: wherever I am now, plus everywhere I'm headed.
-[...new Set([w.city, HOME, ...w.upcoming.map(t => t.city)])].forEach(c => $('where').append(new Option(c, c)));
+  // In-person options: wherever I am now, plus everywhere I'm headed.
+  [...new Set([w.city, HOME, ...w.upcoming.map(t => t.city)])].forEach(c => $('where').append(new Option(c, c)));
+});
 
 const form = $('coffeeForm');
 form.addEventListener('change', () => { $('whereField').hidden = form.mode.value === 'virtual'; });
