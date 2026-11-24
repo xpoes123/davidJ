@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<title>David Jiang · where is David?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14131a; --bg-2: #1c1b25;
+    --fg: #e8e3d8; --fg-soft: #a8a39a; --fg-dim: #6b6862;
+    --accent: #d4a955;
+    --rule: rgba(255,255,255,0.10);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: radial-gradient(ellipse at 50% 0%, #1f1d2c 0%, #14131a 60%); min-height: 100vh; }
+
+  .topbar { position: sticky; top: 0; background: rgba(20,19,26,0.85); backdrop-filter: blur(8px); z-index: 10; border-bottom: 1px solid var(--rule); }
+  .topbar-inner { max-width: 760px; margin: 0 auto; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; font-family: 'Space Grotesk', sans-serif; }
+  .topbar a { color: var(--fg-soft); text-decoration: none; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .topbar a:hover { color: var(--fg); }
+  .topbar .site { color: var(--fg); font-weight: 500; font-size: 14px; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 64px 28px 120px; }
+  .page-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.32em; text-transform: uppercase; margin-bottom: 14px; }
+  .page-title { font-family: 'Space Grotesk', sans-serif; font-size: 56px; font-weight: 500; margin: 0 0 14px; letter-spacing: -0.01em; }
+  .page-sub { font-family: 'Newsreader', serif; font-style: italic; color: var(--fg-soft); margin: 0 0 56px; font-size: 18px; }
+
+  section { margin-bottom: 56px; }
+  section > h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-soft); margin: 0 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+
+  .track-list { display: flex; flex-direction: column; gap: 10px; }
+  .track { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .track .t { color: var(--fg); } .track .a { color: var(--fg-dim); font-family: 'JetBrains Mono', monospace; font-size: 12px; white-space: nowrap; }
+  .dim { color: var(--fg-dim); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+  form { display: grid; gap: 18px; }
+  .modes { display: flex; gap: 10px; }
+  .modes label { flex: 1; text-align: center; padding: 14px; border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; font-family: 'Space Grotesk', sans-serif; color: var(--fg-soft); }
+  .modes input { position: absolute; opacity: 0; }
+  .modes label:has(input:checked) { border-color: var(--accent); color: var(--fg); background: rgba(212,169,85,0.08); }
+  .modes label:has(input:focus-visible) { outline: 2px solid var(--accent); }
+  .field { display: grid; gap: 6px; }
+  .field[hidden] { display: none; }
+  .field span { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-dim); }
+  input[type=text], select, textarea { font: inherit; color: var(--fg); background: rgba(255,255,255,0.03); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 12px; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  textarea { min-height: 90px; resize: vertical; }
+  button { justify-self: start; font-family: 'Space Grotesk', sans-serif; font-size: 14px; letter-spacing: 0.04em; color: var(--bg); background: var(--accent); border: 0; border-radius: 4px; padding: 12px 22px; cursor: pointer; }
+  button:hover { filter: brightness(1.1); }
+  @media (max-width: 520px) { .page-title { font-size: 40px; } main { padding: 40px 16px 80px; } }
+</style>
+<script src="analytics.js" defer></script>
+<script src="travel.js"></script>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html">← back</a>
+      <span class="site">David Jiang</span>
+      <span></span>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-kicker">Where is David?</div>
+    <h1 class="page-title" id="city">—</h1>
+    <p class="page-sub" id="status"></p>
+
+    <section><h2>Coming up</h2><div class="track-list" id="trips"></div></section>
+
+    <section id="coffee">
+      <h2>Let's get coffee</h2>
+      <form id="coffeeForm">
+        <div class="modes">
+          <label><input type="radio" name="mode" value="in person" checked> ☕ In person</label>
+          <label><input type="radio" name="mode" value="virtual"> 💻 Virtual</label>
+        </div>
+        <label class="field" id="whereField"><span>Where</span><select name="where" id="where"></select></label>
+        <label class="field"><span>Your name</span><input type="text" name="name" required></label>
+        <label class="field"><span>When works</span><input type="text" name="when" placeholder="e.g. week of Dec 8, weekday mornings"></label>
+        <label class="field"><span>What's on your mind</span><textarea name="note" placeholder="Optional — what you'd like to chat about"></textarea></label>
+        <button type="submit">Send request →</button>
+        <div class="dim">Opens your email app with everything filled in.</div>
+      </form>
+    </section>
+  </main>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = d => new Date(d + 'T12:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+const range = t => t.from === t.to ? fmt(t.from) : fmt(t.from) + ' – ' + fmt(t.to);
+const row = (t, a) => { const el = document.createElement('div'); el.className = 'track'; el.innerHTML = '<span class="t"></span><span class="a"></span>'; el.children[0].textContent = t; el.children[1].textContent = a; return el; };
+
+const w = whereIsDavid();
+$('city').textContent = w.city;
+const next = w.upcoming[0];
+$('status').textContent = w.trip
+  ? `On the road through ${fmt(w.trip.to)}. Home base is ${HOME}.`
+  : next ? `Home base. Next stop: ${next.city}, ${range(next)}.` : 'Home base. No trips on the books.';
+if (w.upcoming.length) w.upcoming.forEach(t => $('trips').append(row(t.city, range(t))));
+else $('trips').innerHTML = '<div class="dim">Nothing scheduled — I\'m around.</div>';
+
+// In-person options: wherever I am now, plus everywhere I'm headed.
+[...new Set([w.city, HOME, ...w.upcoming.map(t => t.city)])].forEach(c => $('where').append(new Option(c, c)));
+
+const form = $('coffeeForm');
+form.addEventListener('change', () => { $('whereField').hidden = form.mode.value === 'virtual'; });
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = Object.fromEntries(new FormData(form));
+  const virtual = f.mode === 'virtual';
+  const subject = `Coffee? (${virtual ? 'virtual' : 'in person, ' + f.where})`;
+  const body = `Hi David,\n\nI'd love to grab a ${virtual ? 'virtual coffee' : 'coffee in ' + f.where}.\n`
+    + (f.when ? `When works for me: ${f.when}\n` : '')
+    + (f.note ? `\n${f.note}\n` : '')
+    + `\n— ${f.name}`;
+  location.href = `mailto:jiangdavid144@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
+</script>
+</body>
+</html>
