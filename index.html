@@ -459,7 +459,7 @@
 
 <script src="data.js"></script>
 <script src="travel.js"></script>
-<script>document.getElementById('whereLink').textContent = '📍 ' + whereIsDavid().city + ' · coffee?';</script>
+<script>loadWhere().then(w => { document.getElementById('whereLink').textContent = '📍 ' + w.city + ' · coffee?'; });</script>
 <script>
 // Site content lives in data.js (window.STACKS). Plane partition rules: heights weakly decreasing in both i and j.
 const stacks = window.STACKS;

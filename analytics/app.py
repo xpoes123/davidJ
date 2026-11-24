@@ -460,13 +460,14 @@ async def subscribers_count() -> dict[str, Any]:
 _proxy_cache: dict[str, tuple[float, Any]] = {}
 
 
-async def _cached_get(key: str, url: str, ttl: float, params: Optional[dict] = None) -> Any:
+async def _cached_get(key: str, url: str, ttl: float, params: Optional[dict] = None,
+                      headers: Optional[dict] = None) -> Any:
     now = time.time()
     hit = _proxy_cache.get(key)
     if hit and now - hit[0] < ttl:
         return hit[1]
     async with httpx.AsyncClient(timeout=10, headers={"User-Agent": "davidj-stats/1.0"}) as client:
-        r = await client.get(url, params=params)
+        r = await client.get(url, params=params, headers=headers)
         r.raise_for_status()
         data = r.json()
     _proxy_cache[key] = (now, data)
@@ -527,3 +528,23 @@ async def lastfm(user: str) -> Any:
         } for t in rt],
         "top_artists": [{"name": a.get("name"), "playcount": a.get("playcount")} for a in ta],
     }
+
+
+# --- where is David? (/where page) -----------------------------------------
+# Trips come from Finance Hub on the same box. Only names and dates of current
+# and upcoming trips leave this endpoint -- never spend, budgets, or past trips.
+FINANCE_URL = os.environ.get("FINANCE_URL", "http://127.0.0.1:7794")
+FINANCE_TOKEN = os.environ.get("FINANCE_API_TOKEN", "")
+
+
+@app.get("/where")
+async def where() -> Any:
+    if not FINANCE_TOKEN:
+        return {"disabled": True}
+    try:
+        d = await _cached_get("where", f"{FINANCE_URL}/api/v1/trips", ttl=3600,
+                              headers={"Authorization": f"Bearer {FINANCE_TOKEN}"})
+    except Exception:
+        return {"error": "finance fetch failed"}
+    return {"trips": [{"city": t["name"], "from": t["start_date"], "to": t["end_date"]}
+                      for t in d.get("trips", []) if t.get("status") in ("current", "upcoming")]}
